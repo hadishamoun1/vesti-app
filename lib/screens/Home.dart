@@ -13,6 +13,7 @@ class _HomePageState extends State<HomePage> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
 
   @override
   void initState() {
@@ -70,6 +71,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -89,6 +91,26 @@ class _HomePageState extends State<HomePage> {
                 filled: true,
                 fillColor: Colors.grey[200],
               ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Categories',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
+           Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: Wrap(
+              spacing: 8.0, // Space between category boxes
+              runSpacing: 8.0, // Space between rows
+              children: categories.map((category) {
+                return Chip(
+                  label: Text(category),
+                  backgroundColor: Colors.blueGrey[100],
+                );
+              }).toList(),
             ),
           ),
           Expanded(

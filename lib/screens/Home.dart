@@ -13,7 +13,7 @@ class _HomePageState extends State<HomePage> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
+  List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -100,11 +100,12 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
-           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Wrap(
-              spacing: 8.0, // Space between category boxes
-              runSpacing: 8.0, // Space between rows
+              spacing: 8.0,
+              runSpacing: 8.0,
               children: categories.map((category) {
                 return Chip(
                   label: Text(category),
@@ -113,65 +114,114 @@ class _HomePageState extends State<HomePage> {
               }).toList(),
             ),
           ),
-         Expanded(
-          child: isLoading
-              ? Center(child: CircularProgressIndicator())
-              : errorMessage.isNotEmpty
-                  ? Center(child: Text(errorMessage))
-                  : ListView.builder(
-                      itemCount: stores.length,
-                      itemBuilder: (context, index) {
-                        final store = stores[index];
-                        final location = store['location']['coordinates'];
-                        final imageUrl = store['pictureUrl'];
+          Expanded(
+            child: isLoading
+                ? Center(child: CircularProgressIndicator())
+                : errorMessage.isNotEmpty
+                    ? Center(child: Text(errorMessage))
+                    : ListView.builder(
+                        itemCount: stores.length,
+                        itemBuilder: (context, index) {
+                          final store = stores[index];
+                          final location = store['location']['coordinates'];
+                          final imageUrl = store['pictureUrl'];
 
-                        if (_searchQuery.isNotEmpty &&
-                            !store['name']
-                                .toLowerCase()
-                                .contains(_searchQuery.toLowerCase())) {
-                          return Container(); // Skip this item
-                        }
+                          if (_searchQuery.isNotEmpty &&
+                              !store['name']
+                                  .toLowerCase()
+                                  .contains(_searchQuery.toLowerCase())) {
+                            return Container(); // Skip this item
+                          }
 
-                        return Card(
-                          margin: EdgeInsets.all(8.0),
-                          elevation: 5,
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(16.0),
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: Image.network(
-                                imageUrl,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Icon(Icons.error, size: 100);
-                                },
+                          return Card(
+                            margin: EdgeInsets.all(8.0),
+                            elevation: 5,
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(16.0),
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  imageUrl,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Icon(Icons.error, size: 100);
+                                  },
+                                ),
                               ),
+                              title: Text(
+                                store['name'],
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                'Location: Lat ${location[1]}, Long ${location[0]}',
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                              isThreeLine: true,
+                              onTap: () {
+                                // Handle store tap
+                              },
                             ),
-                            title: Text(
-                              store['name'],
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              'Location: Lat ${location[1]}, Long ${location[0]}',
-                              style: TextStyle(color: Colors.grey[600]),
-                            ),
-                            isThreeLine: true,
-                            onTap: () {
-                              // Handle store tap
-                            },
-                          ),
-                        );
-                      },
-                    ),
-        ),
+                          );
+                        },
+                      ),
+          ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.black, // Background color of the BottomNavigationBar
+          borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20.0)), // Border radius
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3), // Shadow color
+              spreadRadius: 2, // Spread radius
+              blurRadius: 8, // Blur radius
+              offset: Offset(0, -2), // Offset for shadow
+            ),
+          ],
+        ),
+        child: SizedBox(
+          height: 80, // Height of the BottomNavigationBar
+          child: ClipRRect(
+            borderRadius: BorderRadius.vertical(
+                top: Radius.circular(20.0)), // Border radius for clipping
+            child: BottomNavigationBar(
+              backgroundColor: Colors
+                  .black, // Background color of the BottomNavigationBar items
+              selectedItemColor: Colors.black, // Color of the selected item
+              unselectedItemColor:
+                  Colors.grey[600], // Color of the unselected items
+              iconSize: 40, // Control the size of the icons here
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  label: 'Search',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.notifications),
+                  label: 'Notifications',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.account_circle),
+                  label: 'Profile',
+                ),
+              ],
+              onTap: (index) {
+                // Handle bottom navigation bar item taps
+                print('Selected index: $index');
+              },
+            ),
+          ),
+        ),
       ),
     );
   }
 }
-
-
-

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 
 class HomePage extends StatefulWidget {
@@ -14,14 +15,43 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
-
-  // State to track favorite status of each store
   Map<int, bool> favoriteStatus = {};
+
+  // WebSocket channel
+  late WebSocketChannel _channel;
 
   @override
   void initState() {
     super.initState();
     fetchStores();
+    // Initialize WebSocket connection
+    _channel = WebSocketChannel.connect(
+      Uri.parse('ws://10.0.2.2:3000'), 
+    );
+
+    // Listen for WebSocket messages
+    _channel.stream.listen(
+      (message) {
+        print('Received WebSocket message: $message');
+        final newStore = json.decode(message);
+        setState(() {
+          stores.add(newStore);
+          favoriteStatus[stores.length - 1] = false;
+        });
+      },
+      onError: (error) {
+        print('WebSocket error: $error');
+        setState(() {
+          errorMessage = 'WebSocket error occurred.';
+        });
+      },
+      onDone: () {
+        print('WebSocket connection closed.');
+        setState(() {
+          errorMessage = 'WebSocket connection closed.';
+        });
+      },
+    );
   }
 
   Future<void> fetchStores() async {
@@ -30,13 +60,10 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
-        print(decodedResponse);
 
         setState(() {
           stores = decodedResponse;
           isLoading = false;
-
-          // Initialize favorite status for each store
           favoriteStatus = {for (var i = 0; i < stores.length; i++) i: false};
         });
       } else {
@@ -51,6 +78,12 @@ class _HomePageState extends State<HomePage> {
         isLoading = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close(); 
+    super.dispose();
   }
 
   @override
@@ -107,8 +140,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
@@ -127,11 +159,10 @@ class _HomePageState extends State<HomePage> {
                     ? Center(child: Text(errorMessage))
                     : GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // Two cards per row
+                          crossAxisCount: 2, 
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
-                          childAspectRatio:
-                              1.0, // Aspect ratio of 1:1 for square cards
+                          childAspectRatio: 1.0, 
                         ),
                         itemCount: stores.length,
                         itemBuilder: (context, index) {
@@ -143,10 +174,9 @@ class _HomePageState extends State<HomePage> {
                               !store['name']
                                   .toLowerCase()
                                   .contains(_searchQuery.toLowerCase())) {
-                            return Container(); // Skip this item
+                            return Container(); 
                           }
 
-                          // Default to false if the value is null
                           final isFavorite = favoriteStatus[index] ?? false;
 
                           return Card(
@@ -162,17 +192,14 @@ class _HomePageState extends State<HomePage> {
                                         width: double.infinity,
                                         height: double.infinity,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(8.0)),
+                                          borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
                                           child: Image.network(
                                             imageUrl,
                                             width: double.infinity,
                                             height: double.infinity,
                                             fit: BoxFit.cover,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Icon(Icons.error,
-                                                  size: 100);
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Icon(Icons.error, size: 100);
                                             },
                                           ),
                                         ),
@@ -183,19 +210,13 @@ class _HomePageState extends State<HomePage> {
                                         right: 2,
                                         child: IconButton(
                                           icon: Icon(
-                                            isFavorite
-                                                ? Icons.favorite
-                                                : Icons.favorite_border,
-                                            color: isFavorite
-                                                ? Colors.red
-                                                : Colors.grey,
+                                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                                            color: isFavorite ? Colors.red : Colors.grey,
                                           ),
                                           onPressed: () {
                                             setState(() {
-                                              favoriteStatus[index] =
-                                                  !isFavorite;
-                                              print(
-                                                  'Favorite pressed for store: ${store['name']}');
+                                              favoriteStatus[index] = !isFavorite;
+                                              print('Favorite pressed for store: ${store['name']}');
                                             });
                                           },
                                         ),
@@ -204,23 +225,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 1.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       store['name'],
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                      textAlign: TextAlign
-                                          .left, 
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
                                     ),
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 1.0),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
                                   child: Text(
                                     'Location: Lat ${location[1]}, Long ${location[0]}',
                                     style: TextStyle(color: Colors.grey[600]),

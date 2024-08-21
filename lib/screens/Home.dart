@@ -113,9 +113,60 @@ class _HomePageState extends State<HomePage> {
               }).toList(),
             ),
           ),
-          Expanded(
-            child: Center(child: CircularProgressIndicator()), // Placeholder
-          ),
+         Expanded(
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : errorMessage.isNotEmpty
+                  ? Center(child: Text(errorMessage))
+                  : ListView.builder(
+                      itemCount: stores.length,
+                      itemBuilder: (context, index) {
+                        final store = stores[index];
+                        final location = store['location']['coordinates'];
+                        final imageUrl = store['pictureUrl'];
+
+                        if (_searchQuery.isNotEmpty &&
+                            !store['name']
+                                .toLowerCase()
+                                .contains(_searchQuery.toLowerCase())) {
+                          return Container(); // Skip this item
+                        }
+
+                        return Card(
+                          margin: EdgeInsets.all(8.0),
+                          elevation: 5,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(16.0),
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: Image.network(
+                                imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(Icons.error, size: 100);
+                                },
+                              ),
+                            ),
+                            title: Text(
+                              store['name'],
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(
+                              'Location: Lat ${location[1]}, Long ${location[0]}',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                            isThreeLine: true,
+                            onTap: () {
+                              // Handle store tap
+                            },
+                          ),
+                        );
+                      },
+                    ),
+        ),
         ],
       ),
     );

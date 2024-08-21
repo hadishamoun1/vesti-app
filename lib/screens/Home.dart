@@ -11,6 +11,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> stores = [];
   bool isLoading = true;
   String errorMessage = '';
+  TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -67,7 +69,33 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(child: CircularProgressIndicator()), // Placeholder
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+              },
+              decoration: InputDecoration(
+                hintText: 'Search for stores',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(child: CircularProgressIndicator()), // Placeholder
+          ),
+        ],
+      ),
     );
   }
 }

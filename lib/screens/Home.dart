@@ -125,7 +125,14 @@ class _HomePageState extends State<HomePage> {
                 ? Center(child: CircularProgressIndicator())
                 : errorMessage.isNotEmpty
                     ? Center(child: Text(errorMessage))
-                    : ListView.builder(
+                    : GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // Two cards per row
+                          crossAxisSpacing: 8.0,
+                          mainAxisSpacing: 8.0,
+                          childAspectRatio:
+                              1.0, // Aspect ratio of 1:1 for square cards
+                        ),
                         itemCount: stores.length,
                         itemBuilder: (context, index) {
                           final store = stores[index];
@@ -145,54 +152,79 @@ class _HomePageState extends State<HomePage> {
                           return Card(
                             margin: EdgeInsets.all(8.0),
                             elevation: 5,
-                            child: Stack(
+                            child: Column(
                               children: [
-                                // Main card content
-                                ListTile(
-                                  contentPadding: EdgeInsets.all(16.0),
-                                  leading: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      imageUrl,
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Icon(Icons.error, size: 100);
-                                      },
+                                Expanded(
+                                  child: Stack(
+                                    children: [
+                                      // Square image
+                                      Container(
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                              top: Radius.circular(8.0)),
+                                          child: Image.network(
+                                            imageUrl,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return Icon(Icons.error,
+                                                  size: 100);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      // Heat icon
+                                      Positioned(
+                                        top: 0,
+                                        right: 2,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: isFavorite
+                                                ? Colors.red
+                                                : Colors.grey,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              favoriteStatus[index] =
+                                                  !isFavorite;
+                                              print(
+                                                  'Favorite pressed for store: ${store['name']}');
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 1.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      store['name'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                      ),
+                                      textAlign: TextAlign
+                                          .left, 
                                     ),
                                   ),
-                                  title: Text(
-                                    store['name'],
-                                    style: TextStyle(
-                                        fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 1.0),
+                                  child: Text(
                                     'Location: Lat ${location[1]}, Long ${location[0]}',
                                     style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                  isThreeLine: true,
-                                  onTap: () {
-                                    // Handle store tap
-                                  },
-                                ),
-                                // Heat icon
-                                Positioned(
-                                  top: 8,
-                                  right: 8,
-                                  child: IconButton(
-                                    icon: Icon(
-                                      isFavorite
-                                          ? Icons.favorite
-                                          : Icons.favorite_border,
-                                      color: isFavorite ? Colors.red : Colors.red,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        favoriteStatus[index] = !isFavorite;
-                                        print('Favorite pressed for store: ${store['name']}');
-                                      });
-                                    },
+                                    textAlign: TextAlign.start,
                                   ),
                                 ),
                               ],

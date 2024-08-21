@@ -15,6 +15,9 @@ class _HomePageState extends State<HomePage> {
   String _searchQuery = '';
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
 
+  // State to track favorite status of each store
+  Map<int, bool> favoriteStatus = {};
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +35,9 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           stores = decodedResponse;
           isLoading = false;
+
+          // Initialize favorite status for each store
+          favoriteStatus = {for (var i = 0; i < stores.length; i++) i: false};
         });
       } else {
         setState(() {
@@ -133,36 +139,63 @@ class _HomePageState extends State<HomePage> {
                             return Container(); // Skip this item
                           }
 
+                          // Default to false if the value is null
+                          final isFavorite = favoriteStatus[index] ?? false;
+
                           return Card(
                             margin: EdgeInsets.all(8.0),
                             elevation: 5,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(16.0),
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.network(
-                                  imageUrl,
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.error, size: 100);
+                            child: Stack(
+                              children: [
+                                // Main card content
+                                ListTile(
+                                  contentPadding: EdgeInsets.all(16.0),
+                                  leading: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      imageUrl,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Icon(Icons.error, size: 100);
+                                      },
+                                    ),
+                                  ),
+                                  title: Text(
+                                    store['name'],
+                                    style: TextStyle(
+                                        fontSize: 18, fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                    'Location: Lat ${location[1]}, Long ${location[0]}',
+                                    style: TextStyle(color: Colors.grey[600]),
+                                  ),
+                                  isThreeLine: true,
+                                  onTap: () {
+                                    // Handle store tap
                                   },
                                 ),
-                              ),
-                              title: Text(
-                                store['name'],
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                'Location: Lat ${location[1]}, Long ${location[0]}',
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                              isThreeLine: true,
-                              onTap: () {
-                                // Handle store tap
-                              },
+                                // Heat icon
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: IconButton(
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: isFavorite ? Colors.red : Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        favoriteStatus[index] = !isFavorite;
+                                        print('Favorite pressed for store: ${store['name']}');
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           );
                         },
@@ -172,30 +205,26 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.black, // Background color of the BottomNavigationBar
-          borderRadius: BorderRadius.vertical(
-              top: Radius.circular(20.0)), // Border radius
+          color: Colors.black,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3), // Shadow color
-              spreadRadius: 2, // Spread radius
-              blurRadius: 8, // Blur radius
-              offset: Offset(0, -2), // Offset for shadow
+              color: Colors.black.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 8,
+              offset: Offset(0, -2),
             ),
           ],
         ),
         child: SizedBox(
-          height: 80, // Height of the BottomNavigationBar
+          height: 80,
           child: ClipRRect(
-            borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20.0)), // Border radius for clipping
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
             child: BottomNavigationBar(
-              backgroundColor: Colors
-                  .black, // Background color of the BottomNavigationBar items
-              selectedItemColor: Colors.black, // Color of the selected item
-              unselectedItemColor:
-                  Colors.grey[600], // Color of the unselected items
-              iconSize: 40, // Control the size of the icons here
+              backgroundColor: Colors.black,
+              selectedItemColor: Colors.black,
+              unselectedItemColor: Colors.grey[600],
+              iconSize: 40,
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
@@ -215,7 +244,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
               onTap: (index) {
-                // Handle bottom navigation bar item taps
                 print('Selected index: $index');
               },
             ),

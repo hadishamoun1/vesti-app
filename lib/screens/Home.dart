@@ -16,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   String _searchQuery = '';
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
   Map<int, bool> favoriteStatus = {};
+  String selectedCategory = "Shoes"; // Default category
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -24,15 +25,11 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchStores();
-    // Initialize WebSocket connection
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://10.0.2.2:3000'), 
+      Uri.parse('ws://10.0.2.2:3000'),
     );
-
-    // Listen for WebSocket messages
     _channel.stream.listen(
       (message) {
-        print('Received WebSocket message: $message');
         final newStore = json.decode(message);
         setState(() {
           stores.add(newStore);
@@ -40,13 +37,11 @@ class _HomePageState extends State<HomePage> {
         });
       },
       onError: (error) {
-        print('WebSocket error: $error');
         setState(() {
           errorMessage = 'WebSocket error occurred.';
         });
       },
       onDone: () {
-        print('WebSocket connection closed.');
         setState(() {
           errorMessage = 'WebSocket connection closed.';
         });
@@ -56,7 +51,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> fetchStores() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:3000/stores'));
+      final response = await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
@@ -82,7 +77,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    _channel.sink.close(); 
+    _channel.sink.close();
     super.dispose();
   }
 
@@ -93,19 +88,13 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(Icons.settings),
           iconSize: 30,
-          onPressed: () {
-            // Handle settings button press
-            print('Settings pressed');
-          },
+          onPressed: () {},
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.shopping_cart),
             iconSize: 30,
-            onPressed: () {
-              // Handle cart button press
-              print('Cart pressed');
-            },
+            onPressed: () {},
           ),
         ],
       ),
@@ -140,29 +129,41 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
             child: Wrap(
               spacing: 8.0,
               runSpacing: 8.0,
               children: categories.map((category) {
-                return Chip(
-                  label: Text(category),
-                  backgroundColor: Colors.blueGrey[100],
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = category; // Update selected category
+                    });
+                  },
+                  child: Chip(
+                    label: Text(category),
+                    backgroundColor: selectedCategory == category
+                        ? Colors.blueGrey[300]
+                        : Colors.blueGrey[100],
+                  ),
                 );
               }).toList(),
             ),
           ),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 11.0),
             child: isLoading
                 ? Center(child: CircularProgressIndicator())
                 : errorMessage.isNotEmpty
                     ? Center(child: Text(errorMessage))
                     : GridView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, 
+                          crossAxisCount: 2,
                           crossAxisSpacing: 8.0,
                           mainAxisSpacing: 8.0,
-                          childAspectRatio: 1.0, 
+                          childAspectRatio: 1.0,
                         ),
                         itemCount: stores.length,
                         itemBuilder: (context, index) {
@@ -174,20 +175,18 @@ class _HomePageState extends State<HomePage> {
                               !store['name']
                                   .toLowerCase()
                                   .contains(_searchQuery.toLowerCase())) {
-                            return Container(); 
+                            return Container();
                           }
 
                           final isFavorite = favoriteStatus[index] ?? false;
 
                           return Card(
-                            margin: EdgeInsets.all(8.0),
                             elevation: 5,
                             child: Column(
                               children: [
                                 Expanded(
                                   child: Stack(
                                     children: [
-                                      // Square image
                                       Container(
                                         width: double.infinity,
                                         height: double.infinity,
@@ -204,7 +203,6 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                       ),
-                                      // Heat icon
                                       Positioned(
                                         top: 0,
                                         right: 2,
@@ -216,7 +214,6 @@ class _HomePageState extends State<HomePage> {
                                           onPressed: () {
                                             setState(() {
                                               favoriteStatus[index] = !isFavorite;
-                                              print('Favorite pressed for store: ${store['name']}');
                                             });
                                           },
                                         ),
@@ -249,6 +246,14 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            child: Text(
+              'Latest $selectedCategory',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          
         ],
       ),
       bottomNavigationBar: Container(

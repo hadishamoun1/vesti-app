@@ -43,4 +43,34 @@ class _HomePageState extends State<HomePage> {
       });
     }
   }
+
+   @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.settings),
+          iconSize: 30,
+          onPressed: () {
+            // Handle settings button press
+            print('Settings pressed');
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            iconSize: 30,
+            onPressed: () {
+              // Handle cart button press
+              print('Cart pressed');
+            },
+          ),
+        ],
+      ),
+      body: Center(child: CircularProgressIndicator()), // Placeholder
+    );
+  }
 }
+
+
+

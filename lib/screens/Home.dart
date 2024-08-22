@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     fetchStores();
     fetchProductsByCategory(selectedCategory);
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://10.0.2.2:3000'),
+      Uri.parse('ws://10.0.2.2:3000?limit=2'),
     );
     _channel.stream.listen(
       (message) {

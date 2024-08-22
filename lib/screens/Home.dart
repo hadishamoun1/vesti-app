@@ -17,7 +17,8 @@ class _HomePageState extends State<HomePage> {
   String _searchQuery = '';
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
   Map<int, bool> favoriteStatus = {};
-  String selectedCategory = "Shoes"; // Default category
+  String selectedCategory = "Shoes"; 
+  int _currentIndex = 0; 
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -27,7 +28,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fetchStores();
     fetchProductsByCategory(
-        selectedCategory); // Fetch products for default category
+        selectedCategory); 
     _channel = WebSocketChannel.connect(
       Uri.parse('ws://10.0.2.2:3000'),
     );
@@ -102,6 +103,13 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _onTap(int index) {
+    setState(() {
+      _currentIndex = index;
+      // Handle navigation or other logic based on the selected index
+    });
+  }
+
   @override
   void dispose() {
     _channel.sink.close();
@@ -140,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 decoration: InputDecoration(
                   hintText:
-                      'Search for $selectedCategory', // Dynamic placeholder
+                      'Search for ${selectedCategory}', // Null-aware placeholder
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -207,12 +215,13 @@ class _HomePageState extends State<HomePage> {
                           itemCount: stores.length,
                           itemBuilder: (context, index) {
                             final store = stores[index];
-                            final location = store['location']['coordinates'];
-                            final imageUrl = store['pictureUrl'];
+                            final location =
+                                store['location']?['coordinates'] ?? [];
+                            final imageUrl = store['pictureUrl'] ?? '';
 
                             if (_searchQuery.isNotEmpty &&
                                 !store['name']
-                                    .toLowerCase()
+                                    ?.toLowerCase()
                                     .contains(_searchQuery.toLowerCase())) {
                               return Container();
                             }
@@ -274,7 +283,8 @@ class _HomePageState extends State<HomePage> {
                                     child: Align(
                                       alignment: Alignment.centerLeft,
                                       child: Text(
-                                        store['name'],
+                                        store['name'] ??
+                                            'Unknown Store', // Handle null store name
                                         style: TextStyle(fontSize: 15),
                                         textAlign: TextAlign.left,
                                       ),
@@ -284,9 +294,8 @@ class _HomePageState extends State<HomePage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8.0, vertical: 1.0),
                                     child: Text(
-                                      'Location: Lat ${location[1]}, Long ${location[0]}',
-                                      style: TextStyle(color: Colors.grey[600]),
-                                      textAlign: TextAlign.start,
+                                      'Location: Lat ${location.isNotEmpty ? location[1] : 'N/A'}, Long ${location.isNotEmpty ? location[0] : 'N/A'}',
+                                      style: TextStyle(fontSize: 12),
                                     ),
                                   ),
                                 ],
@@ -304,81 +313,104 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              child: isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : errorMessage.isNotEmpty
-                      ? Center(child: Text(errorMessage))
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                            childAspectRatio: 0.7,
-                          ),
-                          itemCount: productsByCategory.length,
-                          itemBuilder: (context, index) {
-                            final product = productsByCategory[index];
-                            final imageUrl = product['imageUrl'];
+              child: productsByCategory.isEmpty
+                  ? Center(child: Text('No products available'))
+                  : GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 8.0,
+                        mainAxisSpacing: 8.0,
+                        childAspectRatio: 0.7,
+                      ),
+                      itemCount: productsByCategory.length,
+                      itemBuilder: (context, index) {
+                        final product = productsByCategory[index];
+                        final imageUrl = product['imageUrl'] ?? '';
 
-                            if (_searchQuery.isNotEmpty &&
-                                !product['name']
-                                    .toLowerCase()
-                                    .contains(_searchQuery.toLowerCase())) {
-                              return Container();
-                            }
-
-                            return Card(
-                              elevation: 3,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(8.0)),
-                                            child: Image.network(
-                                              imageUrl,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return Icon(Icons.error,
-                                                    size: 100);
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                        return Card(
+                          elevation: 5,
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(8.0)),
+                                    child: Image.network(
+                                      imageUrl,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Icon(Icons.error, size: 100);
+                                      },
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 4.0),
-                                    child: Text(
-                                      product['name'],
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 4.0),
-                                    child: Text(
-                                      'Price: \$${product['price']}',
-                                      style: TextStyle(color: Colors.grey[600]),
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            );
-                          },
-                        ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 1.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    product['name'] ??
+                                        'Unknown Product', // Handle null product name
+                                    style: TextStyle(fontSize: 15),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 1.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    product['price'] ??
+                                        'Unknown price', // Handle null product name
+                                    style: TextStyle(fontSize: 15),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
             ),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex, // Correctly set the current index
+        onTap: _onTap, // Update currentIndex on tap
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            backgroundColor: Colors.blueGrey[800],
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favorites',
+            backgroundColor: Colors.blueGrey[800],
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+            backgroundColor: Colors.blueGrey[800],
+          ),
+        ],
+        selectedItemColor: Colors.white, // Adjust colors as needed
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.blueGrey[800],
       ),
     );
   }

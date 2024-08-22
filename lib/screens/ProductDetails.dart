@@ -23,6 +23,8 @@ class ProductDetailsPage extends StatelessWidget {
             SizedBox(height: 10),
             Image.network(
               product['imageUrl'] ?? '',
+              height: 300,
+              width: 600,
               errorBuilder: (context, error, stackTrace) {
                 return Icon(Icons.error, size: 100);
               },

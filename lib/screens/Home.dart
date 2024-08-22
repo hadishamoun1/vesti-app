@@ -10,8 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<dynamic> stores = [];
-  List<dynamic> productsByCategory =
-      []; // New list to hold products by category
+  List<dynamic> productsByCategory = [];
   bool isLoading = true;
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
@@ -19,8 +18,6 @@ class _HomePageState extends State<HomePage> {
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
   Map<int, bool> favoriteStatus = {};
   String selectedCategory = "Shoes"; // Default category
-  var primary_color = Color.fromRGBO(191, 177, 193, 1);
-  var secondary_color = Color.fromRGBO(133, 179, 107, 1);
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -142,7 +139,8 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: 'Search for stores',
+                  hintText:
+                      'Search for $selectedCategory', // Dynamic placeholder
                   prefixIcon: Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -380,53 +378,6 @@ class _HomePageState extends State<HomePage> {
                         ),
             ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: secondary_color,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            ),
-          ],
-        ),
-        child: SizedBox(
-          height: 80,
-          child: ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
-            child: BottomNavigationBar(
-              backgroundColor: Colors.black,
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Colors.grey[600],
-              iconSize: 40,
-              items: [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'Home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.notifications),
-                  label: 'Notifications',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.account_circle),
-                  label: 'Profile',
-                ),
-              ],
-              onTap: (index) {
-                print('Selected index: $index');
-              },
-            ),
-          ),
         ),
       ),
     );

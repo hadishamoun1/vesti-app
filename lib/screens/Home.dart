@@ -17,8 +17,10 @@ class _HomePageState extends State<HomePage> {
   String _searchQuery = '';
   List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
   Map<int, bool> favoriteStatus = {};
-  String selectedCategory = "Shoes"; 
-  int _currentIndex = 0; 
+  String selectedCategory = "Shoes";
+  int _currentIndex = 0;
+  var primarry_color = Color.fromARGB(255, 253, 202, 63);
+  var secondary_color = Color.fromRGBO(15, 160, 173, 1);
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -27,8 +29,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     fetchStores();
-    fetchProductsByCategory(
-        selectedCategory); 
+    fetchProductsByCategory(selectedCategory);
     _channel = WebSocketChannel.connect(
       Uri.parse('ws://10.0.2.2:3000'),
     );
@@ -147,15 +148,18 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 decoration: InputDecoration(
-                  hintText:
-                      'Search for ${selectedCategory}', // Null-aware placeholder
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                ),
+                    hintText: 'Search for ${selectedCategory}',
+                    hintStyle: TextStyle(color: Colors.grey[500]),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.grey[500],
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.grey[250]),
               ),
             ),
             Padding(
@@ -180,10 +184,22 @@ class _HomePageState extends State<HomePage> {
                       });
                     },
                     child: Chip(
-                      label: Text(category),
+                      label: Text(
+                        category,
+                        style: TextStyle(
+                          color: selectedCategory == category
+                              ? Colors.white // Text color when selected
+                              : Colors.black, // Text color when not selected
+                        ),
+                      ),
                       backgroundColor: selectedCategory == category
-                          ? Colors.blueGrey[300]
-                          : Colors.blueGrey[100],
+                          ? secondary_color
+                          : primarry_color,
+                      side: BorderSide(
+                        color: selectedCategory == category
+                            ? secondary_color // Border color when selected
+                            : primarry_color, // Border color when not selected
+                      ),
                     ),
                   );
                 }).toList(),
@@ -373,7 +389,7 @@ class _HomePageState extends State<HomePage> {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     product['price'] ??
-                                        'Unknown price', // Handle null product name
+                                        'Unknown price', // Handle null product price
                                     style: TextStyle(fontSize: 15),
                                     textAlign: TextAlign.left,
                                   ),
@@ -388,29 +404,42 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex, // Correctly set the current index
-        onTap: _onTap, // Update currentIndex on tap
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            backgroundColor: Colors.blueGrey[800],
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
-            backgroundColor: Colors.blueGrey[800],
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-            backgroundColor: Colors.blueGrey[800],
-          ),
-        ],
-        selectedItemColor: Colors.white, // Adjust colors as needed
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.blueGrey[800],
+      bottomNavigationBar: Container(
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, -3),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          backgroundColor: secondary_color,
+          currentIndex: _currentIndex,
+          iconSize: 40,
+          onTap: _onTap,
+          selectedItemColor: primarry_color,
+          unselectedItemColor: Colors.white,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              label: 'Search',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Profile',
+            ),
+          ],
+        ),
       ),
     );
   }

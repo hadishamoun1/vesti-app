@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
+import 'ProductDetails.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -345,57 +346,66 @@ class _HomePageState extends State<HomePage> {
                         final product = productsByCategory[index];
                         final imageUrl = product['imageUrl'] ?? '';
 
-                        return Card(
-                          elevation: 5,
-                          child: Column(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(8.0)),
-                                    child: Image.network(
-                                      imageUrl,
-                                      width: double.infinity,
-                                      height: double.infinity,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) {
-                                        return Icon(Icons.error, size: 100);
-                                      },
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ProductDetailsPage(product: product),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 5,
+                            child: Column(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(8.0)),
+                                      child: Image.network(
+                                        imageUrl,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Icon(Icons.error, size: 100);
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 1.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    product['name'] ??
-                                        'Unknown Product', // Handle null product name
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 1.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      product['name'] ?? 'Unknown Product',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 1.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    product['price'] ??
-                                        'Unknown price', // Handle null product price
-                                    style: TextStyle(fontSize: 15),
-                                    textAlign: TextAlign.left,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 1.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      product['price'] ?? 'Unknown price',
+                                      style: TextStyle(fontSize: 15),
+                                      textAlign: TextAlign.left,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

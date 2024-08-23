@@ -128,7 +128,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     color: _selectedSize == size
                                         ? Colors.blue
                                         : Colors.grey[200], // Background color
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(25),
                                     border: Border.all(
                                       color: _selectedSize == size
                                           ? Colors.blue

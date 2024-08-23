@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
 import 'ProductDetails.dart';
+import 'SearchStores.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   var primarry_color = Color.fromARGB(255, 253, 202, 63);
   var secondary_color = Color(0xFF174793);
-
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -109,8 +109,18 @@ class _HomePageState extends State<HomePage> {
   void _onTap(int index) {
     setState(() {
       _currentIndex = index;
-      // Handle navigation or other logic based on the selected index
     });
+
+    if (index == 1) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SearchStoresPage()),
+      );
+    } else if (index == 0) {
+      // Home
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
   }
 
   @override

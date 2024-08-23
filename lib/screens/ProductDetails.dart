@@ -123,7 +123,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                             setState(() {
                                               _selectedSize = size;
                                             });
-                                            // Handle size selection
+                                            
                                             print('Selected size: $size');
                                           },
                                           child: Container(
@@ -132,14 +132,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                               color: _selectedSize == size
                                                   ? Colors.blue
                                                   : Colors.grey[
-                                                      200], // Background color
+                                                      200], 
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                               border: Border.all(
                                                 color: _selectedSize == size
                                                     ? Colors.blue
                                                     : Colors
-                                                        .transparent, // Border color
+                                                        .transparent, 
                                                 width: 2,
                                               ),
                                             ),
@@ -150,7 +150,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                                   color: _selectedSize == size
                                                       ? Colors.white
                                                       : Colors
-                                                          .black, // Text color
+                                                          .black, 
                                                 ),
                                               ),
                                             ),
@@ -192,14 +192,14 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           height: 40,
                                           decoration: BoxDecoration(
                                             color: _getColorFromName(
-                                                colorName), // Use mapped color
+                                                colorName),
                                             borderRadius:
                                                 BorderRadius.circular(25),
                                             border: Border.all(
                                               color: _selectedColor == colorName
                                                   ? Colors.white
                                                   : Colors
-                                                      .transparent, // Border color
+                                                      .transparent, 
                                               width: 2,
                                             ),
                                           ),
@@ -217,25 +217,25 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             height: 160,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white, // White background color
+              color: Colors.white, 
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), // Top-left radius
-                topRight: Radius.circular(30), // Top-right radius
-              ), // Apply border radius only to top corners
+                topLeft: Radius.circular(30), 
+                topRight: Radius.circular(30), 
+              ), 
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // Shadow color
+                  color: Colors.black.withOpacity(0.2), 
                   spreadRadius: 2,
                   blurRadius: 10,
-                  offset: Offset(0, 4), // Shadow position
+                  offset: Offset(0, 4), 
                 ),
               ],
             ),
             child: Column(
               mainAxisAlignment:
-                  MainAxisAlignment.end, // Align content to the bottom
+                  MainAxisAlignment.end, 
               crossAxisAlignment:
-                  CrossAxisAlignment.stretch, // Stretch buttons to full width
+                  CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
@@ -254,6 +254,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(5), 
+                        ),
                       ),
                       child: Text('Add to cart'),
                     ),
@@ -262,7 +266,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle "View Store" button press
+                  
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

@@ -27,7 +27,6 @@ class ProductDetailsPage extends StatelessWidget {
                 },
               ),
               SizedBox(height: 10),
-
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
@@ -40,32 +39,26 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-
-              // Using RichText and TextSpan to handle the description
               RichText(
                 text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Description:\n',
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text:
-                          product['description'] ?? 'No description available',
-                      style: TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  ],
+                  text: 'Description:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              SizedBox(height: 10),
-              Text(
-                'Price: \$${product['price']?.toString() ?? 'Unknown'}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    text: product['description'] ?? 'No description available',
+                    style: TextStyle(fontSize: 16, color: Colors.black),
+                  ),
+                ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               Text(
                 'Available Sizes: ${product['availableSizes']?.join(", ") ?? 'No sizes available'}',
                 style: TextStyle(fontSize: 16),

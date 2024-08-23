@@ -21,7 +21,8 @@ class _HomePageState extends State<HomePage> {
   String selectedCategory = "Shoes";
   int _currentIndex = 0;
   var primarry_color = Color.fromARGB(255, 253, 202, 63);
-  var secondary_color = Color.fromRGBO(15, 160, 173, 1);
+  var secondary_color = Color(0xFF174793);
+
 
   // WebSocket channel
   late WebSocketChannel _channel;

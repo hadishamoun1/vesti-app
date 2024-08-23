@@ -39,67 +39,71 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  text: 'Description:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Description section with padding
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    text: product['description'] ?? 'No description available',
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    text: 'Description:\n\n', // Added extra newline for spacing
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: product['description'] ??
+                            'No description available',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ],
                   ),
                 ),
               ),
               SizedBox(height: 20),
-              RichText(
-                text: TextSpan(
-                  text: 'Available Sizes: \n',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: product['availableSizes']?.join(", ") ??
-                          'No sizes available',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
+              // Available Sizes section with padding
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    text:
+                        'Available Sizes:\n\n', // Added extra newline for spacing
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: product['availableSizes']?.join(", ") ??
+                            'No sizes available',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  text: 'Available Colors: \n',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: product['availableColors']?.join(", ") ??
-                          'No colors available',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
+              // Available Colors section with padding
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    text:
+                        'Available Colors:\n\n', // Added extra newline for spacing
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: product['availableColors']?.join(", ") ??
+                            'No colors available',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

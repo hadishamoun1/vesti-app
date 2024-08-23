@@ -218,7 +218,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white, // White background color
-              borderRadius: BorderRadius.circular(30), // Border radius
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30), // Top-left radius
+                topRight: Radius.circular(30), // Top-right radius
+              ), // Apply border radius only to top corners
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2), // Shadow color
@@ -249,8 +252,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         // Handle button press
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue, 
-                        foregroundColor: Colors.white, 
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
                       ),
                       child: Text('Add to cart'),
                     ),
@@ -262,8 +265,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     // Handle "View Store" button press
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, 
-                    foregroundColor: Colors.white, 
+                    backgroundColor: Colors.blue,
+                    foregroundColor: Colors.white,
                   ),
                   child: Text('View Store'),
                 ),

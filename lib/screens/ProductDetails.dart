@@ -28,9 +28,8 @@ class ProductDetailsPage extends StatelessWidget {
               ),
               SizedBox(height: 10),
 
-              // Adding padding to the product name text
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 8, 8),
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   product['name'] ?? 'Unknown Product',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -41,9 +40,25 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-              Text(
-                'Description: ${product['description'] ?? 'No description available'}',
-                style: TextStyle(fontSize: 16),
+
+              // Using RichText and TextSpan to handle the description
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Description:\n',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(
+                      text:
+                          product['description'] ?? 'No description available',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 10),
               Text(

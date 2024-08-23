@@ -39,12 +39,12 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-              
+
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    text: 'Description:\n\n', 
+                    text: 'Description:\n\n',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -63,57 +63,66 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
-              
+              SizedBox(height: 10), // Reduced space between sections
+
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 4.0), // Reduced vertical padding
                 child: RichText(
                   text: TextSpan(
-                    text:
-                        'Available Sizes:\n\n', 
+                    text: 'Available Sizes:\n',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: product['availableSizes']?.join(", ") ??
-                            'No sizes available',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              // Available Colors section with padding
+              // Display sizes as buttons
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: (product['availableSizes'] as List<dynamic>?)
+                        ?.map((size) => ElevatedButton(
+                              onPressed: () {
+                                // Handle size selection
+                                print('Selected size: $size');
+                              },
+                              child: Text(size.toString()),
+                            ))
+                        .toList() ??
+                    [Text('No sizes available')],
+              ),
+              SizedBox(height: 20), // Space between sizes and colors section
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 4.0), // Reduced vertical padding
                 child: RichText(
                   text: TextSpan(
-                    text:
-                        'Available Colors:\n\n', // Added extra newline for spacing
+                    text: 'Available Colors:\n',
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: product['availableColors']?.join(", ") ??
-                            'No colors available',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
                   ),
                 ),
+              ),
+              // Display colors as buttons
+              Wrap(
+                spacing: 8.0,
+                runSpacing: 8.0,
+                children: (product['availableColors'] as List<dynamic>?)
+                        ?.map((color) => ElevatedButton(
+                              onPressed: () {
+                                // Handle color selection
+                                print('Selected color: $color');
+                              },
+                              child: Text(color.toString()),
+                            ))
+                        .toList() ??
+                    [Text('No colors available')],
               ),
             ],
           ),

@@ -179,8 +179,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                 print('Selected color: $colorName');
                               },
                               child: Container(
-                                width: 50,
-                                height: 50,
+                                width: 40,
+                                height: 40,
                                 decoration: BoxDecoration(
                                   color: _getColorFromName(
                                       colorName), // Use mapped color

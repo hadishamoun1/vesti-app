@@ -184,7 +184,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                 decoration: BoxDecoration(
                                   color: _getColorFromName(
                                       colorName), // Use mapped color
-                                  borderRadius: BorderRadius.circular(12),
+                                  borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
                                     color: _selectedColor == colorName
                                         ? Colors.blue

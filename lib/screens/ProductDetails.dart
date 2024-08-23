@@ -39,12 +39,12 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-              // Description section with padding
+              
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: RichText(
                   text: TextSpan(
-                    text: 'Description:\n\n', // Added extra newline for spacing
+                    text: 'Description:\n\n', 
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -54,20 +54,23 @@ class ProductDetailsPage extends StatelessWidget {
                       TextSpan(
                         text: product['description'] ??
                             'No description available',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: 20),
-              // Available Sizes section with padding
+              
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: RichText(
                   text: TextSpan(
                     text:
-                        'Available Sizes:\n\n', // Added extra newline for spacing
+                        'Available Sizes:\n\n', 
                     style: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
@@ -77,7 +80,10 @@ class ProductDetailsPage extends StatelessWidget {
                       TextSpan(
                         text: product['availableSizes']?.join(", ") ??
                             'No sizes available',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),
@@ -100,7 +106,10 @@ class ProductDetailsPage extends StatelessWidget {
                       TextSpan(
                         text: product['availableColors']?.join(", ") ??
                             'No colors available',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.normal),
                       ),
                     ],
                   ),

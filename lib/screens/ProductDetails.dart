@@ -59,14 +59,48 @@ class ProductDetailsPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Available Sizes: ${product['availableSizes']?.join(", ") ?? 'No sizes available'}',
-                style: TextStyle(fontSize: 16),
+              RichText(
+                text: TextSpan(
+                  text: 'Available Sizes: \n',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: product['availableSizes']?.join(", ") ??
+                          'No sizes available',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: 10),
-              Text(
-                'Available Colors: ${product['availableColors']?.join(", ") ?? 'No colors available'}',
-                style: TextStyle(fontSize: 16),
+              RichText(
+                text: TextSpan(
+                  text: 'Available Colors: \n',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: product['availableColors']?.join(", ") ??
+                          'No colors available',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

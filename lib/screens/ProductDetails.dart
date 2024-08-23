@@ -187,7 +187,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   borderRadius: BorderRadius.circular(25),
                                   border: Border.all(
                                     color: _selectedColor == colorName
-                                        ? Colors.blue
+                                        ? Colors.white
                                         : Colors.transparent, // Border color
                                     width: 2,
                                   ),

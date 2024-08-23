@@ -1,15 +1,44 @@
 import 'package:flutter/material.dart';
 
-class ProductDetailsPage extends StatelessWidget {
+class ProductDetailsPage extends StatefulWidget {
   final dynamic product;
 
   const ProductDetailsPage({Key? key, required this.product}) : super(key: key);
+
+  @override
+  _ProductDetailsPageState createState() => _ProductDetailsPageState();
+}
+
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  String? _selectedSize;
+  String? _selectedColor;
+
+  Color _getColorFromName(String colorName) {
+    switch (colorName.toLowerCase()) {
+      case 'red':
+        return Colors.red;
+      case 'green':
+        return Colors.green;
+      case 'blue':
+        return Colors.blue;
+      case 'yellow':
+        return Colors.yellow;
+      case 'orange':
+        return Colors.orange;
+      case 'purple':
+        return Colors.purple;
+
+      default:
+        return Colors.grey;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Details'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -19,7 +48,7 @@ class ProductDetailsPage extends StatelessWidget {
             children: [
               SizedBox(height: 10),
               Image.network(
-                product['imageUrl'] ?? '',
+                widget.product['imageUrl'] ?? '',
                 height: 200,
                 width: double.infinity,
                 errorBuilder: (context, error, stackTrace) {
@@ -30,7 +59,7 @@ class ProductDetailsPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
-                  product['name'] ?? 'Unknown Product',
+                  widget.product['name'] ?? 'Unknown Product',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -39,7 +68,6 @@ class ProductDetailsPage extends StatelessWidget {
                 thickness: 2,
               ),
               SizedBox(height: 10),
-
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: RichText(
@@ -52,7 +80,7 @@ class ProductDetailsPage extends StatelessWidget {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                        text: product['description'] ??
+                        text: widget.product['description'] ??
                             'No description available',
                         style: TextStyle(
                             fontSize: 16,
@@ -63,11 +91,9 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 10), // Reduced space between sections
-
+              SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 4.0), // Reduced vertical padding
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: RichText(
                   text: TextSpan(
                     text: 'Available Sizes:\n',
@@ -79,25 +105,56 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Display sizes as buttons
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,
-                children: (product['availableSizes'] as List<dynamic>?)
-                        ?.map((size) => ElevatedButton(
-                              onPressed: () {
-                                // Handle size selection
-                                print('Selected size: $size');
-                              },
-                              child: Text(size.toString()),
+                children: (widget.product['availableSizes'] as List<dynamic>?)
+                        ?.map((size) => Container(
+                              constraints: BoxConstraints(
+                                maxWidth: 50,
+                                minHeight: 50,
+                              ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _selectedSize = size;
+                                  });
+                                  // Handle size selection
+                                  print('Selected size: $size');
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: _selectedSize == size
+                                        ? Colors.blue
+                                        : Colors.grey[200], // Background color
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: _selectedSize == size
+                                          ? Colors.blue
+                                          : Colors.transparent, // Border color
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      size.toString(),
+                                      style: TextStyle(
+                                        color: _selectedSize == size
+                                            ? Colors.white
+                                            : Colors.black, // Text color
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ))
                         .toList() ??
                     [Text('No sizes available')],
               ),
-              SizedBox(height: 20), // Space between sizes and colors section
+              SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 4.0), // Reduced vertical padding
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
                 child: RichText(
                   text: TextSpan(
                     text: 'Available Colors:\n',
@@ -109,17 +166,33 @@ class ProductDetailsPage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Display colors as buttons
               Wrap(
                 spacing: 8.0,
                 runSpacing: 8.0,
-                children: (product['availableColors'] as List<dynamic>?)
-                        ?.map((color) => ElevatedButton(
-                              onPressed: () {
+                children: (widget.product['availableColors'] as List<dynamic>?)
+                        ?.map((colorName) => GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedColor = colorName;
+                                });
                                 // Handle color selection
-                                print('Selected color: $color');
+                                print('Selected color: $colorName');
                               },
-                              child: Text(color.toString()),
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: _getColorFromName(
+                                      colorName), // Use mapped color
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: _selectedColor == colorName
+                                        ? Colors.blue
+                                        : Colors.transparent, // Border color
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
                             ))
                         .toList() ??
                     [Text('No colors available')],

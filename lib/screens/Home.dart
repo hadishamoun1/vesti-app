@@ -22,7 +22,8 @@ class _HomePageState extends State<HomePage> {
   String selectedCategory = "Shoes";
   int _currentIndex = 0;
   var primarry_color = Color.fromARGB(255, 202, 202, 202);
-  var secondary_color = Color(0xFF174793);
+  // var secondary_color = Color(0xFF174793);
+  var secondary_color = Color(0xFF3882cd);
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -426,10 +427,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 80,
+        height: 60,
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+          color: secondary_color,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
@@ -439,25 +440,37 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          backgroundColor: secondary_color,
-          currentIndex: _currentIndex,
-          iconSize: 40,
-          onTap: _onTap,
-          selectedItemColor: primarry_color,
-          unselectedItemColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceEvenly, // Evenly space icons horizontally
+          children: [
+            IconButton(
+              icon: Icon(Icons.home_outlined, color: Colors.grey),
+              iconSize: 30,
+              onPressed: () {
+                // Handle Home icon tap
+              },
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
+            IconButton(
+              icon: Icon(Icons.search, color: Colors.grey),
+              iconSize: 30,
+              onPressed: () {
+                // Handle Search icon tap
+              },
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
+            IconButton(
+              icon: Icon(Icons.auto_awesome_outlined, color: Colors.grey),
+              iconSize: 30,
+              onPressed: () {
+                // Handle Cart icon tap
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.person_outline, color: Colors.grey),
+              iconSize: 30,
+              onPressed: () {
+                // Handle Profile icon tap
+              },
             ),
           ],
         ),

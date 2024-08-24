@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   Map<int, bool> favoriteStatus = {};
   String selectedCategory = "Shoes";
   int _currentIndex = 0;
-  var primarry_color = Color.fromARGB(255, 253, 202, 63);
+  var primarry_color = Color.fromARGB(255, 202, 202, 202);
   var secondary_color = Color(0xFF174793);
 
   // WebSocket channel

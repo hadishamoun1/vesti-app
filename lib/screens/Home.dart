@@ -429,7 +429,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: secondary_color,
+          color: Colors.white,
           borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           boxShadow: [
             BoxShadow(
@@ -441,36 +441,87 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.spaceEvenly, // Evenly space icons horizontally
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IconButton(
-              icon: Icon(Icons.home_outlined, color: Colors.grey),
-              iconSize: 30,
-              onPressed: () {
-                // Handle Home icon tap
-              },
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _currentIndex == 0 ? secondary_color : Colors.transparent,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.home_outlined,
+                  color: _currentIndex == 0 ? Colors.white : Colors.grey,
+                ),
+                iconSize: 30,
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 0;
+                  });
+                  // Handle Home icon tap
+                },
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.search, color: Colors.grey),
-              iconSize: 30,
-              onPressed: () {
-                // Handle Search icon tap
-              },
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _currentIndex == 1 ? secondary_color : Colors.transparent,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: _currentIndex == 1 ? Colors.white : Colors.grey,
+                ),
+                iconSize: 30,
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 1;
+                  });
+                  // Handle Search icon tap
+                },
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.auto_awesome_outlined, color: Colors.grey),
-              iconSize: 30,
-              onPressed: () {
-                // Handle Cart icon tap
-              },
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _currentIndex == 2 ? secondary_color : Colors.transparent,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.auto_awesome_outlined,
+                  color: _currentIndex == 2 ? Colors.white : Colors.grey,
+                ),
+                iconSize: 30,
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 2;
+                  });
+                  // Handle Cart icon tap
+                },
+              ),
             ),
-            IconButton(
-              icon: Icon(Icons.person_outline, color: Colors.grey),
-              iconSize: 30,
-              onPressed: () {
-                // Handle Profile icon tap
-              },
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    _currentIndex == 3 ? secondary_color : Colors.transparent,
+              ),
+              child: IconButton(
+                icon: Icon(
+                  Icons.person_outline,
+                  color: _currentIndex == 3 ? Colors.white : Colors.grey,
+                ),
+                iconSize: 30,
+                onPressed: () {
+                  setState(() {
+                    _currentIndex = 3;
+                  });
+                  // Handle Profile icon tap
+                },
+              ),
             ),
           ],
         ),

@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
               child: TextField(
                 controller: _searchController,
                 onChanged: (query) {
@@ -161,18 +161,29 @@ class _HomePageState extends State<HomePage> {
                   });
                 },
                 decoration: InputDecoration(
-                    hintText: 'Search for ${selectedCategory}',
-                    hintStyle: TextStyle(color: Colors.grey[500]),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey[500],
+                  hintText: 'Search for ${selectedCategory}',
+                  hintStyle: TextStyle(color: Colors.grey[500]),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Colors.grey[500],
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey[300]!,
+                      width: 1.5,
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide(
+                      color: Colors.grey,
+                      width: 1.5,
                     ),
-                    filled: true,
-                    fillColor: Colors.grey[250]),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
+                ),
               ),
             ),
             Padding(
@@ -205,9 +216,10 @@ class _HomePageState extends State<HomePage> {
                               : Colors.black, // Text color when not selected
                         ),
                       ),
+                      padding: EdgeInsets.all(2),
                       backgroundColor: selectedCategory == category
                           ? secondary_color
-                          : primarry_color,
+                          : Colors.white,
                       side: BorderSide(
                         color: selectedCategory == category
                             ? secondary_color // Border color when selected
@@ -258,7 +270,7 @@ class _HomePageState extends State<HomePage> {
                             final isFavorite = favoriteStatus[index] ?? false;
 
                             return Card(
-                              elevation: 5,
+                              elevation: 2,
                               child: Column(
                                 children: [
                                   Expanded(
@@ -369,7 +381,7 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                           child: Card(
-                            elevation: 5,
+                            elevation: 2,
                             child: Column(
                               children: [
                                 Expanded(

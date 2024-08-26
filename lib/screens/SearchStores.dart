@@ -3,9 +3,11 @@ import 'Home.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/bottom_nav_bar.dart';
 import 'dart:convert';
+import '../widgets/search_bar.dart' as CustomSearchBar;
 
-var primaryColor = Color.fromARGB(255, 253, 202, 63);
-var secondaryColor = Color(0xFF174793);
+var primaryColor = Color.fromARGB(255, 255, 255, 255);
+var secondaryColor = Color(0xFF3882cd);
+var borderColor = Color.fromARGB(255, 202, 202, 202);
 
 class SearchStoresPage extends StatefulWidget {
   @override
@@ -15,6 +17,8 @@ class SearchStoresPage extends StatefulWidget {
 class _SearchStoresPageState extends State<SearchStoresPage> {
   int _currentIndex = 1;
   List stores = [];
+  int _selectedButton = 0; // Variable to track selected button
+  String _searchQuery = ''; // Variable to track search query
 
   @override
   void initState() {
@@ -46,18 +50,18 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       _currentIndex = index;
     });
 
-   if (index == 1) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SearchStoresPage()),
-    );
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePage()),
-    );
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchStoresPage()),
+      );
+    } else if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -78,27 +82,58 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onChanged: (value) {},
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+                // You may want to filter the stores based on the search query
+              },
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: () {
-                  _fetchStores(limit: 5);
+                  setState(() {
+                    _selectedButton =
+                        1; // Mark 'View Nearby Stores' as selected
+                    _fetchStores(limit: 5);
+                  });
                 },
                 child: Text('View Nearby Stores'),
-                style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor:
+                      _selectedButton == 1 ? secondaryColor : primaryColor,
+                  foregroundColor:
+                      _selectedButton == 1 ? Colors.white : Colors.black,
+                  side: BorderSide(
+                    color:
+                        _selectedButton == 1 ? Colors.transparent : borderColor,
+                    width: 2.0,
+                  ),
+                ),
               ),
               SizedBox(width: 10),
-              ElevatedButton(
+              OutlinedButton(
                 onPressed: () {
-                  _fetchStores();
+                  setState(() {
+                    _selectedButton = 2; // Mark 'View All Stores' as selected
+                    _fetchStores();
+                  });
                 },
                 child: Text('View All Stores'),
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: secondaryColor),
+                style: OutlinedButton.styleFrom(
+                  backgroundColor:
+                      _selectedButton == 2 ? secondaryColor : primaryColor,
+                  foregroundColor:
+                      _selectedButton == 2 ? Colors.white : Colors.black,
+                  side: BorderSide(
+                    color:
+                        _selectedButton == 2 ? Colors.transparent : borderColor,
+                    width: 2.0,
+                  ),
+                ),
               ),
             ],
           ),

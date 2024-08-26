@@ -2,8 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
-import 'ProductDetails.dart';
-import 'SearchStores.dart';
+import '../widgets/search_bar.dart';
+import '../widgets/category_chips.dart';
+import '../widgets/store_grid.dart';
+import '../widgets/product_grid.dart';
+import '../screens/ProductDetails.dart';
+import '../services/api_services.dart';
+import '../screens/SearchStores.dart';
+import '../widgets/bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,13 +23,8 @@ class _HomePageState extends State<HomePage> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  List<String> categories = ["Shoes", "Electronics", "Clothing", "Furniture"];
-  Map<int, bool> favoriteStatus = {};
   String selectedCategory = "Shoes";
   int _currentIndex = 0;
-  var primarry_color = Color.fromARGB(255, 202, 202, 202);
-  // var secondary_color = Color(0xFF174793);
-  var secondary_color = Color(0xFF3882cd);
 
   // WebSocket channel
   late WebSocketChannel _channel;
@@ -41,7 +42,6 @@ class _HomePageState extends State<HomePage> {
         final newStore = json.decode(message);
         setState(() {
           stores.add(newStore);
-          favoriteStatus[stores.length - 1] = false;
         });
       },
       onError: (error) {
@@ -64,11 +64,9 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
-
         setState(() {
           stores = decodedResponse;
           isLoading = false;
-          favoriteStatus = {for (var i = 0; i < stores.length; i++) i: false};
         });
       } else {
         setState(() {
@@ -91,7 +89,6 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
-
         setState(() {
           productsByCategory = decodedResponse;
         });
@@ -118,7 +115,6 @@ class _HomePageState extends State<HomePage> {
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
       );
     } else if (index == 0) {
-      // Home
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomePage()));
     }
@@ -151,84 +147,23 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
-              child: TextField(
-                controller: _searchController,
-                onChanged: (query) {
-                  setState(() {
-                    _searchQuery = query;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search for ${selectedCategory}',
-                  hintStyle: TextStyle(color: Colors.grey[500]),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey[500],
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(
-                      color: Colors.grey[300]!,
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(
-                      color: Colors.grey,
-                      width: 1.5,
-                    ),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
-                ),
-              ),
+            SearchBar(
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+              },
+              hintText: 'Search for $selectedCategory',
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Categories',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
-              child: Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
-                children: categories.map((category) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedCategory = category;
-                        fetchProductsByCategory(selectedCategory);
-                      });
-                    },
-                    child: Chip(
-                      label: Text(
-                        category,
-                        style: TextStyle(
-                          color: selectedCategory == category
-                              ? Colors.white // Text color when selected
-                              : Colors.black, // Text color when not selected
-                        ),
-                      ),
-                      padding: EdgeInsets.all(2),
-                      backgroundColor: selectedCategory == category
-                          ? secondary_color
-                          : Colors.white,
-                      side: BorderSide(
-                        color: selectedCategory == category
-                            ? secondary_color // Border color when selected
-                            : primarry_color, // Border color when not selected
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
+            CategoryChips(
+              categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
+              selectedCategory: selectedCategory,
+              onCategorySelected: (category) {
+                setState(() {
+                  selectedCategory = category;
+                  fetchProductsByCategory(selectedCategory);
+                });
+              },
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
@@ -237,113 +172,11 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              child: isLoading
-                  ? Center(child: CircularProgressIndicator())
-                  : errorMessage.isNotEmpty
-                      ? Center(child: Text(errorMessage))
-                      : GridView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.0,
-                            mainAxisSpacing: 8.0,
-                            childAspectRatio: 1.0,
-                          ),
-                          itemCount: stores.length,
-                          itemBuilder: (context, index) {
-                            final store = stores[index];
-                            final location =
-                                store['location']?['coordinates'] ?? [];
-                            final imageUrl = store['pictureUrl'] ?? '';
-
-                            if (_searchQuery.isNotEmpty &&
-                                !store['name']
-                                    ?.toLowerCase()
-                                    .contains(_searchQuery.toLowerCase())) {
-                              return Container();
-                            }
-
-                            final isFavorite = favoriteStatus[index] ?? false;
-
-                            return Card(
-                              elevation: 2,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.vertical(
-                                                top: Radius.circular(8.0)),
-                                            child: Image.network(
-                                              imageUrl,
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              fit: BoxFit.cover,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return Icon(Icons.error,
-                                                    size: 100);
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          top: 0,
-                                          right: 2,
-                                          child: IconButton(
-                                            icon: Icon(
-                                              isFavorite
-                                                  ? Icons.favorite
-                                                  : Icons.favorite_border,
-                                              color: isFavorite
-                                                  ? Colors.red
-                                                  : Colors.grey,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                favoriteStatus[index] =
-                                                    !isFavorite;
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 1.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        store['name'] ??
-                                            'Unknown Store', // Handle null store name
-                                        style: TextStyle(fontSize: 15),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 1.0),
-                                    child: Text(
-                                      'Location: Lat ${location.isNotEmpty ? location[1] : 'N/A'}, Long ${location.isNotEmpty ? location[0] : 'N/A'}',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+            StoreGrid(
+              isLoading: isLoading,
+              errorMessage: errorMessage,
+              stores: stores,
+              searchQuery: _searchQuery,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
@@ -352,93 +185,18 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 11.0),
-              child: productsByCategory.isEmpty
-                  ? Center(child: Text('No products available'))
-                  : GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: 8.0,
-                        mainAxisSpacing: 8.0,
-                        childAspectRatio: 0.7,
-                      ),
-                      itemCount: productsByCategory.length,
-                      itemBuilder: (context, index) {
-                        final product = productsByCategory[index];
-                        final imageUrl = product['imageUrl'] ?? '';
-
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    ProductDetailsPage(product: product),
-                              ),
-                            );
-                          },
-                          child: Card(
-                            elevation: 2,
-                            child: Column(
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(8.0)),
-                                      child: Image.network(
-                                        imageUrl,
-                                        width: double.infinity,
-                                        height: double.infinity,
-                                        fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Icon(Icons.error, size: 100);
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 1.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      product['name'] ?? 'Unknown Product',
-                                      style: TextStyle(fontSize: 15),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 1.0),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      product['price'] ?? 'Unknown price',
-                                      style: TextStyle(fontSize: 15),
-                                      textAlign: TextAlign.left,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
+            ProductGrid(
+              products: productsByCategory,
             ),
           ],
         ),
       ),
-     
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          _onTap(index);
+        },
+      ),
     );
   }
 }

@@ -1,25 +1,45 @@
+// lib/widgets/custom_search_bar.dart
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
-  final TextEditingController controller;
+class CustomSearchBar extends StatefulWidget {
   final Function(String) onChanged;
   final String hintText;
 
-  SearchBar({
-    required this.controller,
+  CustomSearchBar({
     required this.onChanged,
     required this.hintText,
   });
+
+  @override
+  _CustomSearchBarState createState() => _CustomSearchBarState();
+}
+
+class _CustomSearchBarState extends State<CustomSearchBar> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
       child: TextField(
-        controller: controller,
-        onChanged: onChanged,
+        controller: _controller,
+        onChanged: (text) {
+          widget.onChanged(text);
+        },
         decoration: InputDecoration(
-          hintText: hintText,
+          hintText: widget.hintText,
           hintStyle: TextStyle(color: Colors.grey[500]),
           prefixIcon: Icon(
             Icons.search,

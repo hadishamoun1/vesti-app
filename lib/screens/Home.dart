@@ -531,7 +531,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     _currentIndex = 3;
                   });
-                  // Handle Profile icon tap
+                  
                 },
               ),
             ),

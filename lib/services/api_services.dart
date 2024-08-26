@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/product_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://10.0.2.2:3000';
+  final String baseUrl;
+  ApiService() : baseUrl = dotenv.env['BASE_URL']!;
 
   Future<List<Product>> fetchProducts(String category) async {
     final response = await http.get(Uri.parse('$baseUrl/products/category/$category'));

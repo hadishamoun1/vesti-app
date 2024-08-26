@@ -6,7 +6,6 @@ import '../widgets/custom_search_bar.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/store_grid.dart';
 import '../widgets/product_grid.dart';
-
 import '../screens/SearchStores.dart';
 import '../widgets/bottom_nav_bar.dart';
 
@@ -39,19 +38,25 @@ class _HomePageState extends State<HomePage> {
     _channel.stream.listen(
       (message) {
         final newStore = json.decode(message);
-        setState(() {
-          stores.add(newStore);
-        });
+        if (mounted) {
+          setState(() {
+            stores.add(newStore);
+          });
+        }
       },
       onError: (error) {
-        setState(() {
-          errorMessage = 'WebSocket error occurred.';
-        });
+        if (mounted) {
+          setState(() {
+            errorMessage = 'WebSocket error occurred.';
+          });
+        }
       },
       onDone: () {
-        setState(() {
-          errorMessage = 'WebSocket connection closed.';
-        });
+        if (mounted) {
+          setState(() {
+            errorMessage = 'WebSocket connection closed.';
+          });
+        }
       },
     );
   }
@@ -63,21 +68,27 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
-        setState(() {
-          stores = decodedResponse;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            stores = decodedResponse;
+            isLoading = false;
+          });
+        }
       } else {
+        if (mounted) {
+          setState(() {
+            errorMessage = 'Failed to load stores. Please try again later.';
+            isLoading = false;
+          });
+        }
+      }
+    } catch (error) {
+      if (mounted) {
         setState(() {
-          errorMessage = 'Failed to load stores. Please try again later.';
+          errorMessage = 'An error occurred: $error';
           isLoading = false;
         });
       }
-    } catch (error) {
-      setState(() {
-        errorMessage = 'An error occurred: $error';
-        isLoading = false;
-      });
     }
   }
 
@@ -88,18 +99,24 @@ class _HomePageState extends State<HomePage> {
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
-        setState(() {
-          productsByCategory = decodedResponse;
-        });
+        if (mounted) {
+          setState(() {
+            productsByCategory = decodedResponse;
+          });
+        }
       } else {
-        setState(() {
-          errorMessage = 'Failed to load products. Please try again later.';
-        });
+        if (mounted) {
+          setState(() {
+            errorMessage = 'Failed to load products. Please try again later.';
+          });
+        }
       }
     } catch (error) {
-      setState(() {
-        errorMessage = 'An error occurred: $error';
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = 'An error occurred: $error';
+        });
+      }
     }
   }
 

@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 2,
+            spreadRadius: 5,
             blurRadius: 5,
             offset: Offset(0, -3),
           ),
@@ -56,6 +56,8 @@ class BottomNavBar extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: Container(
+        width: 50,
+        height: 50,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: currentIndex == index ? secondaryColor : Colors.transparent,
@@ -63,7 +65,7 @@ class BottomNavBar extends StatelessWidget {
         child: Icon(
           icon,
           color: currentIndex == index ? Colors.white : Colors.grey,
-          size: 30,
+          size: 32,
         ),
       ),
     );

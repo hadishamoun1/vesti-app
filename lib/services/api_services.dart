@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/product_model.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  final String baseUrl;
-  ApiService() : baseUrl = dotenv.env['BASE_URL']!;
+  // Directly define the base URL here
+  String baseUrl = 'http://10.0.2.2:3000';
 
   Future<List<Product>> fetchProducts(String category) async {
-    final response = await http.get(Uri.parse('$baseUrl/products/category/$category'));
-    
+    final response =
+        await http.get(Uri.parse('$baseUrl/products/category/$category'));
+
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       return data.map((item) => Product.fromJson(item)).toList();

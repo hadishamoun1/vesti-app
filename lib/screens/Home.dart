@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SearchBar(
+            CustomSearchBar(
               onChanged: (query) {
                 setState(() {
                   _searchQuery = query;

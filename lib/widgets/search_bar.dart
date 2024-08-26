@@ -3,7 +3,7 @@ import '../screens/Home.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/bottom_nav_bar.dart';
 import 'dart:convert';
-
+import '../widgets/custom_search_bar.dart';
 
 var primaryColor = Color.fromARGB(255, 255, 255, 255);
 var secondaryColor = Color(0xFF3882cd);

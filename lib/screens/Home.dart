@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'dart:convert';
-import '../widgets/search_bar.dart';
+import '../widgets/custom_search_bar.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/store_grid.dart';
 import '../widgets/product_grid.dart';

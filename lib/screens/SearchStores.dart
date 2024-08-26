@@ -3,7 +3,7 @@ import 'Home.dart';
 import 'package:http/http.dart' as http;
 import '../widgets/bottom_nav_bar.dart';
 import 'dart:convert';
-import '../widgets/search_bar.dart' as CustomSearchBar;
+import '../widgets/custom_search_bar.dart';
 
 var primaryColor = Color.fromARGB(255, 255, 255, 255);
 var secondaryColor = Color(0xFF3882cd);
@@ -72,23 +72,13 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              onChanged: (query) {
-                setState(() {
-                  _searchQuery = query;
-                });
-                // You may want to filter the stores based on the search query
-              },
-            ),
+          CustomSearchBar(
+            onChanged: (query) {
+              setState(() {
+                _searchQuery = query;
+              });
+            },
+            hintText: 'Search...',
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

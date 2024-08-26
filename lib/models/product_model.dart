@@ -1,22 +1,22 @@
 class Product {
-  final String id;
   final String name;
-  final String imageUrl;
-  final double price;
+  final String image;
+  final List<String> sizes;
+  final List<String> colors;
 
   Product({
-    required this.id,
     required this.name,
-    required this.imageUrl,
-    required this.price,
+    required this.image,
+    required this.sizes,
+    required this.colors,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json['id'],
       name: json['name'],
-      imageUrl: json['imageUrl'],
-      price: json['price'],
+      image: json['image'],
+      sizes: List<String>.from(json['sizes']),
+      colors: List<String>.from(json['colors']),
     );
   }
 }

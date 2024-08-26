@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'Home.dart';
-import 'package:http/http.dart' as http; // Add http package for API calls
-import 'dart:convert'; // Add dart:convert for JSON decoding
+import 'package:http/http.dart' as http;
+import '../widgets/bottom_nav_bar.dart';
+import 'dart:convert';
 
 var primaryColor = Color.fromARGB(255, 253, 202, 63);
 var secondaryColor = Color(0xFF174793);
@@ -12,13 +13,13 @@ class SearchStoresPage extends StatefulWidget {
 }
 
 class _SearchStoresPageState extends State<SearchStoresPage> {
-  int _currentIndex = 1; // Set to 1 since this is the Search Page
-  List stores = []; // List to hold fetched stores data
+  int _currentIndex = 1;
+  List stores = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchStores(); // Fetch stores when the page loads
+    _fetchStores();
   }
 
   void _fetchStores({int? limit}) async {
@@ -45,24 +46,25 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       _currentIndex = index;
     });
 
-    if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => SearchStoresPage()),
-      );
-    } else if (index == 0) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    }
+   if (index == 1) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SearchStoresPage()),
+    );
+  } else if (index == 0) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Search Stores'),
+        leading: null,
       ),
       body: Column(
         children: [
@@ -76,9 +78,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              onChanged: (value) {
-                // Optionally, handle search input change
-              },
+              onChanged: (value) {},
             ),
           ),
           Row(
@@ -86,22 +86,19 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  // Fetch nearby stores
-                  _fetchStores(limit: 5); // Example limit for nearby stores
+                  _fetchStores(limit: 5);
                 },
                 child: Text('View Nearby Stores'),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: primaryColor), // Updated here
+                style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
               ),
               SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
-                  // Fetch all stores
-                  _fetchStores(); // No limit for all stores
+                  _fetchStores();
                 },
                 child: Text('View All Stores'),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: secondaryColor), // Updated here
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: secondaryColor),
               ),
             ],
           ),
@@ -114,7 +111,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                   child: ListTile(
                     title: Text(stores[index]['name']),
                     subtitle: Text(stores[index]['location']),
-                    // Add more store details here if needed
                   ),
                 );
               },
@@ -122,42 +118,11 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: Offset(0, -3),
-            ),
-          ],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: secondaryColor,
-          currentIndex: _currentIndex,
-          iconSize: 40,
-          onTap: _onTap,
-          selectedItemColor: primaryColor,
-          unselectedItemColor: Colors.white,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              label: 'Search',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              label: 'Profile',
-            ),
-          ],
-        ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          _onTap(index);
+        },
       ),
     );
   }

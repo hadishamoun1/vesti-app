@@ -110,13 +110,15 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (index == 1) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
       );
     } else if (index == 0) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
     }
   }
 

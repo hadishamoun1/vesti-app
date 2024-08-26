@@ -110,7 +110,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
               OutlinedButton(
                 onPressed: () {
                   setState(() {
-                    _selectedButton = 2; // Mark 'View All Stores' as selected
+                    _selectedButton = 2;
                     _fetchStores();
                   });
                 },

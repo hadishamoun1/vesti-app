@@ -6,8 +6,7 @@ import '../widgets/custom_search_bar.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/store_grid.dart';
 import '../widgets/product_grid.dart';
-import '../screens/ProductDetails.dart';
-import '../services/api_services.dart';
+
 import '../screens/SearchStores.dart';
 import '../widgets/bottom_nav_bar.dart';
 
@@ -150,12 +149,12 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomSearchBar(
+              hintText: 'Search for $selectedCategory',
               onChanged: (query) {
                 setState(() {
                   _searchQuery = query;
                 });
               },
-              hintText: 'Search for $selectedCategory',
             ),
             CategoryChips(
               categories: ["Shoes", "Electronics", "Clothing", "Furniture"],

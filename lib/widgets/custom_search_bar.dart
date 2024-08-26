@@ -14,7 +14,9 @@ class CustomSearchBar extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 5, 16, 16),
       child: TextField(
+        onChanged: onChanged,
         decoration: InputDecoration(
+          hintText: hintText,
           hintStyle: TextStyle(color: Colors.grey[500]),
           prefixIcon: Icon(
             Icons.search,

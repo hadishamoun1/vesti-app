@@ -111,7 +111,10 @@ class _CartScreenState extends State<CartScreen> {
                     },
                     child: Text('Checkout'),
                   ),
+                  
                 ],
+                
+                
               ),
             ),
           ),

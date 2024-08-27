@@ -20,11 +20,12 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   List _allStores = [];
   List _filteredStores = [];
   Position? _currentPosition;
+  bool _showNearbyStores = true; // Track which button is selected
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation(); // Request location when the page is loaded
+    _getCurrentLocation();
   }
 
   void _getCurrentLocation() async {
@@ -32,11 +33,10 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       _currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      // Debugging: Log the obtained latitude and longitude
       print(
           "Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}");
 
-      _fetchStoresNearby(); // Fetch nearby stores after getting the location
+      _fetchStoresNearby();
     } catch (e) {
       print("Error getting location: $e");
     }
@@ -49,7 +49,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       final latitude = _currentPosition!.latitude;
       final longitude = _currentPosition!.longitude;
 
-      // Debugging: Print the latitude and longitude before making the request
       print(
           "Fetching stores nearby with Latitude: $latitude, Longitude: $longitude");
 
@@ -58,7 +57,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
             'http://10.0.2.2:3000/stores/nearby?lat=$latitude&lon=$longitude&radius=5000&limit=5'),
       );
 
-      // Print the raw response from the API
       print("API Response Status Code: ${response.statusCode}");
       print("API Response Body: ${response.body}");
 
@@ -67,6 +65,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           setState(() {
             _allStores = json.decode(response.body);
             _filteredStores = _allStores;
+            _showNearbyStores = true; // Set button state
           });
         }
       } else {
@@ -79,14 +78,12 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
   void _fetchAllStores() async {
     try {
-      // Debugging: Log the URL before making the request
       print("Fetching all stores");
 
       final response = await http.get(
         Uri.parse('http://10.0.2.2:3000/stores'),
       );
 
-      // Print the raw response from the API
       print("API Response Status Code: ${response.statusCode}");
       print("API Response Body: ${response.body}");
 
@@ -95,6 +92,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           setState(() {
             _allStores = json.decode(response.body);
             _filteredStores = _allStores;
+            _showNearbyStores = false; // Set button state
           });
         }
       } else {
@@ -107,12 +105,10 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
   void _searchStores(String query) {
     setState(() {
-      _filteredStores = _allStores
-          .where((store) {
-            final storeName = store['name']?.toLowerCase() ?? '';
-            return storeName.contains(query.toLowerCase());
-          })
-          .toList();
+      _filteredStores = _allStores.where((store) {
+        final storeName = store['name']?.toLowerCase() ?? '';
+        return storeName.contains(query.toLowerCase());
+      }).toList();
     });
   }
 
@@ -152,24 +148,30 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           CustomSearchBar(
             hintText: 'Search...',
             onChanged: (query) {
-              _searchStores(query); // Search through the displayed data
+              _searchStores(query);
             },
           ),
-          SizedBox(height: 10), // Add some spacing between the search bar and buttons
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
                 onPressed: _getCurrentLocation,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: secondaryColor,
+                  backgroundColor:
+                      _showNearbyStores ? secondaryColor : primaryColor,
+                  foregroundColor:
+                      _showNearbyStores ? primaryColor : Colors.black,
                 ),
                 child: Text('View Nearby Stores'),
               ),
               ElevatedButton(
-                onPressed: _fetchAllStores, // Fetch all stores
+                onPressed: _fetchAllStores,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: secondaryColor,
+                  backgroundColor:
+                      !_showNearbyStores ? secondaryColor : primaryColor,
+                  foregroundColor:
+                      !_showNearbyStores ? primaryColor : Colors.black,
                 ),
                 child: Text('View All Stores'),
               ),
@@ -181,7 +183,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
               itemBuilder: (context, index) {
                 final store = _filteredStores[index];
 
-                // Ensure store is not null and provide default values if necessary
                 final storeName = store['name'] ?? 'Unnamed Store';
                 final pictureURL = store['pictureURL'];
 
@@ -193,10 +194,9 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                           height: 50,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.error), // Placeholder for error
+                              Icon(Icons.error),
                         )
-                      : Icon(
-                          Icons.store), // Default icon if no image is available
+                      : Icon(Icons.store),
                   title: Text(storeName),
                   subtitle:
                       Text(store['description'] ?? 'No description available'),

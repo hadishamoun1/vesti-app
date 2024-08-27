@@ -6,14 +6,15 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-    List<CartItem> cartItems = [
+  List<CartItem> cartItems = [
     CartItem(name: 'T-Shirt', price: 20.0, quantity: 1),
     CartItem(name: 'Jeans', price: 40.0, quantity: 2),
     CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
   ];
 
   double get totalPrice {
-    return cartItems.fold(0.0, (total, item) => total + (item.price * item.quantity));
+    return cartItems.fold(
+        0.0, (total, item) => total + (item.price * item.quantity));
   }
 
   void _onCheckout() {
@@ -22,20 +23,20 @@ class _CartScreenState extends State<CartScreen> {
     print('Checkout pressed');
   }
 
-  
-   void _incrementQuantity(int index) {
+  void _incrementQuantity(int index) {
     setState(() {
       cartItems[index].quantity++;
     });
   }
 
-    void _decrementQuantity(int index) {
+  void _decrementQuantity(int index) {
     setState(() {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +44,7 @@ class _CartScreenState extends State<CartScreen> {
         title: Text('Your Cart'),
         centerTitle: true,
       ),
-        body: Column(
+      body: Column(
         children: [
           Expanded(
             child: ListView.builder(
@@ -56,7 +57,8 @@ class _CartScreenState extends State<CartScreen> {
                       child: Text('${cartItems[index].quantity}x'),
                     ),
                     title: Text(cartItems[index].name),
-                    subtitle: Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
+                    subtitle:
+                        Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -75,23 +77,42 @@ class _CartScreenState extends State<CartScreen> {
               },
             ),
           ),
-               Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total: \$${totalPrice.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle checkout action
-                    _onCheckout();
-                  },
-                  child: Text('Checkout'),
+          Container(
+            height: 160,
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 10,
+                  offset: Offset(0, 4),
                 ),
               ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total: \$${totalPrice.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Handle checkout action
+                      _onCheckout();
+                    },
+                    child: Text('Checkout'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -99,6 +120,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
+
 class CartItem {
   final String name;
   final double price;

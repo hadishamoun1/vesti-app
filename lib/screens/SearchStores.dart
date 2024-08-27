@@ -17,9 +17,8 @@ class SearchStoresPage extends StatefulWidget {
 
 class _SearchStoresPageState extends State<SearchStoresPage> {
   int _currentIndex = 1;
-  List stores = [];
-  int _selectedButton = 0;
-  String _searchQuery = '';
+  List _allStores = [];
+  List _filteredStores = [];
   Position? _currentPosition;
 
   @override
@@ -32,6 +31,11 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     try {
       _currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
+
+      // Debugging: Log the obtained latitude and longitude
+      print(
+          "Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}");
+
       _fetchStoresNearby(); // Fetch nearby stores after getting the location
     } catch (e) {
       print("Error getting location: $e");
@@ -42,61 +46,96 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     if (_currentPosition == null) return;
 
     try {
+      final latitude = _currentPosition!.latitude;
+      final longitude = _currentPosition!.longitude;
+
+      // Debugging: Print the latitude and longitude before making the request
+      print(
+          "Fetching stores nearby with Latitude: $latitude, Longitude: $longitude");
+
       final response = await http.get(
         Uri.parse(
-            'http://10.0.2.2:3000/stores/nearby?lat=${_currentPosition!.latitude}&lon=${_currentPosition!.longitude}&limit=5'),
+            'http://10.0.2.2:3000/stores/nearby?lat=$latitude&lon=$longitude&radius=5000&limit=5'),
       );
+
+      // Print the raw response from the API
+      print("API Response Status Code: ${response.statusCode}");
+      print("API Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            stores = json.decode(response.body);
+            _allStores = json.decode(response.body);
+            _filteredStores = _allStores;
           });
         }
       } else {
         throw Exception('Failed to load stores');
       }
     } catch (e) {
-      print(e.toString());
+      print("Error fetching nearby stores: ${e.toString()}");
     }
   }
 
-  void _fetchStores({int? limit}) async {
+  void _fetchAllStores() async {
     try {
+      // Debugging: Log the URL before making the request
+      print("Fetching all stores");
+
       final response = await http.get(
-        Uri.parse(
-            'http://10.0.2.2:3000/stores${limit != null ? '?limit=$limit' : ''}'),
+        Uri.parse('http://10.0.2.2:3000/stores'),
       );
+
+      // Print the raw response from the API
+      print("API Response Status Code: ${response.statusCode}");
+      print("API Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
-            stores = json.decode(response.body);
+            _allStores = json.decode(response.body);
+            _filteredStores = _allStores;
           });
         }
       } else {
         throw Exception('Failed to load stores');
       }
     } catch (e) {
-      print(e.toString());
+      print("Error fetching stores: ${e.toString()}");
     }
+  }
+
+  void _searchStores(String query) {
+    setState(() {
+      _filteredStores = _allStores
+          .where((store) {
+            final storeName = store['name']?.toLowerCase() ?? '';
+            return storeName.contains(query.toLowerCase());
+          })
+          .toList();
+    });
   }
 
   void _onTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    if (_currentIndex != index) {
+      setState(() {
+        _currentIndex = index;
+      });
 
-    if (index == 1) {
-      _getCurrentLocation(); // Request location when user clicks the search icon
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SearchStoresPage()),
-      );
-    } else if (index == 0) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(
+          builder: (context) {
+            switch (index) {
+              case 0:
+                return HomePage();
+              case 1:
+                return SearchStoresPage();
+              default:
+                return SearchStoresPage();
+            }
+          },
+        ),
       );
     }
   }
@@ -113,10 +152,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           CustomSearchBar(
             hintText: 'Search...',
             onChanged: (query) {
-              setState(() {
-                _searchQuery = query;
-                _fetchStores(); // Fetch stores based on the search query
-              });
+              _searchStores(query); // Search through the displayed data
             },
           ),
           SizedBox(height: 10), // Add some spacing between the search bar and buttons
@@ -131,9 +167,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                 child: Text('View Nearby Stores'),
               ),
               ElevatedButton(
-                onPressed: () {
-                  _fetchStores(limit: null); // Fetch all stores
-                },
+                onPressed: _fetchAllStores, // Fetch all stores
                 style: ElevatedButton.styleFrom(
                   backgroundColor: secondaryColor,
                 ),
@@ -143,12 +177,29 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: stores.length,
+              itemCount: _filteredStores.length,
               itemBuilder: (context, index) {
-                final store = stores[index];
+                final store = _filteredStores[index];
+
+                // Ensure store is not null and provide default values if necessary
+                final storeName = store['name'] ?? 'Unnamed Store';
+                final pictureURL = store['pictureURL'];
+
                 return ListTile(
-                  title: Text(store['name']),
-                  subtitle: Text(store['description']),
+                  leading: pictureURL != null && pictureURL.isNotEmpty
+                      ? Image.network(
+                          pictureURL,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Icon(Icons.error), // Placeholder for error
+                        )
+                      : Icon(
+                          Icons.store), // Default icon if no image is available
+                  title: Text(storeName),
+                  subtitle:
+                      Text(store['description'] ?? 'No description available'),
                 );
               },
             ),

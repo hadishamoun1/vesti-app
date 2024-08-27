@@ -16,6 +16,14 @@ class _CartScreenState extends State<CartScreen> {
       cartItems[index].quantity++;
     });
   }
+
+    void _decrementQuantity(int index) {
+    setState(() {
+      if (cartItems[index].quantity > 1) {
+        cartItems[index].quantity--;
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

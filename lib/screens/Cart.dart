@@ -21,7 +21,7 @@ class _CartScreenState extends State<CartScreen> {
     // For example, navigate to a payment screen or show a confirmation dialog
     print('Checkout pressed');
   }
-  
+
   
    void _incrementQuantity(int index) {
     setState(() {
@@ -72,6 +72,25 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 );
               },
+            ),
+          ),
+               Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total: \$${totalPrice.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle checkout action
+                    _onCheckout();
+                  },
+                  child: Text('Checkout'),
+                ),
+              ],
             ),
           ),
         ],

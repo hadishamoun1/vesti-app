@@ -11,6 +11,11 @@ class _CartScreenState extends State<CartScreen> {
     CartItem(name: 'Jeans', price: 40.0, quantity: 2),
     CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
   ];
+   void _incrementQuantity(int index) {
+    setState(() {
+      cartItems[index].quantity++;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

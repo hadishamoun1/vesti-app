@@ -41,6 +41,7 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
+        centerTitle: true,
       ),
         body: Column(
         children: [

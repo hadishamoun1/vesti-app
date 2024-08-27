@@ -17,7 +17,27 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
-      body: Container(), 
+       body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: cartItems.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Text('${cartItems[index].quantity}x'),
+                    ),
+                    title: Text(cartItems[index].name),
+                    subtitle: Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ), 
     );
   }
 }

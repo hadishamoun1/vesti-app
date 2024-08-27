@@ -8,6 +8,7 @@ import '../widgets/store_grid.dart';
 import '../widgets/product_grid.dart';
 import '../screens/SearchStores.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'Cart.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -157,7 +158,12 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             iconSize: 30,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CartScreen()),
+              );
+            },
           ),
         ],
       ),

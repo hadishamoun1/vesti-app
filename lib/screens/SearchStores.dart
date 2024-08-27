@@ -1,3 +1,4 @@
+import 'package:app/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'Home.dart';
 import 'package:http/http.dart' as http;
@@ -8,7 +9,6 @@ import 'package:geolocator/geolocator.dart';
 
 var primaryColor = Color.fromARGB(255, 255, 255, 255);
 var secondaryColor = Color(0xFF3882cd);
-var borderColor = Color.fromARGB(255, 202, 202, 202);
 
 class SearchStoresPage extends StatefulWidget {
   @override
@@ -155,6 +155,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // Use ElevatedButton for the selected state
               ElevatedButton(
                 onPressed: _getCurrentLocation,
                 style: ElevatedButton.styleFrom(
@@ -162,16 +163,19 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                       _showNearbyStores ? secondaryColor : primaryColor,
                   foregroundColor:
                       _showNearbyStores ? primaryColor : Colors.black,
+                  side: BorderSide(color: borderColor, width: 1),
                 ),
                 child: Text('View Nearby Stores'),
               ),
-              ElevatedButton(
+              // Use OutlinedButton for the unselected state
+              OutlinedButton(
                 onPressed: _fetchAllStores,
-                style: ElevatedButton.styleFrom(
+                style: OutlinedButton.styleFrom(
                   backgroundColor:
                       !_showNearbyStores ? secondaryColor : primaryColor,
                   foregroundColor:
                       !_showNearbyStores ? primaryColor : Colors.black,
+                  side: BorderSide(color: borderColor, width: 1),
                 ),
                 child: Text('View All Stores'),
               ),

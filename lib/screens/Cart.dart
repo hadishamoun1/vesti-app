@@ -6,31 +6,38 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-    List<CartItem> cartItems = [
+  List<CartItem> cartItems = [
     CartItem(name: 'T-Shirt', price: 20.0, quantity: 1),
     CartItem(name: 'Jeans', price: 40.0, quantity: 2),
     CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
   ];
-   void _incrementQuantity(int index) {
+
+  double get totalPrice {
+    return cartItems.fold(
+        0.0, (total, item) => total + (item.price * item.quantity));
+  }
+
+  void _incrementQuantity(int index) {
     setState(() {
       cartItems[index].quantity++;
     });
   }
 
-    void _decrementQuantity(int index) {
+  void _decrementQuantity(int index) {
     setState(() {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Your Cart'),
       ),
-        body: Column(
+      body: Column(
         children: [
           Expanded(
             child: ListView.builder(
@@ -43,7 +50,8 @@ class _CartScreenState extends State<CartScreen> {
                       child: Text('${cartItems[index].quantity}x'),
                     ),
                     title: Text(cartItems[index].name),
-                    subtitle: Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
+                    subtitle:
+                        Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -67,6 +75,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 }
+
 class CartItem {
   final String name;
   final double price;

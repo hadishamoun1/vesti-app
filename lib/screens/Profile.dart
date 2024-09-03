@@ -1,38 +1,9 @@
+import 'package:app/widgets/DashedDivider.dart';
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'Home.dart';
 import 'AiSearch.dart';
 import 'SearchStores.dart';
-
-class DashedDivider extends StatelessWidget {
-  final double dashWidth;
-  final double dashHeight;
-  final double dashSpacing;
-  final Color color;
-
-  DashedDivider({
-    this.dashWidth = 10.0,
-    this.dashHeight = 2.0,
-    this.dashSpacing = 4.0,
-    this.color = Colors.black,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(
-        (MediaQuery.of(context).size.width / (dashWidth + dashSpacing)).floor(),
-        (index) => Container(
-          width: dashWidth,
-          height: dashHeight,
-          color: color,
-          margin: EdgeInsets.symmetric(horizontal: dashSpacing / 2),
-        ),
-      ),
-    );
-  }
-}
 
 var secondaryColor = Color(0xFF3882cd);
 
@@ -93,7 +64,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+                      backgroundImage:
+                          NetworkImage('https://via.placeholder.com/150'),
                       backgroundColor: Colors.white,
                     ),
                     SizedBox(width: 16),
@@ -121,11 +93,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ],
                 ),
-                Spacer(flex: 5,), // Pushes the dashed divider to the bottom
-                DashedDivider(), // Add the custom dashed divider here
               ],
             ),
           ),
+          DashedDivider( width: MediaQuery.of(context).size.width, 
+                  alignment: Alignment.bottomCenter,),
           SizedBox(height: 16),
           Expanded(
             child: ListView(

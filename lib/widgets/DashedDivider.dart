@@ -5,23 +5,23 @@ class DashedDivider extends StatelessWidget {
   final double dashHeight;
   final double dashSpacing;
   final Color color;
-  final double width; // Added parameter for width
-  final Alignment alignment; // Added parameter for alignment
+  final double width; 
+  final Alignment alignment; 
 
   DashedDivider({
     this.dashWidth = 10.0,
     this.dashHeight = 2.0,
     this.dashSpacing = 4.0,
     this.color = Colors.black,
-    this.width = double.infinity, // Default to full width
-    this.alignment = Alignment.center, // Default to center alignment
+    this.width = double.infinity, 
+    this.alignment = Alignment.center, 
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width, // Use the width parameter
-      alignment: alignment, // Use the alignment parameter
+      width: width, 
+      alignment: alignment, 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: List.generate(

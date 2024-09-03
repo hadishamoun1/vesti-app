@@ -53,10 +53,10 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile Header
           Container(
+            height: 110,
             padding: EdgeInsets.all(16.0),
-            color: secondaryColor,
+            color: Colors.white,
             child: Row(
               children: [
                 CircleAvatar(
@@ -69,19 +69,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 8),
                     Text(
                       'John Doe',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 6),
                     Text(
                       'john.doe@example.com',
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.black26,
                         fontSize: 16,
                       ),
                     ),
@@ -91,7 +92,6 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: 16),
-          // Navigation Section
           Expanded(
             child: ListView(
               children: [

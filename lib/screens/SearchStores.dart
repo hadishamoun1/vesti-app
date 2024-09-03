@@ -118,7 +118,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       _currentIndex = index;
     });
 
-    if (index == 1) {
+        if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
@@ -132,6 +132,12 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
+    }
+    else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
       );
     }
   }

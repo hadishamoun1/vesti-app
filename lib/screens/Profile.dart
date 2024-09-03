@@ -1,7 +1,35 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
+//
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  int _currentIndex = 0;
+
+  void _onBottomNavTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/home');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/searchStores');
+        break;
+      case 2:
+        Navigator.pushReplacementNamed(context, '/searchScreen');
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,9 +86,9 @@ class ProfilePage extends StatelessWidget {
                   title: Text('Notifications'),
                   onTap: () {
                     //Navigator.push(
-                     // context,
-                    //  MaterialPageRoute(builder: (context) => NotificationsPage()),
-                   // );
+                      //context,
+                     // MaterialPageRoute(builder: (context) => NotificationsPage()),
+                    //);
                   },
                 ),
                 Divider(),
@@ -80,8 +108,8 @@ class ProfilePage extends StatelessWidget {
                   title: Text('Orders'),
                   onTap: () {
                     //Navigator.push(
-                     // context,
-                     // MaterialPageRoute(builder: (context) => OrdersPage()),
+                      //context,
+                      //MaterialPageRoute(builder: (context) => OrdersPage()),
                     //);
                   },
                 ),

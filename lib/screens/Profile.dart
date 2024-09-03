@@ -3,7 +3,9 @@ import '../widgets/bottom_nav_bar.dart';
 import 'Home.dart';
 import 'AiSearch.dart';
 import 'SearchStores.dart';
+
 //
+var secondaryColor = Color(0xFF3882cd);
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -16,7 +18,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void _onBottomNavTapped(int index) {
     setState(() {
       _currentIndex = index;
-     
     });
     if (index == 1) {
       Navigator.pushReplacement(
@@ -33,8 +34,7 @@ class _ProfilePageState extends State<ProfilePage> {
         context,
         MaterialPageRoute(builder: (context) => SearchScreen()),
       );
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
@@ -56,19 +56,21 @@ class _ProfilePageState extends State<ProfilePage> {
           // Profile Header
           Container(
             padding: EdgeInsets.all(16.0),
-            color: Colors.blueGrey[700],
+            color: secondaryColor,
             child: Row(
               children: [
                 CircleAvatar(
                   radius: 40,
-                  backgroundImage: NetworkImage('https://via.placeholder.com/150'), 
+                  backgroundImage:
+                      NetworkImage('https://via.placeholder.com/150'),
+                  backgroundColor: Colors.white,
                 ),
                 SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'John Doe', 
+                      'John Doe',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -77,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'john.doe@example.com', 
+                      'john.doe@example.com',
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
@@ -94,34 +96,34 @@ class _ProfilePageState extends State<ProfilePage> {
             child: ListView(
               children: [
                 ListTile(
-                  leading: Icon(Icons.notifications, color: Colors.blueGrey[700]),
+                  leading: Icon(Icons.notifications, color: secondaryColor),
                   title: Text('Notifications'),
                   onTap: () {
                     //Navigator.push(
-                      //context,
-                     // MaterialPageRoute(builder: (context) => NotificationsPage()),
+                    //context,
+                    // MaterialPageRoute(builder: (context) => NotificationsPage()),
                     //);
                   },
                 ),
                 Divider(),
                 ListTile(
-                  leading: Icon(Icons.favorite, color: Colors.blueGrey[700]),
+                  leading: Icon(Icons.favorite, color: Colors.red),
                   title: Text('Favorites'),
                   onTap: () {
                     //Navigator.push(
-                      //context,
-                      //MaterialPageRoute(builder: (context) => FavoritesPage()),
+                    //context,
+                    //MaterialPageRoute(builder: (context) => FavoritesPage()),
                     //);
                   },
                 ),
                 Divider(),
                 ListTile(
-                  leading: Icon(Icons.list, color: Colors.blueGrey[700]),
+                  leading: Icon(Icons.list, color: secondaryColor),
                   title: Text('Orders'),
                   onTap: () {
                     //Navigator.push(
-                      //context,
-                      //MaterialPageRoute(builder: (context) => OrdersPage()),
+                    //context,
+                    //MaterialPageRoute(builder: (context) => OrdersPage()),
                     //);
                   },
                 ),

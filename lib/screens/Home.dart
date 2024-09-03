@@ -9,6 +9,7 @@ import '../widgets/product_grid.dart';
 import '../screens/SearchStores.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'Cart.dart';
+import 'AiSearch.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -135,6 +136,11 @@ class _HomePageState extends State<HomePage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchScreen()),
       );
     }
   }

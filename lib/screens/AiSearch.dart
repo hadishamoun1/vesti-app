@@ -25,4 +25,39 @@ class _SearchScreenState extends State<SearchScreen> {
     // Implement your API call here and update the search results list.
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Image Search'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: _image == null
+                    ? Center(child: Text('Tap to upload an image'))
+                    : Image.file(_image!, fit: BoxFit.cover),
+              ),
+            ),
+            SizedBox(height: 16.0),
+            Expanded(
+              child: _image == null
+                  ? Center(child: Text('Upload an image to see results'))
+                  : _buildSearchResults(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

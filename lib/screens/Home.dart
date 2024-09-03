@@ -1,11 +1,6 @@
+import 'package:app/screens/HomeTab.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:web_socket_channel/web_socket_channel.dart';
-import 'dart:convert';
-import '../widgets/custom_search_bar.dart';
-import '../widgets/category_chips.dart';
-import '../widgets/store_grid.dart';
-import '../widgets/product_grid.dart';
+
 import '../screens/SearchStores.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'Cart.dart';
@@ -18,145 +13,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<dynamic> stores = [];
-  List<dynamic> productsByCategory = [];
-  bool isLoading = true;
-  String errorMessage = '';
-  TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
-  String selectedCategory = "Shoes";
   int _currentIndex = 0;
-
-  // WebSocket channel
-  late WebSocketChannel _channel;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchStores();
-    fetchProductsByCategory(selectedCategory);
-    _channel = WebSocketChannel.connect(
-      Uri.parse('ws://10.0.2.2:3000?limit=2'),
-    );
-    _channel.stream.listen(
-      (message) {
-        final newStore = json.decode(message);
-        if (mounted) {
-          setState(() {
-            stores.add(newStore);
-          });
-        }
-      },
-      onError: (error) {
-        if (mounted) {
-          setState(() {
-            errorMessage = 'WebSocket error occurred.';
-          });
-        }
-      },
-      onDone: () {
-        if (mounted) {
-          setState(() {
-            errorMessage = 'WebSocket connection closed.';
-          });
-        }
-      },
-    );
-  }
-
-  Future<void> fetchStores() async {
-    try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> decodedResponse = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            stores = decodedResponse;
-            isLoading = false;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            errorMessage = 'Failed to load stores. Please try again later.';
-            isLoading = false;
-          });
-        }
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          errorMessage = 'An error occurred: $error';
-          isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> fetchProductsByCategory(String category) async {
-    try {
-      final response = await http
-          .get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> decodedResponse = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            productsByCategory = decodedResponse;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            errorMessage = 'Failed to load products. Please try again later.';
-          });
-        }
-      }
-    } catch (error) {
-      if (mounted) {
-        setState(() {
-          errorMessage = 'An error occurred: $error';
-        });
-      }
-    }
-  }
 
   void _onTap(int index) {
     setState(() {
       _currentIndex = index;
     });
+  }
 
-    if (index == 1) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SearchStoresPage()),
-      );
-    } else if (index == 0) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    } else if (index == 2) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SearchScreen()),
-      );
-    } else if (index == 3) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ProfilePage()),
-      );
+  Widget buildContent() {
+    switch (_currentIndex) {
+      case 0:
+        print("object");
+        return Hometab();
+      case 1:
+        return SearchStoresPage();
+      case 2:
+        return SearchScreen();
+      case 3:
+        return ProfilePage();
+
+      default:
+        return Hometab();
     }
   }
 
-  @override
-  void dispose() {
-    _channel.sink.close();
-    super.dispose();
-  }
-
+// Mediauery.of(context).size.height
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,61 +60,11 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
-        backgroundColor: Colors.white, 
+        backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20), 
+        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
       ),
-      body: Container(
-        color: Colors.white, 
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomSearchBar(
-                hintText: 'Search for $selectedCategory',
-                onChanged: (query) {
-                  setState(() {
-                    _searchQuery = query;
-                  });
-                },
-              ),
-              CategoryChips(
-                categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
-                selectedCategory: selectedCategory,
-                onCategorySelected: (category) {
-                  setState(() {
-                    selectedCategory = category;
-                    fetchProductsByCategory(selectedCategory);
-                  });
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
-                child: Text(
-                  'Trending stores',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              StoreGrid(
-                isLoading: isLoading,
-                errorMessage: errorMessage,
-                stores: stores,
-                searchQuery: _searchQuery,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
-                child: Text(
-                  'Latest $selectedCategory',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-              ProductGrid(
-                products: productsByCategory,
-              ),
-            ],
-          ),
-        ),
-      ),
+      body: buildContent(),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,
         onTap: (index) {

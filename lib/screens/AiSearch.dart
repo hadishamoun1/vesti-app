@@ -59,43 +59,32 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Search'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-        color: Colors.white,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: Container(
-                width: double.infinity,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: _image == null
-                    ? Center(child: Text('Tap to upload an image'))
-                    : Image.file(_image!, fit: BoxFit.cover),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(12.0),
               ),
-            ),
-            SizedBox(height: 16.0),
-            Expanded(
               child: _image == null
-                  ? Center(child: Text('Upload an image to see results'))
-                  : _buildSearchResults(),
+                  ? Center(child: Text('Tap to upload an image'))
+                  : Image.file(_image!, fit: BoxFit.cover),
             ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onBottomNavTapped,
+          ),
+          SizedBox(height: 16.0),
+          Expanded(
+            child: _image == null
+                ? Center(child: Text('Upload an image to see results'))
+                : _buildSearchResults(),
+          ),
+        ],
       ),
     );
   }

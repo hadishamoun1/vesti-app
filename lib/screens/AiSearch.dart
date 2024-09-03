@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'Home.dart';
+import 'SearchStores.dart';
 
 
 class SearchScreen extends StatefulWidget {
@@ -12,7 +14,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   File? _image;
   final picker = ImagePicker();
-  int _currentIndex = 1; // Set the initial index to 1 for the search screen
+  int _currentIndex = 2; 
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -25,14 +27,30 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchSearchResults() async {
-    // Implement your API call here and update the search results list.
+    
   }
 
   void _onBottomNavTapped(int index) {
     setState(() {
       _currentIndex = index;
-      // Add logic here to navigate to other screens based on the index
+     
     });
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchStoresPage()),
+      );
+    } else if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
+    }
   }
 
   @override

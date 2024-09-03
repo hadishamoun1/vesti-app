@@ -105,7 +105,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     //);
                   },
                 ),
-                Divider(),
                 ListTile(
                   leading: Icon(Icons.favorite, color: Colors.red),
                   title: Text('Favorites'),
@@ -116,7 +115,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     //);
                   },
                 ),
-                Divider(),
                 ListTile(
                   leading: Icon(Icons.list, color: secondaryColor),
                   title: Text('Orders'),

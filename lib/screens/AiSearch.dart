@@ -22,7 +22,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchSearchResults() async {
-    // Implement your API call here and update the search results list.
+
   }
 
   @override
@@ -60,4 +60,26 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
+}
+
+Widget _buildSearchResults() {
+
+  List<String> searchResults = [
+    'Result 1',
+    'Result 2',
+    'Result 3',
+  ];
+
+  return ListView.builder(
+    itemCount: searchResults.length,
+    itemBuilder: (context, index) {
+      return Card(
+        child: ListTile(
+          title: Text(searchResults[index]),
+          subtitle: Text('Additional details'),
+          trailing: Icon(Icons.arrow_forward_ios),
+        ),
+      );
+    },
+  );
 }

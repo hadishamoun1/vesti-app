@@ -14,7 +14,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   File? _image;
   final picker = ImagePicker();
-  int _currentIndex = 2; 
+  int _currentIndex = 2;
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -63,9 +63,10 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         title: Text('Image Search'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: Container(
-        color: Colors.white, 
+        color: Colors.white,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [

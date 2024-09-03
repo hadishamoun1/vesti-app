@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
+import 'Home.dart';
+import 'AiSearch.dart';
+import 'SearchStores.dart';
 //
 
 class ProfilePage extends StatefulWidget {
@@ -8,25 +11,34 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  int _currentIndex = 0;
+  int _currentIndex = 3;
 
   void _onBottomNavTapped(int index) {
     setState(() {
       _currentIndex = index;
+     
     });
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, '/home');
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, '/searchStores');
-        break;
-      case 2:
-        Navigator.pushReplacementNamed(context, '/searchScreen');
-        break;
-      default:
-        break;
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchStoresPage()),
+      );
+    } else if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
+    }
+    else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
     }
   }
 

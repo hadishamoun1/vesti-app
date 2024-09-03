@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'Home.dart';
 import 'SearchStores.dart';
+import 'Profile.dart';
 
 
 class SearchScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _currentIndex = index;
      
     });
-    if (index == 1) {
+      if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
@@ -49,6 +50,12 @@ class _SearchScreenState extends State<SearchScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchScreen()),
+      );
+    }
+    else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => ProfilePage()),
       );
     }
   }

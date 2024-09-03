@@ -55,8 +55,8 @@ class _ProfilePageState extends State<ProfilePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 110,
-            padding: EdgeInsets.all(16.0),
+            height: 150,
+            padding: EdgeInsets.fromLTRB(16, 16, 16, 45),
             color: Colors.white,
             child: Row(
               children: [
@@ -87,7 +87,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 16,
                       ),
                     ),
-                   
                   ],
                 ),
               ],

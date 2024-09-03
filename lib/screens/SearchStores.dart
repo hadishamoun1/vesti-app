@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
@@ -28,13 +28,21 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   }
 
   void _getCurrentLocation() async {
-    try {
-      _currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+    final status = await Permission.location.request();
 
-      _fetchStoresNearby();
-    } catch (e) {
-      print("Error getting location: $e");
+    if (status.isGranted) {
+      try {
+        _currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        _fetchStoresNearby();
+      } catch (e) {
+        print("Error getting location: $e");
+      }
+    } else if (status.isDenied) {
+      print("Location permission denied");
+    } else if (status.isPermanentlyDenied) {
+      // The user has permanently denied the permission, direct them to settings.
+      openAppSettings();
     }
   }
 
@@ -138,31 +146,35 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: _filteredStores.length,
-              itemBuilder: (context, index) {
-                final store = _filteredStores[index];
+            child: _currentPosition == null
+                ? Center(child: CircularProgressIndicator())
+                : _filteredStores.isEmpty
+                    ? Center(child: Text('No stores found'))
+                    : ListView.builder(
+                        itemCount: _filteredStores.length,
+                        itemBuilder: (context, index) {
+                          final store = _filteredStores[index];
+                          final storeName = store['name'] ?? 'Unnamed Store';
+                          final pictureURL = store['pictureURL'];
 
-                final storeName = store['name'] ?? 'Unnamed Store';
-                final pictureURL = store['pictureURL'];
-
-                return ListTile(
-                  leading: pictureURL != null && pictureURL.isNotEmpty
-                      ? Image.network(
-                          pictureURL,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.error),
-                        )
-                      : Icon(Icons.store),
-                  title: Text(storeName),
-                  subtitle:
-                      Text(store['description'] ?? 'No description available'),
-                );
-              },
-            ),
+                          return ListTile(
+                            leading: pictureURL != null && pictureURL.isNotEmpty
+                                ? Image.network(
+                                    pictureURL,
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Icon(Icons.error),
+                                  )
+                                : Icon(Icons.store),
+                            title: Text(storeName),
+                            subtitle: Text(store['description'] ??
+                                'No description available'),
+                          );
+                        },
+                      ),
           ),
         ],
       ),

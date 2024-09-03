@@ -178,53 +178,59 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         ],
+        backgroundColor: Colors.white, 
+        iconTheme: IconThemeData(color: Colors.black),
+        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20), 
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomSearchBar(
-              hintText: 'Search for $selectedCategory',
-              onChanged: (query) {
-                setState(() {
-                  _searchQuery = query;
-                });
-              },
-            ),
-            CategoryChips(
-              categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
-              selectedCategory: selectedCategory,
-              onCategorySelected: (category) {
-                setState(() {
-                  selectedCategory = category;
-                  fetchProductsByCategory(selectedCategory);
-                });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
-              child: Text(
-                'Trending stores',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Container(
+        color: Colors.white, 
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomSearchBar(
+                hintText: 'Search for $selectedCategory',
+                onChanged: (query) {
+                  setState(() {
+                    _searchQuery = query;
+                  });
+                },
               ),
-            ),
-            StoreGrid(
-              isLoading: isLoading,
-              errorMessage: errorMessage,
-              stores: stores,
-              searchQuery: _searchQuery,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
-              child: Text(
-                'Latest $selectedCategory',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              CategoryChips(
+                categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
+                selectedCategory: selectedCategory,
+                onCategorySelected: (category) {
+                  setState(() {
+                    selectedCategory = category;
+                    fetchProductsByCategory(selectedCategory);
+                  });
+                },
               ),
-            ),
-            ProductGrid(
-              products: productsByCategory,
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
+                child: Text(
+                  'Trending stores',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              StoreGrid(
+                isLoading: isLoading,
+                errorMessage: errorMessage,
+                stores: stores,
+                searchQuery: _searchQuery,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
+                child: Text(
+                  'Latest $selectedCategory',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              ProductGrid(
+                products: productsByCategory,
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomNavBar(

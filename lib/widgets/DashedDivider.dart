@@ -12,7 +12,7 @@ class DashedDivider extends StatelessWidget {
     this.dashWidth = 10.0,
     this.dashHeight = 2.0,
     this.dashSpacing = 4.0,
-    this.color = Colors.black,
+    this.color = const Color.fromARGB(255, 196, 196, 196),
     this.width = double.infinity, 
     this.alignment = Alignment.center, 
   });

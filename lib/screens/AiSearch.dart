@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import '../widgets/bottom_nav_bar.dart';
+
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -10,6 +12,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   File? _image;
   final picker = ImagePicker();
+  int _currentIndex = 1; // Set the initial index to 1 for the search screen
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -22,7 +25,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchSearchResults() async {
+    // Implement your API call here and update the search results list.
+  }
 
+  void _onBottomNavTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      // Add logic here to navigate to other screens based on the index
+    });
   }
 
   @override
@@ -58,28 +68,31 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: _onBottomNavTapped,
+      ),
     );
   }
-}
 
-Widget _buildSearchResults() {
+  Widget _buildSearchResults() {
+    List<String> searchResults = [
+      'Result 1',
+      'Result 2',
+      'Result 3',
+    ];
 
-  List<String> searchResults = [
-    'Result 1',
-    'Result 2',
-    'Result 3',
-  ];
-
-  return ListView.builder(
-    itemCount: searchResults.length,
-    itemBuilder: (context, index) {
-      return Card(
-        child: ListTile(
-          title: Text(searchResults[index]),
-          subtitle: Text('Additional details'),
-          trailing: Icon(Icons.arrow_forward_ios),
-        ),
-      );
-    },
-  );
+    return ListView.builder(
+      itemCount: searchResults.length,
+      itemBuilder: (context, index) {
+        return Card(
+          child: ListTile(
+            title: Text(searchResults[index]),
+            subtitle: Text('Additional details'),
+            trailing: Icon(Icons.arrow_forward_ios),
+          ),
+        );
+      },
+    );
+  }
 }

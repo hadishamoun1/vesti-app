@@ -47,6 +47,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile'),
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
       ),
@@ -86,6 +87,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         fontSize: 16,
                       ),
                     ),
+                   
                   ],
                 ),
               ],

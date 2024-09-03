@@ -62,6 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Search'),
+        centerTitle: true,
       ),
       body: Container(
         color: Colors.white, 

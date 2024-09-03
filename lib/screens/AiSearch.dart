@@ -6,7 +6,6 @@ import 'Home.dart';
 import 'SearchStores.dart';
 import 'Profile.dart';
 
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -28,15 +27,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchSearchResults() async {
-    
+    // Fetch search results here
   }
 
   void _onBottomNavTapped(int index) {
     setState(() {
       _currentIndex = index;
-     
     });
-      if (index == 1) {
+    if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
@@ -51,8 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
         context,
         MaterialPageRoute(builder: (context) => SearchScreen()),
       );
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
@@ -66,7 +63,8 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         title: Text('Image Search'),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white, 
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [

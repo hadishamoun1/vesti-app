@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:app/widgets/DashedDivider.dart'; // Import the DashedDivider widget
+import 'package:app/widgets/DashedDivider.dart'; 
 import '../widgets/bottom_nav_bar.dart';
 import 'Home.dart';
 import 'AiSearch.dart';
@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             DashedDivider(
-                    width: MediaQuery.of(context).size.width, // Ensure full width
+                    width: MediaQuery.of(context).size.width, 
                     alignment: Alignment.bottomCenter,
                   ),
             SizedBox(height: 16),

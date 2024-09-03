@@ -1,4 +1,3 @@
-import 'package:app/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'Home.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +8,10 @@ import 'package:geolocator/geolocator.dart';
 import 'AiSearch.dart';
 import 'Profile.dart';
 
-var primaryColor = Color.fromARGB(255, 255, 255, 255);
+var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
+var appBarColor = Colors.white;
+var textColor = Colors.black;
 
 class SearchStoresPage extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   List _allStores = [];
   List _filteredStores = [];
   Position? _currentPosition;
-  bool _showNearbyStores = true; // Track which button is selected
+  bool _showNearbyStores = true;
 
   @override
   void initState() {
@@ -34,9 +35,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     try {
       _currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
-
-      print(
-          "Latitude: ${_currentPosition!.latitude}, Longitude: ${_currentPosition!.longitude}");
 
       _fetchStoresNearby();
     } catch (e) {
@@ -51,23 +49,17 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       final latitude = _currentPosition!.latitude;
       final longitude = _currentPosition!.longitude;
 
-      print(
-          "Fetching stores nearby with Latitude: $latitude, Longitude: $longitude");
-
       final response = await http.get(
         Uri.parse(
             'http://10.0.2.2:3000/stores/nearby?lat=$latitude&lon=$longitude&radius=5000&limit=5'),
       );
-
-      print("API Response Status Code: ${response.statusCode}");
-      print("API Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
             _allStores = json.decode(response.body);
             _filteredStores = _allStores;
-            _showNearbyStores = true; // Set button state
+            _showNearbyStores = true;
           });
         }
       } else {
@@ -80,21 +72,16 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
   void _fetchAllStores() async {
     try {
-      print("Fetching all stores");
-
       final response = await http.get(
         Uri.parse('http://10.0.2.2:3000/stores'),
       );
-
-      print("API Response Status Code: ${response.statusCode}");
-      print("API Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         if (mounted) {
           setState(() {
             _allStores = json.decode(response.body);
             _filteredStores = _allStores;
-            _showNearbyStores = false; // Set button state
+            _showNearbyStores = false;
           });
         }
       } else {
@@ -119,7 +106,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       _currentIndex = index;
     });
 
-        if (index == 1) {
+    if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SearchStoresPage()),
@@ -134,8 +121,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
         context,
         MaterialPageRoute(builder: (context) => SearchScreen()),
       );
-    }
-    else if (index == 3) {
+    } else if (index == 3) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ProfilePage()),
@@ -147,75 +133,78 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Stores'),
+        title: Text('Search Stores', style: TextStyle(color: textColor)),
+        backgroundColor: appBarColor,
         centerTitle: true,
+        iconTheme: IconThemeData(color: textColor),
       ),
-      body: Column(
-        children: [
-          CustomSearchBar(
-            hintText: 'Search...',
-            onChanged: (query) {
-              _searchStores(query);
-            },
-          ),
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Use ElevatedButton for the selected state
-              ElevatedButton(
-                onPressed: _getCurrentLocation,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      _showNearbyStores ? secondaryColor : primaryColor,
-                  foregroundColor:
-                      _showNearbyStores ? primaryColor : Colors.black,
-                  side: BorderSide(color: borderColor, width: 1),
-                ),
-                child: Text('View Nearby Stores'),
-              ),
-              // Use OutlinedButton for the unselected state
-              OutlinedButton(
-                onPressed: _fetchAllStores,
-                style: OutlinedButton.styleFrom(
-                  backgroundColor:
-                      !_showNearbyStores ? secondaryColor : primaryColor,
-                  foregroundColor:
-                      !_showNearbyStores ? primaryColor : Colors.black,
-                  side: BorderSide(color: borderColor, width: 1),
-                ),
-                child: Text('View All Stores'),
-              ),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _filteredStores.length,
-              itemBuilder: (context, index) {
-                final store = _filteredStores[index];
-
-                final storeName = store['name'] ?? 'Unnamed Store';
-                final pictureURL = store['pictureURL'];
-
-                return ListTile(
-                  leading: pictureURL != null && pictureURL.isNotEmpty
-                      ? Image.network(
-                          pictureURL,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Icon(Icons.error),
-                        )
-                      : Icon(Icons.store),
-                  title: Text(storeName),
-                  subtitle:
-                      Text(store['description'] ?? 'No description available'),
-                );
+      body: Container(
+        color: primaryColor,
+        child: Column(
+          children: [
+            CustomSearchBar(
+              hintText: 'Search...',
+              onChanged: (query) {
+                _searchStores(query);
               },
             ),
-          ),
-        ],
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: _getCurrentLocation,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        _showNearbyStores ? secondaryColor : primaryColor,
+                    foregroundColor:
+                        _showNearbyStores ? primaryColor : Colors.black,
+                    side: BorderSide(color: secondaryColor, width: 1),
+                  ),
+                  child: Text('View Nearby Stores'),
+                ),
+                OutlinedButton(
+                  onPressed: _fetchAllStores,
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor:
+                        !_showNearbyStores ? secondaryColor : primaryColor,
+                    foregroundColor:
+                        !_showNearbyStores ? primaryColor : Colors.black,
+                    side: BorderSide(color: secondaryColor, width: 1),
+                  ),
+                  child: Text('View All Stores'),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _filteredStores.length,
+                itemBuilder: (context, index) {
+                  final store = _filteredStores[index];
+
+                  final storeName = store['name'] ?? 'Unnamed Store';
+                  final pictureURL = store['pictureURL'];
+
+                  return ListTile(
+                    leading: pictureURL != null && pictureURL.isNotEmpty
+                        ? Image.network(
+                            pictureURL,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                Icon(Icons.error),
+                          )
+                        : Icon(Icons.store),
+                    title: Text(storeName),
+                    subtitle: Text(
+                        store['description'] ?? 'No description available'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _currentIndex,

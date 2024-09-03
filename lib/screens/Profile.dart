@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'John Doe', // Replace with user's name
+                      'John Doe', 
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -36,7 +36,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'john.doe@example.com',
+                      'john.doe@example.com', 
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
@@ -47,10 +47,48 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(height: 16),
+          // Navigation Section
+          Expanded(
+            child: ListView(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.notifications, color: Colors.blueGrey[700]),
+                  title: Text('Notifications'),
+                  onTap: () {
+                    //Navigator.push(
+                     // context,
+                    //  MaterialPageRoute(builder: (context) => NotificationsPage()),
+                   // );
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.favorite, color: Colors.blueGrey[700]),
+                  title: Text('Favorites'),
+                  onTap: () {
+                    //Navigator.push(
+                      //context,
+                      //MaterialPageRoute(builder: (context) => FavoritesPage()),
+                    //);
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.list, color: Colors.blueGrey[700]),
+                  title: Text('Orders'),
+                  onTap: () {
+                    //Navigator.push(
+                     // context,
+                     // MaterialPageRoute(builder: (context) => OrdersPage()),
+                    //);
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
-  
-  

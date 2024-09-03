@@ -7,6 +7,7 @@ import 'dart:convert';
 import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'AiSearch.dart';
+import 'Profile.dart';
 
 var primaryColor = Color.fromARGB(255, 255, 255, 255);
 var secondaryColor = Color(0xFF3882cd);

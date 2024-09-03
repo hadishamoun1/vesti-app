@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'Home.dart';
 import 'package:http/http.dart' as http;
-import '../widgets/bottom_nav_bar.dart';
 import 'dart:convert';
 import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
-import 'AiSearch.dart';
-import 'Profile.dart';
+
 
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);

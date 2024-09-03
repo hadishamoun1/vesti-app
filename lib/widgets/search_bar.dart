@@ -17,8 +17,8 @@ class SearchStoresPage extends StatefulWidget {
 class _SearchStoresPageState extends State<SearchStoresPage> {
   int _currentIndex = 1;
   List stores = [];
-  int _selectedButton = 0; // Variable to track selected button
-  String _searchQuery = ''; // Variable to track search query
+  int _selectedButton = 0; 
+  String _searchQuery = ''; 
 
   @override
   void initState() {

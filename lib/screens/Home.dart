@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
         backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: IconThemeData(color: secondaryColor),
         titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
       ),
       body: buildContent(),

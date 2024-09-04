@@ -32,7 +32,7 @@ class StoreGrid extends StatelessWidget {
                         crossAxisCount: 2,
                         crossAxisSpacing: 8.0,
                         mainAxisSpacing: 8.0,
-                        childAspectRatio: 1.5,
+                        childAspectRatio: 1.1,
                       ),
                       itemCount: stores.length,
                       itemBuilder: (context, index) {
@@ -56,15 +56,16 @@ class StoreGrid extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
+                                    
                                     child: ClipRRect(
+                                      
                                       borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(
-                                              4.0)), 
+                                          top: Radius.circular(15.0)),
                                       child: Container(
                                         width: double.infinity,
                                         child: Image.network(
                                           store['pictureUrl'],
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.fill,
                                           errorBuilder: (BuildContext context,
                                               Object error,
                                               StackTrace? stackTrace) {

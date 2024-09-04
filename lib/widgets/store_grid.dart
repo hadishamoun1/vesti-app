@@ -1,4 +1,7 @@
+
 import 'package:flutter/material.dart';
+
+import '../screens/StoreDetails.dart';
 
 class StoreGrid extends StatelessWidget {
   final bool isLoading;

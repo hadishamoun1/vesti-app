@@ -16,14 +16,14 @@ class StoreDetailsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Container(
               width: double.infinity,
-              height: 250, 
+              height: 250,
               child: Image.network(
                 store['pictureUrl'],
                 fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
                   return Center(
                     child: Icon(
                       Icons.error,
@@ -34,18 +34,6 @@ class StoreDetailsPage extends StatelessWidget {
                 },
               ),
             ),
-            // Store Name
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                store['name'],
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            // Additional details can be added below
           ],
         ),
       ),

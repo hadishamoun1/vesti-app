@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../screens/StoreDetails.dart';
@@ -57,19 +56,28 @@ class StoreGrid extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
-                                    child: Image.network(
-                                      store['pictureUrl'],
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (BuildContext context,
-                                          Object error, StackTrace? stackTrace) {
-                                        return Center(
-                                          child: Icon(
-                                            Icons.error,
-                                            color: Colors.red,
-                                            size: 50,
-                                          ),
-                                        );
-                                      },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(
+                                              4.0)), 
+                                      child: Container(
+                                        width: double.infinity,
+                                        child: Image.network(
+                                          store['pictureUrl'],
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (BuildContext context,
+                                              Object error,
+                                              StackTrace? stackTrace) {
+                                            return Center(
+                                              child: Icon(
+                                                Icons.error,
+                                                color: Colors.red,
+                                                size: 50,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   ),
                                   Padding(

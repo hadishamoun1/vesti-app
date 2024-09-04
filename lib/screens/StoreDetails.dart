@@ -1,41 +1,14 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class StoreDetailsPage extends StatefulWidget {
-  final int storeId;
+class StoreDetailsPage extends StatelessWidget {
+  final Map<String, dynamic> store;
 
-  StoreDetailsPage({required this.storeId});
+  StoreDetailsPage({required this.store});
 
-  @override
-  _StoreDetailsPageState createState() => _StoreDetailsPageState();
-}
-
-class _StoreDetailsPageState extends State<StoreDetailsPage> {
-  late Future<Map<String, dynamic>> store;
-  late Future<List<dynamic>> products;
-
-  @override
-  void initState() {
-    super.initState();
-    store = fetchStore(widget.storeId);
-    products = fetchProductsByStoreId(widget.storeId);
-  }
-
-  Future<Map<String, dynamic>> fetchStore(int storeId) async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:3000/stores/$storeId'));
-
-    if (response.statusCode == 200) {
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to load store');
-    }
-  }
-
-  Future<List<dynamic>> fetchProductsByStoreId(int storeId) async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:3000/products/store/$storeId'));
+  Future<List<dynamic>> fetchProducts() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:3000/products/store/${store['id']}'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -49,18 +22,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: FutureBuilder<Map<String, dynamic>>(
-          future: store,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Text('Loading...');
-            } else if (snapshot.hasError) {
-              return Text('Error');
-            } else {
-              return Text(snapshot.data?['name'] ?? 'Store Details');
-            }
-          },
-        ),
+        title: Text(store['name']),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -69,46 +31,29 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            FutureBuilder<Map<String, dynamic>>(
-              future: store,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                } else if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Center(child: Text('Error loading store')),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        width: double.infinity,
-                        height: 250,
-                        child: Image.network(
-                          snapshot.data?['pictureUrl'] ?? '',
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object error,
-                              StackTrace? stackTrace) {
-                            return Center(
-                              child: Icon(
-                                Icons.error,
-                                color: Colors.red,
-                                size: 50,
-                              ),
-                            );
-                          },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Container(
+                  width: double.infinity,
+                  height: 250,
+                  child: Image.network(
+                    store['pictureUrl'],
+                    fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.error,
+                          color: Colors.red,
+                          size: 50,
                         ),
-                      ),
-                    ),
-                  );
-                }
-              },
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
             Padding(
               padding:
@@ -122,83 +67,36 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
               ),
             ),
             FutureBuilder<List<dynamic>>(
-              future: products,
+              future: fetchProducts(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
+                  return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
-                  return Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Center(child: Text('Error loading products')),
-                  );
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('No products available'));
                 } else {
-                  final productList = snapshot.data ?? [];
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Column(
-                      children: productList.map<Widget>((product) {
-                        final imageUrl = product['imageUrl'] ?? '';
-                        final name = product['name'] ?? 'Unknown Product';
-                        final price = product['price'] ?? 0.00;
-
-                        return Card(
-                          margin: const EdgeInsets.only(bottom: 15.0),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.network(
-                                    imageUrl,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (BuildContext context,
-                                        Object error, StackTrace? stackTrace) {
-                                      return Center(
-                                        child: Icon(
-                                          Icons.error,
-                                          color: Colors.red,
-                                          size: 50,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        name,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        '\$${price.toStringAsFixed(2)}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.green,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                  final products = snapshot.data!;
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return ListTile(
+                        leading: Image.network(
+                          product['imageUrl'],
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 50,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error, color: Colors.red);
+                          },
+                        ),
+                        title: Text(product['name']),
+                        subtitle: Text('\$${product['price']}'),
+                      );
+                    },
                   );
                 }
               },

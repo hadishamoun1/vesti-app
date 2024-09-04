@@ -2,14 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class StoreDetailsPage extends StatelessWidget {
+class StoreDetailsPage extends StatefulWidget {
   final Map<String, dynamic> store;
 
   StoreDetailsPage({required this.store});
 
+  @override
+  _StoreDetailsPageState createState() => _StoreDetailsPageState();
+}
+
+class _StoreDetailsPageState extends State<StoreDetailsPage> {
+  late Future<List<dynamic>> _productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productsFuture = fetchProducts();
+  }
+
   Future<List<dynamic>> fetchProducts() async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:3000/products/store/${store['id']}'));
+    final response = await http.get(
+        Uri.parse('http://10.0.2.2:3000/products/store/${widget.store['id']}'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -23,7 +36,7 @@ class StoreDetailsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(store['name']),
+        title: Text(widget.store['name']),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -40,7 +53,7 @@ class StoreDetailsPage extends StatelessWidget {
                   width: double.infinity,
                   height: 250,
                   child: Image.network(
-                    store['pictureUrl'],
+                    widget.store['pictureUrl'],
                     fit: BoxFit.cover,
                     errorBuilder: (BuildContext context, Object error,
                         StackTrace? stackTrace) {
@@ -68,7 +81,7 @@ class StoreDetailsPage extends StatelessWidget {
               ),
             ),
             FutureBuilder<List<dynamic>>(
-              future: fetchProducts(),
+              future: _productsFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());

@@ -11,17 +11,40 @@ class StoreDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(store['name']),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(store['pictureUrl']),
-            SizedBox(height: 20),
-            Text(
-              store['name'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            
+            Container(
+              width: double.infinity,
+              height: 250, 
+              child: Image.network(
+                store['pictureUrl'],
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                  return Center(
+                    child: Icon(
+                      Icons.error,
+                      color: Colors.red,
+                      size: 50,
+                    ),
+                  );
+                },
+              ),
             ),
-            // Add more store details here
+            // Store Name
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                store['name'],
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            // Additional details can be added below
           ],
         ),
       ),

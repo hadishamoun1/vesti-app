@@ -49,13 +49,33 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10),
-                    Image.network(
-                      widget.product['imageUrl'] ?? '',
-                      height: 200,
+                    Container(
+                      height: 250,
                       width: double.infinity,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.error, size: 100);
-                      },
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          widget.product['imageUrl'] ?? '',
+                          width: double.infinity,
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Icon(Icons.error, size: 100),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     SizedBox(height: 10),
                     Padding(

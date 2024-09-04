@@ -209,7 +209,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ),
           ),
           Container(
-            height: 160,
+            height: 90,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,

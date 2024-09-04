@@ -164,16 +164,19 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                               final pictureURL = store['pictureUrl'];
 
                               return ListTile(
-                                leading: pictureURL != null && pictureURL.isNotEmpty
+                                leading: pictureURL != null &&
+                                        pictureURL.isNotEmpty
                                     ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
                                         child: Image.network(
                                           pictureURL,
                                           width: 50,
                                           height: 50,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (context, error, stackTrace) =>
-                                              Icon(Icons.error),
+                                          errorBuilder:
+                                              (context, error, stackTrace) =>
+                                                  Icon(Icons.error),
                                         ),
                                       )
                                     : Icon(Icons.store),
@@ -203,6 +206,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                   'No description available';
 
                               return Card(
+                                color: Colors.white,
                                 elevation: 5,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -211,15 +215,18 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ClipRRect(
-                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(10)),
                                       child: SizedBox(
                                         width: double.infinity,
-                                        height: 120, 
-                                        child: pictureURL != null && pictureURL.isNotEmpty
+                                        height: 120,
+                                        child: pictureURL != null &&
+                                                pictureURL.isNotEmpty
                                             ? Image.network(
                                                 pictureURL,
                                                 fit: BoxFit.cover,
-                                                errorBuilder: (context, error, stackTrace) =>
+                                                errorBuilder: (context, error,
+                                                        stackTrace) =>
                                                     Icon(Icons.error),
                                               )
                                             : Icon(Icons.store, size: 100),
@@ -236,7 +243,8 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                       ),
                                     ),
                                     Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
                                       child: Text(
                                         description,
                                         style: TextStyle(

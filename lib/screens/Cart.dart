@@ -43,6 +43,7 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         title: Text('Your Cart'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [

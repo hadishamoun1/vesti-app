@@ -69,8 +69,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
                           widget.product['imageUrl'] ?? '',
-                          width: double.infinity,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Icon(Icons.error, size: 100),

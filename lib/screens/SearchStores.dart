@@ -41,7 +41,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     } else if (status.isDenied) {
       print("Location permission denied");
     } else if (status.isPermanentlyDenied) {
-      // The user has permanently denied the permission, direct them to settings.
       openAppSettings();
     }
   }
@@ -107,9 +106,14 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: primaryColor,
-      child: Column(
+    return Scaffold(
+      backgroundColor: primaryColor,
+      appBar: AppBar(
+        title: Text('Search Stores'),
+        backgroundColor: appBarColor,
+        centerTitle: true,
+      ),
+      body: Column(
         children: [
           CustomSearchBar(
             hintText: 'Search...',
@@ -148,33 +152,107 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           Expanded(
             child: _currentPosition == null
                 ? Center(child: CircularProgressIndicator())
-                : _filteredStores.isEmpty
-                    ? Center(child: Text('No stores found'))
-                    : ListView.builder(
-                        itemCount: _filteredStores.length,
-                        itemBuilder: (context, index) {
-                          final store = _filteredStores[index];
-                          final storeName = store['name'] ?? 'Unnamed Store';
-                          final pictureURL = store['pictureURL'];
+                : _showNearbyStores
+                    ? _filteredStores.isEmpty
+                        ? Center(child: Text('No stores found'))
+                        : ListView.builder(
+                            itemCount: _filteredStores.length,
+                            itemBuilder: (context, index) {
+                              final store = _filteredStores[index];
+                              final storeName =
+                                  store['name'] ?? 'Unnamed Store';
+                              final pictureURL = store['pictureUrl'];
 
-                          return ListTile(
-                            leading: pictureURL != null && pictureURL.isNotEmpty
-                                ? Image.network(
-                                    pictureURL,
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Icon(Icons.error),
-                                  )
-                                : Icon(Icons.store),
-                            title: Text(storeName),
-                            subtitle: Text(store['description'] ??
-                                'No description available'),
-                          );
-                        },
-                      ),
+                              return ListTile(
+                                leading: pictureURL != null && pictureURL.isNotEmpty
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          pictureURL,
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (context, error, stackTrace) =>
+                                              Icon(Icons.error),
+                                        ),
+                                      )
+                                    : Icon(Icons.store),
+                                title: Text(storeName),
+                                subtitle: Text(store['description'] ??
+                                    'No description available'),
+                              );
+                            },
+                          )
+                    : _filteredStores.isEmpty
+                        ? Center(child: Text('No stores found'))
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                            ),
+                            padding: EdgeInsets.all(16),
+                            itemCount: _filteredStores.length,
+                            itemBuilder: (context, index) {
+                              final store = _filteredStores[index];
+                              final storeName =
+                                  store['name'] ?? 'Unnamed Store';
+                              final pictureURL = store['pictureUrl'];
+                              final description = store['description'] ??
+                                  'No description available';
+
+                              return Card(
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        height: 120, 
+                                        child: pictureURL != null && pictureURL.isNotEmpty
+                                            ? Image.network(
+                                                pictureURL,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error, stackTrace) =>
+                                                    Icon(Icons.error),
+                                              )
+                                            : Icon(Icons.store, size: 100),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        storeName,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: Text(
+                                        description,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey[700],
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
           ),
         ],
       ),

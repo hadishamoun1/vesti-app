@@ -4,8 +4,8 @@ import 'dart:convert';
 import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import 'StoreDetails.dart';
+
 
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
@@ -189,8 +189,9 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          StoreDetailsPage(store: store),
+                                      builder: (context) => StoreDetailsPage(
+                                        store: store,
+                                      ),
                                     ),
                                   );
                                 },
@@ -216,58 +217,70 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                               final description = store['description'] ??
                                   'No description available';
 
-                              return Card(
-                                color: Colors.white,
-                                elevation: 2,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                          top: Radius.circular(10)),
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        height: 120,
-                                        child: pictureURL != null &&
-                                                pictureURL.isNotEmpty
-                                            ? Image.network(
-                                                pictureURL,
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                        stackTrace) =>
-                                                    Icon(Icons.error),
-                                              )
-                                            : Icon(Icons.store, size: 100),
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => StoreDetailsPage(
+                                        store: store,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        storeName,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                  );
+                                },
+                                child: Card(
+                                  color: Colors.white,
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(10)),
+                                        child: SizedBox(
+                                          width: double.infinity,
+                                          height: 120,
+                                          child: pictureURL != null &&
+                                                  pictureURL.isNotEmpty
+                                              ? Image.network(
+                                                  pictureURL,
+                                                  fit: BoxFit.cover,
+                                                  errorBuilder: (context, error,
+                                                          stackTrace) =>
+                                                      Icon(Icons.error),
+                                                )
+                                              : Icon(Icons.store, size: 100),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8.0),
-                                      child: Text(
-                                        description,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.grey[700],
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          storeName,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    ),
-                                    SizedBox(height: 8),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8.0),
+                                        child: Text(
+                                          description,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey[700],
+                                          ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+                                    ],
+                                  ),
                                 ),
                               );
                             },

@@ -38,35 +38,47 @@ class StoreGrid extends StatelessWidget {
                         if (store['name']
                             .toLowerCase()
                             .contains(searchQuery.toLowerCase())) {
-                          return Card(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Image.network(
-                                    store['pictureUrl'],
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (BuildContext context,
-                                        Object error, StackTrace? stackTrace) {
-                                      return Center(
-                                        child: Icon(
-                                          Icons.error,
-                                          color: Colors.red,
-                                          size: 50,
-                                        ),
-                                      );
-                                    },
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StoreDetailsPage(
+                                    store: store,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    store['name'],
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                              );
+                            },
+                            child: Card(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Image.network(
+                                      store['pictureUrl'],
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (BuildContext context,
+                                          Object error, StackTrace? stackTrace) {
+                                        return Center(
+                                          child: Icon(
+                                            Icons.error,
+                                            color: Colors.red,
+                                            size: 50,
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      store['name'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         }

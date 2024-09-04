@@ -11,6 +11,7 @@ class StoreDetailsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(store['name']),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
   child: Column(

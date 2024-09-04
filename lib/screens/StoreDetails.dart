@@ -10,6 +10,7 @@ class StoreDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(store['name']),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -39,6 +39,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       appBar: AppBar(
         title: Text('Product Details'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: Column(
         children: [

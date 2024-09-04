@@ -7,6 +7,8 @@ import 'Cart.dart';
 import 'AiSearch.dart';
 import 'Profile.dart';
 
+var secondaryColor = Color(0xFF3882cd);
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();

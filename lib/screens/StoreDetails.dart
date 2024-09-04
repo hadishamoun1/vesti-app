@@ -17,7 +17,7 @@ class StoreDetailsPage extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: const EdgeInsets.all(8.0), 
+        padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(15), 
           child: Container(

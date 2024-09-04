@@ -207,7 +207,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
                               return Card(
                                 color: Colors.white,
-                                elevation: 5,
+                                elevation: 2,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 ),

@@ -95,11 +95,14 @@ class StoreDetailsPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         elevation: 5,
+                        color: Colors.white,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Expanded(
+                              
                               child: ClipRRect(
+                                
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(15.0)),
                                 child: Image.network(

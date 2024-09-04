@@ -5,6 +5,8 @@ import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'StoreDetails.dart';
+
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
 var appBarColor = Colors.white;
@@ -183,6 +185,15 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                 title: Text(storeName),
                                 subtitle: Text(store['description'] ??
                                     'No description available'),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          StoreDetailsPage(store: store),
+                                    ),
+                                  );
+                                },
                               );
                             },
                           )

@@ -46,7 +46,7 @@ class StoreGrid extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StoreDetailsPage(
-                                    store: store,
+                                   storeId: store['id'],
                                   ),
                                 ),
                               );

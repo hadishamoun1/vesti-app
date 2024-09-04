@@ -48,7 +48,7 @@ class StoreDetailsPage extends StatelessWidget {
               child: Text(
                 'Products',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),

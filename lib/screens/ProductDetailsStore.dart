@@ -56,6 +56,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.1),

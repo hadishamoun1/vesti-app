@@ -136,7 +136,7 @@ class StoreDetailsPage extends StatelessWidget {
                               child: Text(
                                 '\$${product['price']}',
                                 style: TextStyle(
-                                  color: Colors.green,
+                                  color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),

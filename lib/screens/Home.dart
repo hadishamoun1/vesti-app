@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: secondaryColor),
-        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
+        titleTextStyle: TextStyle(color: secondaryColor, fontSize: 20),
       ),
       body: buildContent(),
       bottomNavigationBar: BottomNavBar(

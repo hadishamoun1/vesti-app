@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/NotificationCard.dart';
 
 class NotificationsPage extends StatefulWidget {
-   final int userId;
+  final int userId;
 
   NotificationsPage({required this.userId});
   @override
@@ -28,10 +28,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Notifications'),
       ),
-        body: ListView.builder(
+      body: ListView.builder(
         itemCount: _notifications.length,
         itemBuilder: (context, index) {
           final notification = _notifications[index];
@@ -41,7 +42,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             message: notification.message,
           );
         },
-        ),
+      ),
     );
   }
 }

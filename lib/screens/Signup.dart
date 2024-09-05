@@ -6,6 +6,7 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -14,7 +15,7 @@ class _SignupPageState extends State<SignupPage> {
 
   void _signup() {
     if (_formKey.currentState?.validate() ?? false) {
-      
+      // Proceed with signup logic
       Navigator.pushNamed(context, '/login');
     }
   }
@@ -33,7 +34,7 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  //backgroundImage: AssetImage('assets/logo.png'),
+                  // backgroundImage: AssetImage('assets/logo.png'),
                 ),
                 SizedBox(height: 40),
                 Text(
@@ -53,6 +54,25 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                 ),
                 SizedBox(height: 30),
+                TextFormField(
+                  controller: _nameController,
+                  decoration: InputDecoration(
+                    labelText: 'Name',
+                    prefixIcon: Icon(Icons.person, color: Colors.blueAccent),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Name is required';
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(

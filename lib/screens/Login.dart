@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 import 'dart:convert';
 
 class LoginPage extends StatefulWidget {
@@ -16,7 +17,6 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) {
-      
       return;
     }
 
@@ -36,6 +36,13 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final token = data['token'];
+
+        // Save the JWT token using shared preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('jwt_token', token);
+
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         setState(() {
@@ -67,7 +74,6 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  // backgroundImage: AssetImage('assets/logo.png'),
                 ),
                 SizedBox(height: 40),
                 Text(

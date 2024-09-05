@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         setState(() {
-          _errorMessage = jsonDecode(response.body)['message'];
+          _errorMessage = 'Incorrect email or password';
         });
       }
     } catch (e) {

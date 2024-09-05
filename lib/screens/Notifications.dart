@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../widgets/NotificationCard.dart';
 
 class NotificationsPage extends StatefulWidget {
+   final int userId;
+
+  NotificationsPage({required this.userId});
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }

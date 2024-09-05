@@ -5,6 +5,8 @@ import 'package:app/widgets/DashedDivider.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+import 'Notifications.dart';
+
 var secondaryColor = Color(0xFF3882cd);
 
 class ProfilePage extends StatefulWidget {
@@ -15,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String userName = '';
   String userEmail = '';
-  String userId = '';
+ int userId=0;
 
   @override
   void initState() {
@@ -30,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     if (token != null) {
       Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      int userId = decodedToken['userId'];
+      userId = decodedToken['userId'];
       print(userId);
 
       final response = await http.get(
@@ -49,6 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
       } else {
         print('Failed to load user data');
       }
+      
     }
   }
 
@@ -122,7 +125,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: Icon(Icons.notifications, color: secondaryColor),
                     title: Text('Notifications'),
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationsPage(userId: userId),
+                        ),
+                      );
+                    },
                   ),
                   ListTile(
                     leading: Icon(Icons.favorite, color: Colors.red),

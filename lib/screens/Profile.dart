@@ -138,6 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: Icon(Icons.favorite, color: Colors.red),
                     title: Text('Favorites'),
+                     trailing: Icon(Icons.arrow_forward_ios, size: 16, color: secondaryColor),
                     onTap: () {},
                   ),
                   ListTile(

@@ -28,6 +28,17 @@ class _NotificationsPageState extends State<NotificationsPage> {
       appBar: AppBar(
         title: Text('Notifications'),
       ),
+        body: ListView.builder(
+        itemCount: _notifications.length,
+        itemBuilder: (context, index) {
+          final notification = _notifications[index];
+          return NotificationCard(
+            imageUrl: notification.imageUrl,
+            name: notification.name,
+            message: notification.message,
+          );
+        },
+        ),
     );
   }
 }

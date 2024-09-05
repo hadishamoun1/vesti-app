@@ -11,13 +11,11 @@ class SignupPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            
               CircleAvatar(
                 radius: 50,
                 //backgroundImage: AssetImage('assets/logo.png'),
               ),
               SizedBox(height: 40),
-              
               Text(
                 'Create Account',
                 style: TextStyle(
@@ -35,7 +33,6 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -48,7 +45,6 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -62,7 +58,6 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -76,10 +71,9 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              
               ElevatedButton(
                 onPressed: () {
-                   Navigator.pushNamed(context, '/login');
+                  Navigator.pushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
@@ -94,7 +88,6 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-             
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/login');

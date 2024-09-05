@@ -47,3 +47,15 @@ class NotificationCard extends StatelessWidget {
     );
   }
 }
+
+class NotificationItem {
+  final String imageUrl;
+  final String name;
+  final String message;
+
+  NotificationItem({
+    required this.imageUrl,
+    required this.name,
+    required this.message,
+  });
+}

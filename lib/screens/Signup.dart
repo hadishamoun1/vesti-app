@@ -18,6 +18,10 @@ class SignupPage extends StatelessWidget {
               decoration: InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
+             TextField(
+              decoration: InputDecoration(labelText: 'Confirm Password'),
+              obscureText: true,
+            ),
         ])
        )
     );

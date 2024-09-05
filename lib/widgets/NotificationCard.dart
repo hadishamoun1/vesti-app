@@ -9,7 +9,7 @@ class NotificationCard extends StatelessWidget {
     required this.imageUrl,
     required this.name,
     required this.message,
-
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,14 @@ class NotificationCard extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        subtitle: Text(
+          message,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
       ),
-    ),
+    );
   }
-
-  });
 }

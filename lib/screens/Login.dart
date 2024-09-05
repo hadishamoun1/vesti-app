@@ -11,13 +11,11 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
               CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage('assets/logo.png'),
               ),
               SizedBox(height: 40),
-              
               Text(
                 'Welcome Back!',
                 style: TextStyle(
@@ -35,7 +33,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -48,7 +45,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -58,11 +54,10 @@ class LoginPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: Colors.white,
                 ),
               ),
               SizedBox(height: 20),
-              
               ElevatedButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/home');
@@ -80,7 +75,6 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/signup');

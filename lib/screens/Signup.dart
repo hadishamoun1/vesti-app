@@ -11,13 +11,13 @@ class SignupPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // App Logo
+            
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/logo.png'), // Replace with your logo
+                backgroundImage: AssetImage('assets/logo.png'),
               ),
               SizedBox(height: 40),
-              // Welcome Text
+              
               Text(
                 'Create Account',
                 style: TextStyle(
@@ -35,7 +35,7 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 30),
-              // Email Input
+              
               TextField(
                 decoration: InputDecoration(
                   labelText: 'Email',
@@ -48,7 +48,7 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Password Input
+              
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -62,7 +62,7 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Confirm Password Input
+              
               TextField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -72,14 +72,14 @@ class SignupPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: Colors.white,
                 ),
               ),
               SizedBox(height: 20),
-              // Signup Button
+              
               ElevatedButton(
                 onPressed: () {
-                  // Add signup logic here
+                
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
@@ -94,7 +94,7 @@ class SignupPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              // Login Link
+             
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/login');

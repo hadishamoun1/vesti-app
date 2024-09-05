@@ -14,7 +14,7 @@ class _SignupPageState extends State<SignupPage> {
 
   void _signup() {
     if (_formKey.currentState?.validate() ?? false) {
-      // Handle sign up logic here
+      
       Navigator.pushNamed(context, '/login');
     }
   }

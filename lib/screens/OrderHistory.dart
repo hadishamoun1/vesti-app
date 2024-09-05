@@ -60,27 +60,27 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       });
     }
   }
-    @override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Order History'),
         centerTitle: true,
+        backgroundColor: Colors.white,
       ),
       body: _isLoading
-        ? Center(child: CircularProgressIndicator())
-        : _errorMessage.isNotEmpty
-          ? Center(child: Text(_errorMessage))
-          : ListView.builder(
-              itemCount: _orders.length,
-              itemBuilder: (context, index) {
-                final order = _orders[index];
-                return OrderCard(order: order); 
-              },
-            ),
+          ? Center(child: CircularProgressIndicator())
+          : _errorMessage.isNotEmpty
+              ? Center(child: Text(_errorMessage))
+              : ListView.builder(
+                  itemCount: _orders.length,
+                  itemBuilder: (context, index) {
+                    final order = _orders[index];
+                    return OrderCard(order: order);
+                  },
+                ),
     );
   }
 }
-
-

@@ -14,7 +14,7 @@ class SignupPage extends StatelessWidget {
             
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/logo.png'),
+                //backgroundImage: AssetImage('assets/logo.png'),
               ),
               SizedBox(height: 40),
               
@@ -79,7 +79,7 @@ class SignupPage extends StatelessWidget {
               
               ElevatedButton(
                 onPressed: () {
-                
+                   Navigator.pushNamed(context, '/login');
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),

@@ -5,3 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../models/order.dart';
 import 'order_card.dart';
+
+
+class OrderHistoryPage extends StatefulWidget {
+  @override
+  _OrderHistoryPageState createState() => _OrderHistoryPageState();
+}

@@ -31,6 +31,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Notifications'),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: _notifications.length,

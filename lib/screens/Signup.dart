@@ -27,6 +27,12 @@ class SignupPage extends StatelessWidget {
               onPressed: () {},
               child: Text('Sign Up'),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              },
+              child: Text('Already have an account? Log in'),
+            )
         ])
        )
     );

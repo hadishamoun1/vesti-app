@@ -125,6 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: Icon(Icons.notifications, color: secondaryColor),
                     title: Text('Notifications'),
+                     trailing: Icon(Icons.arrow_forward_ios, size: 16, color: secondaryColor),
                     onTap: () {
                        Navigator.push(
                         context,

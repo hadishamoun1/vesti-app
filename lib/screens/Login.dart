@@ -13,6 +13,10 @@ class LoginPage extends StatelessWidget {
           TextField(
             decoration: InputDecoration(labelText: 'Email'),
           ),
+           TextField(
+              decoration: InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
         ]),
       ),
     );

@@ -22,6 +22,12 @@ class LoginPage extends StatelessWidget {
               onPressed: () { },
                child: Text('Login'),
             ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/signup');
+              },
+              child: Text('Don\'t have an account? Sign up'),
+            )
         ]),
       ),
     );

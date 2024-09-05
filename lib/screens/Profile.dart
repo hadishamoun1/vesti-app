@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'Notifications.dart';
+import 'OrderHistory.dart';
 
 var secondaryColor = Color(0xFF3882cd);
 
@@ -145,7 +146,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     leading: Icon(Icons.list, color: secondaryColor),
                     title: Text('Orders'),
                     trailing: Icon(Icons.arrow_forward_ios, size: 16, color: secondaryColor),
-                    onTap: () {},
+                    onTap: () {
+                       Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderHistoryPage (),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

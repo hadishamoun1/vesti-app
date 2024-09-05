@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/Home.dart';
+import 'screens/Loading.dart';
 import 'screens/Login.dart';
 import 'screens/Signup.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomePage(),
         
       },
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }

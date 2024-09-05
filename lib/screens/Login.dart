@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/login'), 
+        Uri.parse('http://10.0.2.2:3000/login'),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"email": email, "password": password}),
       );
@@ -137,7 +137,8 @@ class _LoginPageState extends State<LoginPage> {
                     : ElevatedButton(
                         onPressed: _login,
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 80),
                           backgroundColor: Colors.blueAccent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),

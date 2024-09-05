@@ -22,6 +22,7 @@ class SignupPage extends StatelessWidget {
               decoration: InputDecoration(labelText: 'Confirm Password'),
               obscureText: true,
             ),
+            SizedBox(height: 20),
         ])
        )
     );

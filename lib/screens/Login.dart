@@ -18,6 +18,10 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
             ),
              SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () { },
+               child: Text('Login'),
+            ),
         ]),
       ),
     );

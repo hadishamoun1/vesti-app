@@ -19,7 +19,9 @@ class LoginPage extends StatelessWidget {
             ),
              SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () { },
+              onPressed: () { 
+                 Navigator.pushReplacementNamed(context, '/home');
+              },
                child: Text('Login'),
             ),
             TextButton(

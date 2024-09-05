@@ -35,11 +35,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage:
-                            NetworkImage('https://via.placeholder.com/150'),
-                        backgroundColor: Colors.white,
+                      ClipOval(
+                        child: Image.network(
+                          'https://th.bing.com/th/id/R.fd51499e37b3340832ac271d2fee4a80?rik=MqY4rciAudYrwA&pid=ImgRaw&r=0',
+                          width:
+                              80, 
+                          height: 80,
+                          fit: BoxFit
+                              .contain,
+                        ),
                       ),
                       SizedBox(width: 16),
                       Column(
@@ -104,9 +108,9 @@ class _ProfilePageState extends State<ProfilePage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Align(
-                alignment: Alignment.center, // Centers the button horizontally
+                alignment: Alignment.center,
                 child: FractionallySizedBox(
-                  widthFactor: 0.5, // 50% of the screen width
+                  widthFactor: 0.5,
                   child: ElevatedButton(
                     onPressed: _signOut,
                     style: ElevatedButton.styleFrom(

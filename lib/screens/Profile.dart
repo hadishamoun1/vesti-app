@@ -1,6 +1,9 @@
+import 'dart:convert'; // For converting API response
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/widgets/DashedDivider.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 var secondaryColor = Color(0xFF3882cd);
 
@@ -10,12 +13,49 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  // Function to handle sign out
+  String userName = '';
+  String userEmail = '';
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('jwt_token');
+    print(token);
+
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      int userId = decodedToken['userId'];
+      print(userId);
+
+      final response = await http.get(
+        Uri.parse('http://10.0.2.2:3000/users/$userId'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          userName = data['name'];
+          userEmail = data['email'];
+        });
+      } else {
+        print('Failed to load user data');
+      }
+    }
+  }
+
   Future<void> _signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('jwt_token'); // Remove the token from shared preferences
+    await prefs.remove('jwt_token');
 
-    // Navigate to login page after sign out
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -38,11 +78,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ClipOval(
                         child: Image.network(
                           'https://th.bing.com/th/id/R.fd51499e37b3340832ac271d2fee4a80?rik=MqY4rciAudYrwA&pid=ImgRaw&r=0',
-                          width:
-                              80, 
+                          width: 80,
                           height: 80,
-                          fit: BoxFit
-                              .contain,
+                          fit: BoxFit.contain,
                         ),
                       ),
                       SizedBox(width: 16),
@@ -51,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           SizedBox(height: 8),
                           Text(
-                            'John Doe',
+                            userName.isNotEmpty ? userName : 'Loading...',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 24,
@@ -60,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(height: 6),
                           Text(
-                            'john.doe@example.com',
+                            userEmail.isNotEmpty ? userEmail : 'Loading...',
                             style: TextStyle(
                               color: Colors.black26,
                               fontSize: 16,
@@ -84,23 +122,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ListTile(
                     leading: Icon(Icons.notifications, color: secondaryColor),
                     title: Text('Notifications'),
-                    onTap: () {
-                      // Navigate to notifications page
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     leading: Icon(Icons.favorite, color: Colors.red),
                     title: Text('Favorites'),
-                    onTap: () {
-                      // Navigate to favorites page
-                    },
+                    onTap: () {},
                   ),
                   ListTile(
                     leading: Icon(Icons.list, color: secondaryColor),
                     title: Text('Orders'),
-                    onTap: () {
-                      // Navigate to orders page
-                    },
+                    onTap: () {},
                   ),
                 ],
               ),

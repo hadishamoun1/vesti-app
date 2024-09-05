@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -12,11 +14,49 @@ class _SignupPageState extends State<SignupPage> {
   final _confirmPasswordController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  void _signup() {
+  Future<void> _signup() async {
     if (_formKey.currentState?.validate() ?? false) {
-      // Proceed with signup logic
-      Navigator.pushNamed(context, '/login');
+      setState(() {
+        _isLoading = true;
+        _errorMessage = null;
+      });
+
+      final name = _nameController.text;
+      final email = _emailController.text;
+      final password = _passwordController.text;
+      final phoneNumber = _phoneNumberController.text;
+
+      try {
+        final response = await http.post(
+          Uri.parse('http://10.0.2.2:3000/users'),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "name": name,
+            "email": email,
+            "password": password,
+            "phoneNumber": phoneNumber,
+          }),
+        );
+
+        if (response.statusCode == 201) { 
+          Navigator.pushNamed(context, '/login');
+        } else {
+          setState(() {
+            _errorMessage = jsonDecode(response.body)['message'];
+          });
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = "Error signing up. Please try again.";
+        });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -154,20 +194,28 @@ class _SignupPageState extends State<SignupPage> {
                   },
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _signup,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
-                    backgroundColor: Colors.blueAccent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                _isLoading
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: _signup,
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                          backgroundColor: Colors.blueAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                SizedBox(height: 20),
+                if (_errorMessage != null)
+                  Text(
+                    _errorMessage!,
+                    style: TextStyle(color: Colors.red),
                   ),
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                ),
                 SizedBox(height: 20),
                 TextButton(
                   onPressed: () {

@@ -65,6 +65,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Order History'),
+        centerTitle: true,
       ),
       body: _isLoading
         ? Center(child: CircularProgressIndicator())

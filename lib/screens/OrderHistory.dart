@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../models/order_model.dart';
+import '../widgets/order_cards.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   @override
@@ -59,4 +60,25 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       });
     }
   }
+    @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Order History'),
+      ),
+      body: _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : _errorMessage.isNotEmpty
+          ? Center(child: Text(_errorMessage))
+          : ListView.builder(
+              itemCount: _orders.length,
+              itemBuilder: (context, index) {
+                final order = _orders[index];
+                return OrderCard(order: order); 
+              },
+            ),
+    );
+  }
 }
+
+

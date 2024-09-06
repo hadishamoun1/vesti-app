@@ -3,6 +3,8 @@ import 'screens/Home.dart';
 import 'screens/Loading.dart';
 import 'screens/Login.dart';
 import 'screens/Signup.dart';
+import 'package:geolocator/geolocator.dart';
+import 'services/location_service.dart';
 
 void main() async {
 
@@ -22,5 +24,13 @@ class MyApp extends StatelessWidget {
       },
       home: SplashScreen(),
     );
+  }
+}
+void fetchLocation() async {
+  try {
+    Position position = await getUserLocation();
+    print('User Location: ${position.latitude}, ${position.longitude}');
+  } catch (e) {
+    print('Error fetching location: $e');
   }
 }

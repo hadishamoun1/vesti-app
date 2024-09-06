@@ -1,12 +1,12 @@
 import 'dart:convert';
-
+import 'package:flutter/material.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:http/http.dart' as http;
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:app/widgets/category_chips.dart';
 import 'package:app/widgets/custom_search_bar.dart';
 import 'package:app/widgets/product_grid.dart';
 import 'package:app/widgets/store_grid.dart';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:web_socket_channel/web_socket_channel.dart';
 
 class Hometab extends StatefulWidget {
   const Hometab({super.key});
@@ -18,6 +18,9 @@ class Hometab extends StatefulWidget {
 class _HometabState extends State<Hometab> {
   // WebSocket channel
   late WebSocketChannel _channel;
+
+  // Location tracking
+  bool _isLocationServiceInitialized = false;
 
   List<dynamic> stores = [];
   List<dynamic> productsByCategory = [];
@@ -32,6 +35,11 @@ class _HometabState extends State<Hometab> {
     super.initState();
     fetchStores();
     fetchProductsByCategory(selectedCategory);
+    _initializeWebSocket();
+    _initializeBackgroundGeolocation();
+  }
+
+  void _initializeWebSocket() {
     _channel = WebSocketChannel.connect(
       Uri.parse('ws://10.0.2.2:3000?limit=2'),
     );
@@ -61,10 +69,28 @@ class _HometabState extends State<Hometab> {
     );
   }
 
+  Future<void> _initializeBackgroundGeolocation() async {
+    try {
+      final bg.State state = await bg.BackgroundGeolocation.state;
+      if (!state.enabled) {
+        await bg.BackgroundGeolocation.start();
+      }
+      _isLocationServiceInitialized = true;
+
+      bg.BackgroundGeolocation.onLocation((bg.Location location) {
+        // Handle location updates here
+        print('Location: ${location.coords}');
+        // You can also send location data to your server or use it as needed
+      });
+
+    } catch (e) {
+      print('Error initializing BackgroundGeolocation: $e');
+    }
+  }
+
   Future<void> fetchStores() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
+      final response = await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
@@ -123,6 +149,9 @@ class _HometabState extends State<Hometab> {
   @override
   void dispose() {
     _channel.sink.close();
+    if (_isLocationServiceInitialized) {
+      bg.BackgroundGeolocation.stop();
+    }
     super.dispose();
   }
 

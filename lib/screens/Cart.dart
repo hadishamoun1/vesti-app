@@ -190,6 +190,25 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ],
                 ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      foregroundColor: Colors.white,
+                      fixedSize: Size(400, 45), // Width and height
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text(
+                      'Pay Now',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

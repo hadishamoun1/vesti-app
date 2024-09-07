@@ -18,7 +18,6 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _onCheckout() {
-    // Implement checkout functionality here
     print('Checkout pressed');
   }
 
@@ -54,58 +53,59 @@ class _CartScreenState extends State<CartScreen> {
                 return Card(
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: SizedBox(
-                   
-                    height: 100,
-                    child: ListTile(
-                      leading: Container(
-                        width: 70,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Image container
+                        Container(
+                          width: 120,
+                          height: 110, 
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(Icons.image, color: Colors.grey),
                         ),
-                        child: Icon(Icons.image, color: Colors.grey),
-                      ),
-                      title: Row(
-                        children: [
-                          Text(
-                            cartItems[index].name,
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          SizedBox(width: 10),
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${cartItems[index].quantity}',
+                        SizedBox(width: 10),
+                        // Item details
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                cartItems[index].name,
                                 style: TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                                    fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                            ),
+                              SizedBox(height: 10),
+                              Text(
+                                '\$${cartItems[index].price.toStringAsFixed(2)}',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              SizedBox(height: 10),
+                              // Quantity controls
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () => _decrementQuantity(index),
+                                  ),
+                                  Text(
+                                    '${cartItems[index].quantity}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () => _incrementQuantity(index),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      subtitle: Text(
-                          '\$${cartItems[index].price.toStringAsFixed(2)}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () => _decrementQuantity(index),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () => _incrementQuantity(index),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 );

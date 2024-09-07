@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 import 'ProductDetailsStore.dart';
 
-
 class StoreDetailsPage extends StatefulWidget {
-  final Map<String, dynamic> store;
+  final Map<String, dynamic>? store;
+  final int? storeId;
 
-  StoreDetailsPage({required this.store});
+  StoreDetailsPage({this.store, this.storeId})
+      : assert(store != null || storeId != null, 'Either store or storeId must be provided');
 
   @override
   _StoreDetailsPageState createState() => _StoreDetailsPageState();
@@ -23,8 +25,17 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   }
 
   Future<List<dynamic>> fetchProducts() async {
-    final response = await http.get(
-        Uri.parse('http://10.0.2.2:3000/products/store/${widget.store['id']}'));
+    String url;
+
+    if (widget.store != null) {
+      url = 'http://10.0.2.2:3000/products/store/${widget.store!['id']}';
+    } else if (widget.storeId != null) {
+      url = 'http://10.0.2.2:3000/products/store/${widget.storeId}';
+    } else {
+      throw Exception('No store or storeId provided');
+    }
+
+    final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -38,7 +49,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.store['name']),
+        title: Text(widget.store != null ? widget.store!['name'] : 'Store'),
         centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -47,33 +58,32 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Container(
-                  width: double.infinity,
-                  height: 250,
-                  child: Image.network(
-                    widget.store['pictureUrl'],
-                    fit: BoxFit.cover,
-                    errorBuilder: (BuildContext context, Object error,
-                        StackTrace? stackTrace) {
-                      return Center(
-                        child: Icon(
-                          Icons.error,
-                          color: Colors.red,
-                          size: 50,
-                        ),
-                      );
-                    },
+            if (widget.store != null) 
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 5, 15, 15),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Container(
+                    width: double.infinity,
+                    height: 250,
+                    child: Image.network(
+                      widget.store!['pictureUrl'],
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                        return Center(
+                          child: Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 50,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
             Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
               child: Text(
                 'Products',
                 style: TextStyle(
@@ -127,8 +137,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                             children: [
                               Expanded(
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(15.0)),
+                                  borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
                                   child: Image.network(
                                     product['imageUrl'],
                                     fit: BoxFit.fill,
@@ -158,8 +167,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Text(
                                   '\$${product['price']}',
                                   style: TextStyle(

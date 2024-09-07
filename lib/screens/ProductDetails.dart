@@ -266,7 +266,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            StoreDetailsPage(store :widget.product['storeId']),
+                            StoreDetailsPage(storeId :widget.product['storeId']),
                       ),
                     );
                   },

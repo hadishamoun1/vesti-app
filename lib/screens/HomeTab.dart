@@ -118,33 +118,35 @@ class _HometabState extends State<Hometab> {
     }
   }
 
-  Future<void> fetchProductsByCategory(String category) async {
-    try {
-      final response = await http
-          .get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
+ Future<void> fetchProductsByCategory(String category) async {
+  try {
+    final response = await http.get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
 
-      if (response.statusCode == 200) {
-        final List<dynamic> decodedResponse = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            productsByCategory = decodedResponse;
-          });
-        }
-      } else {
-        if (mounted) {
-          setState(() {
-            errorMessage = 'Failed to load products. Please try again later.';
-          });
-        }
-      }
-    } catch (error) {
+    print('API Response: ${response.body}');  
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decodedResponse = json.decode(response.body);
       if (mounted) {
         setState(() {
-          errorMessage = 'An error occurred: $error';
+          productsByCategory = decodedResponse;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Failed to load products. Please try again later.';
         });
       }
     }
+  } catch (error) {
+    if (mounted) {
+      setState(() {
+        errorMessage = 'An error occurred: $error';
+      });
+    }
   }
+}
+
 
   @override
   void dispose() {

@@ -3,11 +3,13 @@ import '../screens/ProductDetails.dart'; // Ensure you have this import
 
 class ProductGrid extends StatelessWidget {
   final List<dynamic> products;
+  
 
   ProductGrid({required this.products});
 
   @override
   Widget build(BuildContext context) {
+    print(products);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 11.0),
       child: GridView.builder(
@@ -39,9 +41,11 @@ class ProductGrid extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ClipRRect(
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(8.0)),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(8.0)),
                       child: Image.network(
-                        product['imageUrl'] ?? '', // Use appropriate key for image URL
+                        product['imageUrl'] ??
+                            '', // Use appropriate key for image URL
                         width: double.infinity,
                         height: double.infinity,
                         fit: BoxFit.cover,
@@ -52,7 +56,8 @@ class ProductGrid extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 1.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 1.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

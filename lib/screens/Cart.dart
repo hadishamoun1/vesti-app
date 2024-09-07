@@ -123,7 +123,10 @@ class _CartScreenState extends State<CartScreen> {
                                     onPressed: () => _decrementQuantity(index),
                                   ),
                                   IconButton(
-                                    icon: Icon(Icons.add),
+                                    icon: Icon(
+                                      Icons.add,
+                                      color: Colors.blue,
+                                    ),
                                     onPressed: () => _incrementQuantity(index),
                                   ),
                                 ],

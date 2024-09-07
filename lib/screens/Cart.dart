@@ -56,8 +56,7 @@ class _CartScreenState extends State<CartScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Image container
                         Container(
@@ -70,16 +69,34 @@ class _CartScreenState extends State<CartScreen> {
                           child: Icon(Icons.image, color: Colors.grey),
                         ),
                         SizedBox(width: 10),
-                        // Item details and quantity controls centered vertically
+                        // Item details and quantity centered vertically
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                cartItems[index].name,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              Row(
+                                children: [
+                                  Text(
+                                    cartItems[index].name,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(width: 10),
+                                  // CircleAvatar showing the quantity beside the name
+                                  CircleAvatar(
+                                    radius: 12,
+                                    backgroundColor: Colors.blue,
+                                    child: Text(
+                                      '${cartItems[index].quantity}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 10),
                               Text(
@@ -93,19 +110,17 @@ class _CartScreenState extends State<CartScreen> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Column(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center, 
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.remove),
+                                    icon: Icon(
+                                      Icons.remove,
+                                      color: Colors.blue,
+                                    ),
                                     onPressed: () => _decrementQuantity(index),
-                                  ),
-                                  Text(
-                                    '${cartItems[index].quantity}',
-                                    style: TextStyle(fontSize: 16),
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.add),

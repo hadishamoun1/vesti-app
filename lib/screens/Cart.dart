@@ -19,7 +19,6 @@ class _CartScreenState extends State<CartScreen> {
 
   void _onCheckout() {
     // Implement checkout functionality here
-    // For example, navigate to a payment screen or show a confirmation dialog
     print('Checkout pressed');
   }
 
@@ -59,7 +58,10 @@ class _CartScreenState extends State<CartScreen> {
                     leading: CircleAvatar(
                       child: Text('${cartItems[index].quantity}x'),
                     ),
-                    title: Text(cartItems[index].name),
+                    title: Text(
+                      '${cartItems[index].name} (x${cartItems[index].quantity})',
+                      style: TextStyle(fontSize: 16),
+                    ),
                     subtitle:
                         Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
                     trailing: Row(
@@ -109,7 +111,6 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Handle checkout action
                       _onCheckout();
                     },
                     child: Text('Checkout'),

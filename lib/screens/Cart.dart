@@ -61,10 +61,10 @@ class _CartScreenState extends State<CartScreen> {
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(
-                            8), // Square shape with rounded corners
+                            8), 
                       ),
                       child: Icon(Icons.image,
-                          color: Colors.grey), // Placeholder for product image
+                          color: Colors.grey), 
                     ),
                     title: Row(
                       children: [
@@ -74,20 +74,20 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         SizedBox(width: 10),
                         Container(
-                          width: 24, // Square size
-                          height: 24, // Square size
+                          width: 24, 
+                          height: 24, 
                           decoration: BoxDecoration(
                             color: Colors
-                                .blue, // Background color for the square avatar
+                                .blue, 
                             borderRadius: BorderRadius.circular(
-                                4), // Make the container square
+                                15),
                           ),
                           child: Center(
                             child: Text(
                               '${cartItems[index].quantity}',
                               style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white), // White text color
+                                  color: Colors.white), 
                             ),
                           ),
                         ),

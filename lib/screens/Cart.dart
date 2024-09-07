@@ -56,7 +56,8 @@ class _CartScreenState extends State<CartScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment:
+                          CrossAxisAlignment.center,
                       children: [
                         // Image container
                         Container(
@@ -69,9 +70,10 @@ class _CartScreenState extends State<CartScreen> {
                           child: Icon(Icons.image, color: Colors.grey),
                         ),
                         SizedBox(width: 10),
-                        // Item details
+                        // Item details and quantity controls centered vertically
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
@@ -84,27 +86,32 @@ class _CartScreenState extends State<CartScreen> {
                                 '\$${cartItems[index].price.toStringAsFixed(2)}',
                                 style: TextStyle(fontSize: 16),
                               ),
-                              SizedBox(height: 10),
                             ],
                           ),
                         ),
-                        // Quantity controls aligned to the right
+                        // Quantity controls aligned and centered vertically
                         Align(
                           alignment: Alignment.centerRight,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          child: Column(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, 
                             children: [
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () => _decrementQuantity(index),
-                              ),
-                              Text(
-                                '${cartItems[index].quantity}',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () => _incrementQuantity(index),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () => _decrementQuantity(index),
+                                  ),
+                                  Text(
+                                    '${cartItems[index].quantity}',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () => _incrementQuantity(index),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

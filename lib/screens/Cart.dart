@@ -53,6 +53,7 @@ class _CartScreenState extends State<CartScreen> {
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
                 return Card(
+                  color: Colors.white,
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: ListTile(
                     leading: CircleAvatar(
@@ -113,10 +114,7 @@ class _CartScreenState extends State<CartScreen> {
                     },
                     child: Text('Checkout'),
                   ),
-                  
                 ],
-                
-                
               ),
             ),
           ),

@@ -55,12 +55,22 @@ class _CartScreenState extends State<CartScreen> {
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: ListTile(
-                    leading: CircleAvatar(
-                      child: Text('${cartItems[index].quantity}x'),
-                    ),
-                    title: Text(
-                      '${cartItems[index].name} (x${cartItems[index].quantity})',
-                      style: TextStyle(fontSize: 16),
+                    title: Row(
+                      children: [
+                        Text(
+                          cartItems[index].name,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        SizedBox(width: 10),
+                        CircleAvatar(
+                          radius: 12, // Make the avatar small
+                          backgroundColor: Colors.grey[200],
+                          child: Text(
+                            '${cartItems[index].quantity}',
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          ),
+                        ),
+                      ],
                     ),
                     subtitle:
                         Text('\$${cartItems[index].price.toStringAsFixed(2)}'),

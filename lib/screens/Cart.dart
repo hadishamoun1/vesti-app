@@ -118,7 +118,7 @@ class _CartScreenState extends State<CartScreen> {
                                   IconButton(
                                     icon: Icon(
                                       Icons.remove,
-                                      color: Colors.blue,
+                                      color: Colors.red,
                                     ),
                                     onPressed: () => _decrementQuantity(index),
                                   ),

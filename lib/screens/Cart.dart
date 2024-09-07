@@ -101,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
                               SizedBox(height: 10),
                               Text(
                                 '\$${cartItems[index].price.toStringAsFixed(2)}',
-                                style: TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 17),
                               ),
                             ],
                           ),

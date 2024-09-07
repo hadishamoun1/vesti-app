@@ -63,8 +63,8 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         SizedBox(width: 10),
                         CircleAvatar(
-                          radius: 12, // Make the avatar small
-                          backgroundColor: Colors.grey[200],
+                          radius: 12,
+                          backgroundColor: Colors.blue,
                           child: Text(
                             '${cartItems[index].quantity}',
                             style: TextStyle(fontSize: 12, color: Colors.black),

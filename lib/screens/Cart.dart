@@ -179,7 +179,12 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Total: \$${totalPrice.toStringAsFixed(2)}',
+                      'Total: ',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '\$${totalPrice.toStringAsFixed(2)}',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),

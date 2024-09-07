@@ -67,7 +67,7 @@ class _CartScreenState extends State<CartScreen> {
                           backgroundColor: Colors.blue,
                           child: Text(
                             '${cartItems[index].quantity}',
-                            style: TextStyle(fontSize: 12, color: Colors.black),
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
                         ),
                       ],

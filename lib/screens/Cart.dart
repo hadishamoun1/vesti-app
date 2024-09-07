@@ -17,6 +17,10 @@ class _CartScreenState extends State<CartScreen> {
         0.0, (total, item) => total + (item.price * item.quantity));
   }
 
+  int get totalItems {
+    return cartItems.fold(0, (total, item) => total + item.quantity);
+  }
+
   void _onCheckout() {
     print('Checkout pressed');
   }
@@ -159,23 +163,33 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ],
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Total: \$${totalPrice.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Total items text
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: Text(
+                    'Total Items: $totalItems',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      _onCheckout();
-                    },
-                    child: Text('Checkout'),
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Total: \$${totalPrice.toStringAsFixed(2)}',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    ElevatedButton(
+                      onPressed: _onCheckout,
+                      child: Text('Checkout'),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ],

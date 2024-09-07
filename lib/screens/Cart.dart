@@ -56,15 +56,13 @@ class _CartScreenState extends State<CartScreen> {
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: ListTile(
                     leading: Container(
-                      width: 40,
-                      height: 40,
+                      width: 70,
+                      height: 60,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(
-                            8), 
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Icon(Icons.image,
-                          color: Colors.grey), 
+                      child: Icon(Icons.image, color: Colors.grey),
                     ),
                     title: Row(
                       children: [
@@ -74,20 +72,17 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         SizedBox(width: 10),
                         Container(
-                          width: 24, 
-                          height: 24, 
+                          width: 24,
+                          height: 24,
                           decoration: BoxDecoration(
-                            color: Colors
-                                .blue, 
-                            borderRadius: BorderRadius.circular(
-                                15),
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: Center(
                             child: Text(
                               '${cartItems[index].quantity}',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.white), 
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
                             ),
                           ),
                         ),

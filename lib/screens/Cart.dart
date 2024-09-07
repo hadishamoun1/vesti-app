@@ -61,7 +61,7 @@ class _CartScreenState extends State<CartScreen> {
                         // Image container
                         Container(
                           width: 120,
-                          height: 110, 
+                          height: 110,
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(8),
@@ -85,22 +85,26 @@ class _CartScreenState extends State<CartScreen> {
                                 style: TextStyle(fontSize: 16),
                               ),
                               SizedBox(height: 10),
-                              // Quantity controls
-                              Row(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.remove),
-                                    onPressed: () => _decrementQuantity(index),
-                                  ),
-                                  Text(
-                                    '${cartItems[index].quantity}',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  IconButton(
-                                    icon: Icon(Icons.add),
-                                    onPressed: () => _incrementQuantity(index),
-                                  ),
-                                ],
+                            ],
+                          ),
+                        ),
+                        // Quantity controls aligned to the right
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.remove),
+                                onPressed: () => _decrementQuantity(index),
+                              ),
+                              Text(
+                                '${cartItems[index].quantity}',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.add),
+                                onPressed: () => _incrementQuantity(index),
                               ),
                             ],
                           ),

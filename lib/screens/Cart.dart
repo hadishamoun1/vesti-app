@@ -55,6 +55,17 @@ class _CartScreenState extends State<CartScreen> {
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                   child: ListTile(
+                    leading: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(
+                            8), // Square shape with rounded corners
+                      ),
+                      child: Icon(Icons.image,
+                          color: Colors.grey), // Placeholder for product image
+                    ),
                     title: Row(
                       children: [
                         Text(
@@ -62,12 +73,22 @@ class _CartScreenState extends State<CartScreen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(width: 10),
-                        CircleAvatar(
-                          radius: 12,
-                          backgroundColor: Colors.blue,
-                          child: Text(
-                            '${cartItems[index].quantity}',
-                            style: TextStyle(fontSize: 12, color: Colors.white),
+                        Container(
+                          width: 24, // Square size
+                          height: 24, // Square size
+                          decoration: BoxDecoration(
+                            color: Colors
+                                .blue, // Background color for the square avatar
+                            borderRadius: BorderRadius.circular(
+                                4), // Make the container square
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${cartItems[index].quantity}',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white), // White text color
+                            ),
                           ),
                         ),
                       ],

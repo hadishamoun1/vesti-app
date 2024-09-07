@@ -54,54 +54,58 @@ class _CartScreenState extends State<CartScreen> {
                 return Card(
                   color: Colors.white,
                   margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: ListTile(
-                    leading: Container(
-                      width: 70,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(Icons.image, color: Colors.grey),
-                    ),
-                    title: Row(
-                      children: [
-                        Text(
-                          cartItems[index].name,
-                          style: TextStyle(fontSize: 16),
+                  child: SizedBox(
+                   
+                    height: 100,
+                    child: ListTile(
+                      leading: Container(
+                        width: 70,
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(15),
+                        child: Icon(Icons.image, color: Colors.grey),
+                      ),
+                      title: Row(
+                        children: [
+                          Text(
+                            cartItems[index].name,
+                            style: TextStyle(fontSize: 16),
                           ),
-                          child: Center(
-                            child: Text(
-                              '${cartItems[index].quantity}',
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
+                          SizedBox(width: 10),
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${cartItems[index].quantity}',
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    subtitle:
-                        Text('\$${cartItems[index].price.toStringAsFixed(2)}'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () => _decrementQuantity(index),
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () => _incrementQuantity(index),
-                        ),
-                      ],
+                        ],
+                      ),
+                      subtitle: Text(
+                          '\$${cartItems[index].price.toStringAsFixed(2)}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.remove),
+                            onPressed: () => _decrementQuantity(index),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.add),
+                            onPressed: () => _incrementQuantity(index),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

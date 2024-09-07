@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'StoreDetails.dart';
+
 class ProductDetailsPage extends StatefulWidget {
   final dynamic product;
 
@@ -125,7 +127,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                             setState(() {
                                               _selectedSize = size;
                                             });
-                                            
+
                                             print('Selected size: $size');
                                           },
                                           child: Container(
@@ -133,15 +135,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                             decoration: BoxDecoration(
                                               color: _selectedSize == size
                                                   ? Colors.blue
-                                                  : Colors.grey[
-                                                      200], 
+                                                  : Colors.grey[200],
                                               borderRadius:
                                                   BorderRadius.circular(25),
                                               border: Border.all(
                                                 color: _selectedSize == size
                                                     ? Colors.blue
-                                                    : Colors
-                                                        .transparent, 
+                                                    : Colors.transparent,
                                                 width: 2,
                                               ),
                                             ),
@@ -151,8 +151,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                                 style: TextStyle(
                                                   color: _selectedSize == size
                                                       ? Colors.white
-                                                      : Colors
-                                                          .black, 
+                                                      : Colors.black,
                                                 ),
                                               ),
                                             ),
@@ -193,15 +192,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           width: 40,
                                           height: 40,
                                           decoration: BoxDecoration(
-                                            color: _getColorFromName(
-                                                colorName),
+                                            color: _getColorFromName(colorName),
                                             borderRadius:
                                                 BorderRadius.circular(25),
                                             border: Border.all(
                                               color: _selectedColor == colorName
                                                   ? Colors.white
-                                                  : Colors
-                                                      .transparent, 
+                                                  : Colors.transparent,
                                               width: 2,
                                             ),
                                           ),
@@ -219,25 +216,23 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             height: 160,
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white, 
+              color: Colors.white,
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30), 
-                topRight: Radius.circular(30), 
-              ), 
+                topLeft: Radius.circular(30),
+                topRight: Radius.circular(30),
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2), 
+                  color: Colors.black.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 10,
-                  offset: Offset(0, 4), 
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
             child: Column(
-              mainAxisAlignment:
-                  MainAxisAlignment.end, 
-              crossAxisAlignment:
-                  CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Row(
                   children: [
@@ -257,8 +252,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(5), 
+                          borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                       child: Text('Add to cart'),
@@ -268,7 +262,13 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                  
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            StoreDetailsPage(store :widget.product['storeId']),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

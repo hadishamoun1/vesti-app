@@ -183,10 +183,6 @@ class _CartScreenState extends State<CartScreen> {
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    ElevatedButton(
-                      onPressed: _onCheckout,
-                      child: Text('Checkout'),
-                    ),
                   ],
                 ),
               ],

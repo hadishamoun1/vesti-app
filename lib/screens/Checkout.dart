@@ -11,7 +11,7 @@ class OpenStreetMapScreen extends StatelessWidget {
       ),
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(37.7749, -122.4194), // Center to San Francisco
+          initialCenter: LatLng(33.8886, 35.4955),
           initialZoom: 13.0,
           onTap: (tapPosition, point) {
             print('Tapped position: $point');
@@ -27,7 +27,7 @@ class OpenStreetMapScreen extends StatelessWidget {
           MarkerLayer(
             markers: [
               Marker(
-                point: LatLng(37.7749, -122.4194),
+                point: LatLng(33.8886, 35.4955),
                 width: 80.0,
                 height: 80.0,
                 child: Container(

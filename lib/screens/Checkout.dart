@@ -68,20 +68,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ],
             ),
             child: Center(
-              child: IconButton(
-                icon: Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 50,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OpenStreetMapScreen(),
-                    ),
-                  );
-                },
+              child: Image.asset(
+                width: 70,
+                height: 70,
+                'assets/images/imageMaps.png',
+                fit: BoxFit.contain,
               ),
             ),
           ),

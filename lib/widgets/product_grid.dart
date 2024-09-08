@@ -55,7 +55,7 @@ class ProductGrid extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 7.0),
+                        horizontal: 10.0, vertical: 7.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

@@ -10,6 +10,7 @@ class _CartScreenState extends State<CartScreen> {
     CartItem(name: 'T-Shirt', price: 20.0, quantity: 1),
     CartItem(name: 'Jeans', price: 40.0, quantity: 2),
     CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
+    // Add more items as needed...
   ];
 
   double get totalPrice {
@@ -36,6 +37,12 @@ class _CartScreenState extends State<CartScreen> {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
       }
+    });
+  }
+
+  void _removeCartItem(int index) {
+    setState(() {
+      cartItems.removeAt(index);
     });
   }
 
@@ -112,10 +119,15 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                         // Quantity controls aligned and centered vertically
                         Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.topRight,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              // X icon for deletion
+                              IconButton(
+                                icon: Icon(Icons.close, color: Colors.red),
+                                onPressed: () => _removeCartItem(index),
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [

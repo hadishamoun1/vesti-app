@@ -238,7 +238,7 @@ class _CartScreenState extends State<CartScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PaymentScreen()),
+                            builder: (context) => OpenStreetMapScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

@@ -1,33 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 
-class PaymentScreen extends StatefulWidget {
-  @override
-  _PaymentScreenState createState() => _PaymentScreenState();
-}
-
-class _PaymentScreenState extends State<PaymentScreen> {
-  final TextEditingController _addressController = TextEditingController();
-
+class OpenStreetMapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment'),
-        backgroundColor: Colors.blue,
+        title: Text('OpenStreetMap'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Address',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-          
-          ],
+      body: FlutterMap(
+        options: MapOptions(
+          initialCenter: LatLng(37.7749, -122.4194), // Center to San Francisco
+          initialZoom: 13.0,
+          onTap: (tapPosition, point) {
+            print('Tapped position: $point');
+          },
         ),
+        children: [
+          TileLayer(
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
+            // Attribution text can be added here directly
+            // FlutterMap should handle the attribution automatically
+          ),
+          MarkerLayer(
+            markers: [
+              Marker(
+                point: LatLng(37.7749, -122.4194),
+                width: 80.0,
+                height: 80.0,
+                child: Container(
+                  child: Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 40,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

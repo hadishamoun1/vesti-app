@@ -3,7 +3,6 @@ import '../screens/ProductDetails.dart'; // Ensure you have this import
 
 class ProductGrid extends StatelessWidget {
   final List<dynamic> products;
-  
 
   ProductGrid({required this.products});
 
@@ -16,10 +15,10 @@ class ProductGrid extends StatelessWidget {
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.8,
         ),
         itemCount: products.length,
         itemBuilder: (context, index) {
@@ -47,8 +46,7 @@ class ProductGrid extends StatelessWidget {
                         product['imageUrl'] ??
                             '', // Use appropriate key for image URL
                         width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         errorBuilder: (context, error, stackTrace) {
                           return Icon(Icons.error, size: 100);
                         },
@@ -57,7 +55,7 @@ class ProductGrid extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 1.0),
+                        horizontal: 8.0, vertical: 7.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

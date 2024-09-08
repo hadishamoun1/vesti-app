@@ -222,7 +222,7 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ),
                     child: Text(
-                      'Pay Now',
+                      'Go to checkout',
                       style: TextStyle(fontSize: 18),
                     ),
                   ),

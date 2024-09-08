@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'OpenStreetMap.dart';
+import '../widgets/OpenStreetMap.dart';
 
 class CartScreen extends StatefulWidget {
   @override

@@ -10,8 +10,9 @@ class _CartScreenState extends State<CartScreen> {
     CartItem(name: 'T-Shirt', price: 20.0, quantity: 1),
     CartItem(name: 'Jeans', price: 40.0, quantity: 2),
     CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
-    // Add more items as needed...
   ];
+
+  List<double> paddingValues = [0.0, 0.0, 0.0]; // Padding state for each item
 
   double get totalPrice {
     return cartItems.fold(
@@ -29,6 +30,14 @@ class _CartScreenState extends State<CartScreen> {
   void _incrementQuantity(int index) {
     setState(() {
       cartItems[index].quantity++;
+      paddingValues[index] = 10.0; // Move the card forward
+    });
+
+    // Reset the padding after a short delay for smooth animation
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        paddingValues[index] = 0.0;
+      });
     });
   }
 
@@ -36,13 +45,22 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
+        paddingValues[index] = 10.0; // Move the card forward
       }
+    });
+
+    // Reset the padding after a short delay for smooth animation
+    Future.delayed(Duration(milliseconds: 300), () {
+      setState(() {
+        paddingValues[index] = 0.0;
+      });
     });
   }
 
   void _removeCartItem(int index) {
     setState(() {
       cartItems.removeAt(index);
+      paddingValues.removeAt(index);
     });
   }
 
@@ -61,102 +79,107 @@ class _CartScreenState extends State<CartScreen> {
             child: ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
-                return Card(
-                  color: Colors.white,
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Stack(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            // Image container
-                            Container(
-                              width: 120,
-                              height: 110,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(8),
+                return AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  padding: EdgeInsets.only(
+                      left: paddingValues[index]), // Animated padding
+                  child: Card(
+                    color: Colors.white,
+                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Stack(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Image container
+                              Container(
+                                width: 120,
+                                height: 110,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(Icons.image, color: Colors.grey),
                               ),
-                              child: Icon(Icons.image, color: Colors.grey),
-                            ),
-                            SizedBox(width: 10),
-                            // Item details and quantity centered vertically
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        cartItems[index].name,
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(width: 10),
-                                      // CircleAvatar showing the quantity beside the name
-                                      CircleAvatar(
-                                        radius: 12,
-                                        backgroundColor: Colors.blue,
-                                        child: Text(
-                                          '${cartItems[index].quantity}',
+                              SizedBox(width: 10),
+                              // Item details and quantity centered vertically
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          cartItems[index].name,
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(width: 10),
+                                        // CircleAvatar showing the quantity beside the name
+                                        CircleAvatar(
+                                          radius: 12,
+                                          backgroundColor: Colors.blue,
+                                          child: Text(
+                                            '${cartItems[index].quantity}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  // Row to align price with increment/decrement buttons
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        '\$${cartItems[index].price.toStringAsFixed(2)}',
-                                        style: TextStyle(fontSize: 17),
-                                      ),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.remove,
-                                              color: Colors.red,
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    // Row to align price with increment/decrement buttons
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '\$${cartItems[index].price.toStringAsFixed(2)}',
+                                          style: TextStyle(fontSize: 17),
+                                        ),
+                                        Row(
+                                          children: [
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.remove,
+                                                color: Colors.red,
+                                              ),
+                                              onPressed: () =>
+                                                  _decrementQuantity(index),
                                             ),
-                                            onPressed: () =>
-                                                _decrementQuantity(index),
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.add,
-                                              color: Colors.blue,
+                                            IconButton(
+                                              icon: Icon(
+                                                Icons.add,
+                                                color: Colors.blue,
+                                              ),
+                                              onPressed: () =>
+                                                  _incrementQuantity(index),
                                             ),
-                                            onPressed: () =>
-                                                _incrementQuantity(index),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Positioned(
-                          top: 0,
-                          right: 0,
-                          child: IconButton(
-                            icon: Icon(Icons.close, color: Colors.red),
-                            onPressed: () => _removeCartItem(index),
+                            ],
                           ),
-                        ),
-                      ],
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.close, color: Colors.red),
+                              onPressed: () => _removeCartItem(index),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -184,7 +207,6 @@ class _CartScreenState extends State<CartScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Total items text
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
@@ -214,7 +236,7 @@ class _CartScreenState extends State<CartScreen> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
-                      fixedSize: Size(400, 45), // Width and height
+                      fixedSize: Size(400, 45),
                       padding:
                           EdgeInsets.symmetric(horizontal: 20, vertical: 9),
                       shape: RoundedRectangleBorder(

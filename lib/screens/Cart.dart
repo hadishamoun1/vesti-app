@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Checkout.dart';
+
 
 
 class CartScreen extends StatefulWidget {
@@ -238,7 +240,7 @@ class _CartScreenState extends State<CartScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => OpenStreetMapScreen()),
+                            builder: (context) => PaymentScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

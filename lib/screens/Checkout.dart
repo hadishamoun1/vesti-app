@@ -25,14 +25,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            TextField(
-              controller: _addressController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your address',
-              ),
-              maxLines: 5, // Allows multiple lines of text
-            ),
+          
           ],
         ),
       ),

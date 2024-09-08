@@ -52,41 +52,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ),
-          SizedBox(height: 20), 
-         
-             Container(
-              width: 100, 
-              height: 100, 
-              decoration: BoxDecoration(
-                color: Colors.grey[200], 
-                borderRadius: BorderRadius.circular(10), 
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Center(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.location_on,
-                    color: Colors.red,
-                    size: 50,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OpenStreetMapScreen(),
-                      ),
-                    );
-                  },
+          SizedBox(height: 20),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, 2),
+                  blurRadius: 6,
                 ),
+              ],
+            ),
+            child: Center(
+              child: IconButton(
+                icon: Icon(
+                  Icons.location_on,
+                  color: Colors.red,
+                  size: 50,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OpenStreetMapScreen(),
+                    ),
+                  );
+                },
               ),
             ),
-          
+          ),
         ],
       ),
     );

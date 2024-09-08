@@ -38,8 +38,56 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Payment Content Here'),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: EdgeInsets.all(16.0),
+            child: Text(
+              'Address',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          SizedBox(height: 20), 
+         
+             Container(
+              width: 100, 
+              height: 100, 
+              decoration: BoxDecoration(
+                color: Colors.grey[200], 
+                borderRadius: BorderRadius.circular(10), 
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 2),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: IconButton(
+                  icon: Icon(
+                    Icons.location_on,
+                    color: Colors.red,
+                    size: 50,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OpenStreetMapScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          
+        ],
       ),
     );
   }

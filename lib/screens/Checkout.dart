@@ -22,6 +22,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Payment'),
         actions: [
@@ -39,7 +40,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,  
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.all(16.0),
@@ -54,7 +55,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           SizedBox(height: 20),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),  
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: GestureDetector(
               onTap: () {
                 // Navigate to the specific page

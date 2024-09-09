@@ -298,7 +298,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         decoration: InputDecoration(
           labelText: 'PayPal Email',
           border: OutlineInputBorder(),
-          prefixIcon: Icon(Icons.email),
+          prefixIcon: Icon(
+            Icons.email,
+            color: Colors.blue,
+          ),
         ),
       ),
     );

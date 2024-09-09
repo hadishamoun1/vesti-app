@@ -47,8 +47,7 @@ class _OpenStreetMapScreenState extends State<OpenStreetMapScreen> {
           _markerPosition =
               LatLng(locationData.latitude!, locationData.longitude!);
         });
-        _mapController.move(
-            _markerPosition, 13.0); // Move the map to the new position
+        _mapController.move(_markerPosition, 13.0);
       }
     } catch (e) {
       print("Error getting location: $e");
@@ -105,7 +104,7 @@ class _OpenStreetMapScreenState extends State<OpenStreetMapScreen> {
             child: FloatingActionButton(
               onPressed: _getCurrentLocation,
               child: Icon(Icons.my_location),
-              backgroundColor: Colors.blue,
+              backgroundColor: Colors.white,
             ),
           ),
         ],

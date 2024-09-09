@@ -15,7 +15,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   LatLng _markerPosition = LatLng(33.8938, 35.5018);
-  String _streetName = 'Unknown'; // Added field for the street name
+  String _streetName = 'Unknown'; // Field for the street name
   String _selectedPaymentMethod = '';
 
   void _selectPaymentMethod(String method) {
@@ -246,14 +246,71 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildCardPaymentFields() {
-    return Container(); // Your card payment fields here
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Card Number',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.credit_card),
+            ),
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.datetime,
+                  decoration: InputDecoration(
+                    labelText: 'Expiration Date',
+                    border: OutlineInputBorder(),
+                    hintText: 'MM/YY',
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'CVV',
+                    border: OutlineInputBorder(),
+                    hintText: 'XXX',
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildPayPalPaymentFields() {
-    return Container(); // Your PayPal payment fields here
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: TextField(
+        keyboardType: TextInputType.emailAddress,
+        decoration: InputDecoration(
+          labelText: 'PayPal Email',
+          border: OutlineInputBorder(),
+          prefixIcon: Icon(Icons.email),
+        ),
+      ),
+    );
   }
 
   Widget _buildCashOnDeliveryMessage() {
-    return Container(); // Your cash on delivery message here
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Text(
+        'You will pay in cash upon delivery.',
+        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      ),
+    );
   }
 }

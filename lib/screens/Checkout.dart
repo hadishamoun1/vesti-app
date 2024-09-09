@@ -32,7 +32,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
         backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        // Use this for scrolling in case content overflows
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,7 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 30), // Space before the next section
+            SizedBox(height: 30),
             Padding(
               padding: EdgeInsets.fromLTRB(16, 16, 0, 5),
               child: Text(
@@ -102,54 +101,48 @@ class _PaymentScreenState extends State<PaymentScreen> {
             // Payment Method Section
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    // Credit/Debit Card Option
-                    ListTile(
-                      leading: Icon(Icons.credit_card, color: Colors.blue),
-                      title: Text('Credit / Debit Card'),
-                      trailing: Icon(_selectedPaymentMethod == 'card'
-                          ? Icons.check_circle
-                          : Icons.arrow_forward_ios),
-                      selected: _selectedPaymentMethod == 'card',
-                      onTap: () {
-                        _selectPaymentMethod('card');
-                      },
-                    ),
-                    Divider(), // Divider between payment options
-                    // PayPal Option
-                    ListTile(
-                      leading: Icon(Icons.account_balance_wallet,
-                          color: Colors.orange),
-                      title: Text('PayPal'),
-                      trailing: Icon(_selectedPaymentMethod == 'paypal'
-                          ? Icons.check_circle
-                          : Icons.arrow_forward_ios),
-                      selected: _selectedPaymentMethod == 'paypal',
-                      onTap: () {
-                        _selectPaymentMethod('paypal');
-                      },
-                    ),
-                    Divider(),
-                    // Cash on Delivery Option
-                    ListTile(
-                      leading: Icon(Icons.attach_money, color: Colors.green),
-                      title: Text('Cash on Delivery'),
-                      trailing: Icon(_selectedPaymentMethod == 'cash'
-                          ? Icons.check_circle
-                          : Icons.arrow_forward_ios),
-                      selected: _selectedPaymentMethod == 'cash',
-                      onTap: () {
-                        _selectPaymentMethod('cash');
-                      },
-                    ),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  // Credit/Debit Card Option
+                  ListTile(
+                    leading: Icon(Icons.credit_card, color: Colors.blue),
+                    title: Text('Credit / Debit Card'),
+                    trailing: _selectedPaymentMethod == 'card'
+                        ? Icon(Icons.check_circle, color: Colors.green)
+                        : null, // Show green tick if selected
+                    selected: _selectedPaymentMethod == 'card',
+                    onTap: () {
+                      _selectPaymentMethod('card');
+                    },
+                  ),
+                  Divider(), // Divider between payment options
+                  // PayPal Option
+                  ListTile(
+                    leading: Icon(Icons.account_balance_wallet,
+                        color: Colors.orange),
+                    title: Text('PayPal'),
+                    trailing: _selectedPaymentMethod == 'paypal'
+                        ? Icon(Icons.check_circle, color: Colors.green)
+                        : null,
+                    selected: _selectedPaymentMethod == 'paypal',
+                    onTap: () {
+                      _selectPaymentMethod('paypal');
+                    },
+                  ),
+                  Divider(),
+                  // Cash on Delivery Option
+                  ListTile(
+                    leading: Icon(Icons.attach_money, color: Colors.green),
+                    title: Text('Cash on Delivery'),
+                    trailing: _selectedPaymentMethod == 'cash'
+                        ? Icon(Icons.check_circle, color: Colors.green)
+                        : null,
+                    selected: _selectedPaymentMethod == 'cash',
+                    onTap: () {
+                      _selectPaymentMethod('cash');
+                    },
+                  ),
+                ],
               ),
             ),
             // Conditionally show payment details input based on the selected method

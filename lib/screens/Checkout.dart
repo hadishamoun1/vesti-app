@@ -32,7 +32,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.fromLTRB(16, 16, 0, 5),
             child: Text(
               'Delivery Address',
               style: TextStyle(

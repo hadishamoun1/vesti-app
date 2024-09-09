@@ -25,6 +25,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Payment'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.location_on),

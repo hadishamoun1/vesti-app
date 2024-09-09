@@ -67,41 +67,46 @@ class _OpenStreetMapScreenState extends State<OpenStreetMapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('OpenStreetMap'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.my_location),
-            onPressed: () {
-              _getCurrentLocation();
-            },
-          ),
-        ],
       ),
-      body: FlutterMap(
-        mapController: _mapController,
-        options: MapOptions(
-          initialCenter: _markerPosition,
-          initialZoom: 13.0,
-          onTap: (tapPosition, point) => _onTap(point),
-        ),
+      body: Stack(
         children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                width: 80.0,
-                height: 80.0,
-                point: _markerPosition,
-                child: Container(
-                  child: Icon(
-                    Icons.location_on,
-                    color: Colors.red,
-                    size: 40,
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: _markerPosition,
+              initialZoom: 13.0,
+              onTap: (tapPosition, point) => _onTap(point),
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: _markerPosition,
+                    child: Container(
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.red,
+                        size: 40,
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
+          ),
+          Positioned(
+            bottom: 16.0,
+            right: 16.0,
+            child: FloatingActionButton(
+              onPressed: _getCurrentLocation,
+              child: Icon(Icons.my_location),
+              backgroundColor: Colors.blue,
+            ),
           ),
         ],
       ),

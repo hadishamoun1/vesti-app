@@ -27,25 +27,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         title: Text('Payment'),
         centerTitle: true,
         backgroundColor: Colors.white,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.location_on),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OpenStreetMapScreen(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(10.0),
             child: Text(
               'Delivery Address',
               style: TextStyle(

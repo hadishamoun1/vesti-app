@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 
 class OpenStreetMapScreen extends StatefulWidget {
+  final Function(LatLng, String) onLocationSelected;
+
+  OpenStreetMapScreen({required this.onLocationSelected});
+
   @override
   _OpenStreetMapScreenState createState() => _OpenStreetMapScreenState();
 }
@@ -56,12 +61,24 @@ class _OpenStreetMapScreenState extends State<OpenStreetMapScreen> {
     }
   }
 
-  void _onTap(LatLng point) {
+  void _onTap(LatLng point) async {
     setState(() {
       _markerPosition = point;
     });
-    print('Tapped position: $point');
+
+   
+  try {
+    List<geocoding.Placemark> placemarks = await geocoding.placemarkFromCoordinates(point.latitude, point.longitude);
+    String streetName = placemarks.isNotEmpty
+        ? placemarks.first.street ?? 'Unknown'
+        : 'Unknown';
+
+    widget.onLocationSelected(point, streetName);
+    Navigator.pop(context);
+  } catch (e) {
+    print("Error fetching address: $e");
   }
+}
 
   @override
   Widget build(BuildContext context) {

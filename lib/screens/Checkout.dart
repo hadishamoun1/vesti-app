@@ -1,8 +1,7 @@
+// checkout.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-
-import '../widgets/OpenStreetMap.dart'; // Replace with your target page import
+import '../widgets/OpenStreetMap.dart'; // Adjust the path if necessary
 
 class PaymentScreen extends StatefulWidget {
   final int totalItems;
@@ -16,15 +15,36 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   LatLng _markerPosition = LatLng(33.8938, 35.5018);
-
-  // Track the selected payment method
+  String _streetName = 'Unknown'; // Added field for the street name
   String _selectedPaymentMethod = '';
 
-  // Function to set the selected payment method
   void _selectPaymentMethod(String method) {
     setState(() {
       _selectedPaymentMethod = method;
     });
+  }
+
+  void _openMap() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OpenStreetMapScreen(
+          onLocationSelected: (LatLng point, String streetName) {
+            setState(() {
+              _markerPosition = point;
+              _streetName = streetName;
+            });
+          },
+        ),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        _markerPosition = result['position'];
+        _streetName = result['street'];
+      });
+    }
   }
 
   @override
@@ -58,14 +78,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                     SizedBox(height: 20),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OpenStreetMapScreen(),
-                          ),
-                        );
-                      },
+                      onTap: _openMap,
                       child: Container(
                         width: 120,
                         height: 120,
@@ -88,6 +101,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Selected Address: $_streetName',
+                      style: TextStyle(fontSize: 16, color: Colors.black),
                     ),
                     SizedBox(height: 30),
                     Padding(
@@ -228,68 +246,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildCardPaymentFields() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Enter your card details', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Card Number',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.number,
-          ),
-          SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Expiry Date',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.datetime,
-          ),
-          SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'CVV',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.number,
-          ),
-        ],
-      ),
-    );
+    return Container(); // Your card payment fields here
   }
 
   Widget _buildPayPalPaymentFields() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Enter your PayPal email', style: TextStyle(fontSize: 18)),
-          SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'PayPal Email',
-              border: OutlineInputBorder(),
-            ),
-            keyboardType: TextInputType.emailAddress,
-          ),
-        ],
-      ),
-    );
+    return Container(); // Your PayPal payment fields here
   }
 
   Widget _buildCashOnDeliveryMessage() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Text(
-        'You will pay with cash upon delivery.',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
+    return Container(); // Your cash on delivery message here
   }
 }

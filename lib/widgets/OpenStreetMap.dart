@@ -48,6 +48,8 @@ class _OpenStreetMapScreenState extends State<OpenStreetMapScreen> {
               LatLng(locationData.latitude!, locationData.longitude!);
         });
         _mapController.move(_markerPosition, 13.0);
+        print(
+            'Current location: Latitude: ${locationData.latitude}, Longitude: ${locationData.longitude}');
       }
     } catch (e) {
       print("Error getting location: $e");

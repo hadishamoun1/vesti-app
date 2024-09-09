@@ -39,12 +39,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,  
         children: [
-          Container(
+          Padding(
             padding: EdgeInsets.all(16.0),
             child: Text(
-              'Address',
+              'Delivery Address',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -53,37 +53,40 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
           ),
           SizedBox(height: 20),
-          GestureDetector(
-            onTap: () {
-              // Navigate to the specific page
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OpenStreetMapScreen(), // Replace with your target screen
-                ),
-              );
-            },
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 6,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),  
+            child: GestureDetector(
+              onTap: () {
+                // Navigate to the specific page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OpenStreetMapScreen(),
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset(
-                  'assets/images/imageMaps.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+                );
+              },
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      offset: Offset(0, 2),
+                      blurRadius: 6,
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    'assets/images/imageMaps.png',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

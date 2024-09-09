@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
-import '../widgets/OpenStreetMap.dart';
+import '../widgets/OpenStreetMap.dart'; // Replace with your target page import
 
 class PaymentScreen extends StatefulWidget {
   @override
@@ -53,26 +53,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
           ),
           SizedBox(height: 20),
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(0, 2),
-                  blurRadius: 6,
+          GestureDetector(
+            onTap: () {
+              // Navigate to the specific page
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OpenStreetMapScreen(), // Replace with your target screen
                 ),
-              ],
-            ),
-            child: Center(
-              child: Image.asset(
-                width: 70,
-                height: 70,
-                'assets/images/imageMaps.png',
-                fit: BoxFit.contain,
+              );
+            },
+            child: Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0, 2),
+                    blurRadius: 6,
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.asset(
+                  'assets/images/imageMaps.png',
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

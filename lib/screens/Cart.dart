@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'Checkout.dart';
-
-
+import 'checkout.dart'; // Updated import to match file name
 
 class CartScreen extends StatefulWidget {
   @override
@@ -25,10 +22,6 @@ class _CartScreenState extends State<CartScreen> {
 
   int get totalItems {
     return cartItems.fold(0, (total, item) => total + item.quantity);
-  }
-
-  void _onCheckout() {
-    print('Checkout pressed');
   }
 
   void _incrementQuantity(int index) {
@@ -66,6 +59,18 @@ class _CartScreenState extends State<CartScreen> {
       cartItems.removeAt(index);
       paddingValues.removeAt(index);
     });
+  }
+
+  void _onCheckout() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentScreen(
+          totalItems: totalItems,
+          totalPrice: totalPrice,
+        ),
+      ),
+    );
   }
 
   @override
@@ -236,13 +241,7 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PaymentScreen()),
-                      );
-                    },
+                    onPressed: _onCheckout,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,

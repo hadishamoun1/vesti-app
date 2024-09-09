@@ -5,17 +5,19 @@ import 'package:latlong2/latlong.dart';
 import '../widgets/OpenStreetMap.dart'; // Replace with your target page import
 
 class PaymentScreen extends StatefulWidget {
+  final int totalItems;
+  final double totalPrice;
+
+  PaymentScreen({required this.totalItems, required this.totalPrice});
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
   LatLng _markerPosition = LatLng(33.8938, 35.5018);
-
-  // Track the selected payment method
   String _selectedPaymentMethod = '';
 
-  // Function to set the selected payment method
   void _selectPaymentMethod(String method) {
     setState(() {
       _selectedPaymentMethod = method;
@@ -51,7 +53,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: GestureDetector(
                 onTap: () {
-                  // Navigate to the specific page
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -98,25 +99,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
             SizedBox(height: 20),
-            // Payment Method Section
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  // Credit/Debit Card Option
                   ListTile(
                     leading: Icon(Icons.credit_card, color: Colors.blue),
                     title: Text('Credit / Debit Card'),
                     trailing: _selectedPaymentMethod == 'card'
                         ? Icon(Icons.check_circle, color: Colors.green)
-                        : null, // Show green tick if selected
+                        : null,
                     selected: _selectedPaymentMethod == 'card',
                     onTap: () {
                       _selectPaymentMethod('card');
                     },
                   ),
-                  Divider(), // Divider between payment options
-                  // PayPal Option
+                  Divider(),
                   ListTile(
                     leading: Icon(Icons.account_balance_wallet,
                         color: Colors.orange),
@@ -130,7 +128,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     },
                   ),
                   Divider(),
-                  // Cash on Delivery Option
                   ListTile(
                     leading: Icon(Icons.attach_money, color: Colors.green),
                     title: Text('Cash on Delivery'),
@@ -145,17 +142,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ],
               ),
             ),
-            // Conditionally show payment details input based on the selected method
             if (_selectedPaymentMethod == 'card') _buildCardPaymentFields(),
             if (_selectedPaymentMethod == 'paypal') _buildPayPalPaymentFields(),
             if (_selectedPaymentMethod == 'cash') _buildCashOnDeliveryMessage(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Total Items: ${widget.totalItems}',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Total Price: \$${widget.totalPrice.toStringAsFixed(2)}',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  // Build input fields for Credit/Debit Card
   Widget _buildCardPaymentFields() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -192,7 +204,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  // Build fields or message for PayPal
   Widget _buildPayPalPaymentFields() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -213,7 +224,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
-  // Message for Cash on Delivery
   Widget _buildCashOnDeliveryMessage() {
     return Padding(
       padding: const EdgeInsets.all(16.0),

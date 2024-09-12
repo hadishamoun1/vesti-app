@@ -18,7 +18,7 @@ class StoreGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 11.0),
+      padding: const EdgeInsets.fromLTRB(11, 0, 11, 20),
       child: isLoading
           ? Center(child: CircularProgressIndicator())
           : errorMessage.isNotEmpty
@@ -46,19 +46,18 @@ class StoreGrid extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => StoreDetailsPage(
-                                   store: store,
+                                    store: store,
                                   ),
                                 ),
                               );
                             },
                             child: Card(
+                              color: const Color.fromARGB(255, 236, 243, 248),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
-                                    
                                     child: ClipRRect(
-                                      
                                       borderRadius: BorderRadius.vertical(
                                           top: Radius.circular(15.0)),
                                       child: Container(
@@ -86,7 +85,7 @@ class StoreGrid extends StatelessWidget {
                                     child: Text(
                                       store['name'],
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                          fontWeight: FontWeight.w500),
                                     ),
                                   ),
                                 ],

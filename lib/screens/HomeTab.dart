@@ -194,7 +194,7 @@ class _HometabState extends State<Hometab> {
             padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
             child: Text(
               'Trending stores',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ),
           StoreGrid(
@@ -204,10 +204,10 @@ class _HometabState extends State<Hometab> {
             searchQuery: _searchQuery,
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
+            padding: const EdgeInsets.fromLTRB(16, 15, 24, 10),
             child: Text(
               'Latest $selectedCategory',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ),
           ProductGrid(

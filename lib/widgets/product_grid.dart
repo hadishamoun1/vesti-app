@@ -1,3 +1,4 @@
+import 'package:app/screens/Home.dart';
 import 'package:flutter/material.dart';
 import '../screens/ProductDetails.dart'; // Ensure you have this import
 
@@ -35,6 +36,7 @@ class ProductGrid extends StatelessWidget {
               );
             },
             child: Card(
+              color: const Color.fromARGB(255, 236, 243, 248),
               elevation: 2,
               child: Column(
                 children: [
@@ -65,6 +67,20 @@ class ProductGrid extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${product['price']}\$' ?? 'Unknown price',
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

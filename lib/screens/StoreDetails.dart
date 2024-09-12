@@ -119,7 +119,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                       store['name'] ?? 'Store Name',
                       style: TextStyle(
                         fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -141,7 +141,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                       'Products',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -236,7 +236,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 18,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),

@@ -1,6 +1,6 @@
-import 'package:app/screens/Home.dart';
+
 import 'package:flutter/material.dart';
-import '../screens/ProductDetails.dart'; // Ensure you have this import
+import '../screens/ProductDetails.dart'; 
 
 class ProductGrid extends StatelessWidget {
   final List<dynamic> products;
@@ -39,6 +39,8 @@ class ProductGrid extends StatelessWidget {
               color: const Color.fromARGB(255, 236, 243, 248),
               elevation: 2,
               child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, 
                 children: [
                   Expanded(
                     child: ClipRRect(
@@ -46,7 +48,7 @@ class ProductGrid extends StatelessWidget {
                           BorderRadius.vertical(top: Radius.circular(8.0)),
                       child: Image.network(
                         product['imageUrl'] ??
-                            '', // Use appropriate key for image URL
+                            '', 
                         width: double.infinity,
                         fit: BoxFit.fill,
                         errorBuilder: (context, error, stackTrace) {
@@ -56,31 +58,36 @@ class ProductGrid extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 7.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment
+                          .centerLeft, 
                       child: Text(
                         product['name'] ?? 'Unknown Product',
-                        style: TextStyle(fontSize: 15),
-                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Align(
-                      alignment: Alignment.centerLeft,
+                      alignment:
+                          Alignment.centerLeft,
                       child: Text(
-                        '${product['price']}\$' ?? 'Unknown price',
+                        '\$${product['price']}',
                         style: TextStyle(
-                          fontSize: 20,
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                         ),
-                        textAlign: TextAlign.left,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

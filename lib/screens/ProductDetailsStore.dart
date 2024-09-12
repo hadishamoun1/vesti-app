@@ -85,7 +85,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       child: Text(
                         widget.product['name'] ?? 'Unknown Product',
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.w500),
                       ),
                     ),
                     Divider(
@@ -94,26 +94,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                     SizedBox(height: 10),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
                       child: RichText(
                         text: TextSpan(
-                          text: 'Description:\n\n',
+                          text:
+                              widget.product['description'] ?? 'No description',
                           style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: widget.product['description'] ??
-                                  'No description available',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal),
-                            ),
-                          ],
+                              fontSize: 16,
+                              color: const Color.fromARGB(255, 100, 100, 100),
+                              fontWeight: FontWeight.normal),
                         ),
+                        textAlign: TextAlign.justify,
                       ),
                     ),
                     SizedBox(height: 10),
@@ -125,7 +116,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -188,7 +179,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -258,7 +249,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       'Price: \$${widget.product['price'] ?? '0.00'}',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Spacer(),

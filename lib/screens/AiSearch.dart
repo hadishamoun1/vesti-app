@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
-
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -11,7 +10,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   File? _image;
   final picker = ImagePicker();
- 
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -27,7 +25,6 @@ class _SearchScreenState extends State<SearchScreen> {
     // Fetch search results here
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,18 +38,49 @@ class _SearchScreenState extends State<SearchScreen> {
               width: double.infinity,
               height: 200,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: const Color.fromARGB(255, 225, 242, 252),
                 borderRadius: BorderRadius.circular(12.0),
               ),
               child: _image == null
-                  ? Center(child: Text('Tap to upload an image'))
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/projImages/upload_pic.png',
+                          height: 80,
+                        ),
+                        SizedBox(height: 10.0),
+                        Text(
+                          'Tap to upload an image',
+                          style: TextStyle(
+                              color: const Color.fromARGB(255, 114, 114, 114)),
+                        ),
+                      ],
+                    )
                   : Image.file(_image!, fit: BoxFit.cover),
             ),
           ),
           SizedBox(height: 16.0),
           Expanded(
             child: _image == null
-                ? Center(child: Text('Upload an image to see results'))
+                ? Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.auto_fix_high,
+                          color: Color.fromARGB(255, 114, 114, 114),
+                        ),
+                        SizedBox(width: 8.0),
+                        Text(
+                          'Upload an image to see similar results',
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 114, 114, 114),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
                 : _buildSearchResults(),
           ),
         ],

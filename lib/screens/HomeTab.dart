@@ -161,56 +161,59 @@ class _HometabState extends State<Hometab> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomSearchBar(
-            hintText: 'Search for $selectedCategory',
-            onChanged: (query) {
-              setState(() {
-                _searchQuery = query;
-              });
-            },
-          ),
-          CategoryChips(
-            categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
-            selectedCategory: selectedCategory,
-            onCategorySelected: (category) {
-              setState(() {
-                selectedCategory = category;
-                fetchProductsByCategory(
-                    selectedCategory.toLowerCase()); // Convert to lowercase
-              });
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
-            child: Text(
-              'Trending stores',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomSearchBar(
+              hintText: 'Search for $selectedCategory',
+              onChanged: (query) {
+                setState(() {
+                  _searchQuery = query;
+                });
+              },
             ),
-          ),
-          StoreGrid(
-            isLoading: isLoading,
-            errorMessage: errorMessage,
-            stores: stores,
-            searchQuery: _searchQuery,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 15, 24, 10),
-            child: Text(
-              'Latest $selectedCategory',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            CategoryChips(
+              categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
+              selectedCategory: selectedCategory,
+              onCategorySelected: (category) {
+                setState(() {
+                  selectedCategory = category;
+                  fetchProductsByCategory(
+                      selectedCategory.toLowerCase()); // Convert to lowercase
+                });
+              },
             ),
-          ),
-          Expanded(
-            child: ProductGrid(
-              products: productsByCategory,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 15, 16, 5),
+              child: Text(
+                'Trending stores',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
             ),
-          ),
-        ],
+            StoreGrid(
+              isLoading: isLoading,
+              errorMessage: errorMessage,
+              stores: stores,
+              searchQuery: _searchQuery,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 15, 24, 10),
+              child: Text(
+                'Latest $selectedCategory',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ),
+            SizedBox(
+              height: 400, 
+              child: ProductGrid(
+                products: productsByCategory,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

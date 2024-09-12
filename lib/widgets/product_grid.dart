@@ -8,9 +8,12 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(products);
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 11.0),
       child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
@@ -25,7 +28,9 @@ class ProductGrid extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductDetailsPage(product: product),
+                  builder: (context) => ProductDetailsPage(
+                    product: product,
+                  ),
                 ),
               );
             },
@@ -40,11 +45,13 @@ class ProductGrid extends StatelessWidget {
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(8.0)),
                       child: Image.network(
-                        getImageUrl(product['imageUrl']),
+                        getImageUrl(
+                          product['imageUrl'] ?? '',
+                        ),
                         width: double.infinity,
                         fit: BoxFit.fill,
                         errorBuilder: (context, error, stackTrace) {
-                          return Center(child: Icon(Icons.error, size: 100));
+                          return Icon(Icons.error, size: 100);
                         },
                       ),
                     ),

@@ -30,13 +30,14 @@ class _HometabState extends State<Hometab> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String selectedCategory = "Shoes";
+  String selectedCategory = "Shoes"; // Initialize with desired category
 
   @override
   void initState() {
     super.initState();
     fetchStores();
-    fetchProductsByCategory(selectedCategory);
+    fetchProductsByCategory(
+        selectedCategory.toLowerCase()); // Convert to lowercase
     _initializeWebSocket();
     _initializeBackgroundGeolocation();
   }
@@ -79,15 +80,8 @@ class _HometabState extends State<Hometab> {
       }
       _isLocationServiceInitialized = true;
 
-      // bg.BackgroundGeolocation.getonLocation((bg.Location location) {
-      //   // Handle location updates here
-      //   print('Location: ${location.coords}');
-      //   // You can also send location data to your server or use it as needed
-      // });
-
       Timer.periodic(Duration(seconds: 1), (timer) async {
         final location = await bg.BackgroundGeolocation.getCurrentPosition();
-
         print(location.coords);
       });
     } catch (e) {
@@ -186,7 +180,8 @@ class _HometabState extends State<Hometab> {
             onCategorySelected: (category) {
               setState(() {
                 selectedCategory = category;
-                fetchProductsByCategory(selectedCategory);
+                fetchProductsByCategory(
+                    selectedCategory.toLowerCase()); // Convert to lowercase
               });
             },
           ),
@@ -210,8 +205,10 @@ class _HometabState extends State<Hometab> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
           ),
-          ProductGrid(
-            products: productsByCategory,
+          Expanded(
+            child: ProductGrid(
+              products: productsByCategory,
+            ),
           ),
         ],
       ),

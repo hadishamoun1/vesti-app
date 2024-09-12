@@ -15,6 +15,11 @@ class StoreGrid extends StatelessWidget {
     required this.searchQuery,
   });
 
+  String getImageUrl(String relativePath) {
+    final baseUrl = 'http://10.0.2.2:3000'; // Your backend base URL
+    return '$baseUrl$relativePath';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -40,6 +45,7 @@ class StoreGrid extends StatelessWidget {
                         if (store['name']
                             .toLowerCase()
                             .contains(searchQuery.toLowerCase())) {
+                          final imageUrl = getImageUrl(store['pictureUrl']);
                           return GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -63,7 +69,7 @@ class StoreGrid extends StatelessWidget {
                                       child: Container(
                                         width: double.infinity,
                                         child: Image.network(
-                                          store['pictureUrl'],
+                                          imageUrl,
                                           fit: BoxFit.fill,
                                           errorBuilder: (BuildContext context,
                                               Object error,

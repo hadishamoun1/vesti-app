@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import '../screens/ProductDetails.dart'; 
+import '../screens/ProductDetails.dart';
 
 class ProductGrid extends StatelessWidget {
   final List<dynamic> products;
@@ -9,12 +8,9 @@ class ProductGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(products);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 11.0),
+      padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 8.0,
@@ -29,9 +25,7 @@ class ProductGrid extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductDetailsPage(
-                    product: product,
-                  ),
+                  builder: (context) => ProductDetailsPage(product: product),
                 ),
               );
             },
@@ -39,20 +33,18 @@ class ProductGrid extends StatelessWidget {
               color: const Color.fromARGB(255, 236, 243, 248),
               elevation: 2,
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start, 
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: ClipRRect(
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(8.0)),
                       child: Image.network(
-                        product['imageUrl'] ??
-                            '', 
+                        getImageUrl(product['imageUrl']),
                         width: double.infinity,
                         fit: BoxFit.fill,
                         errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error, size: 100);
+                          return Center(child: Icon(Icons.error, size: 100));
                         },
                       ),
                     ),
@@ -60,8 +52,7 @@ class ProductGrid extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
-                      alignment: Alignment
-                          .centerLeft, 
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         product['name'] ?? 'Unknown Product',
                         style: TextStyle(
@@ -76,8 +67,7 @@ class ProductGrid extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Align(
-                      alignment:
-                          Alignment.centerLeft,
+                      alignment: Alignment.centerLeft,
                       child: Text(
                         '\$${product['price']}',
                         style: TextStyle(
@@ -95,5 +85,10 @@ class ProductGrid extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String getImageUrl(String relativePath) {
+    final baseUrl = 'http://10.0.2.2:3000';
+    return '$baseUrl$relativePath';
   }
 }

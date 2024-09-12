@@ -1,4 +1,3 @@
-import 'package:app/screens/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -57,6 +56,11 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
     }
   }
 
+  String constructImageUrl(String path) {
+    // Replace with the base URL of your backend
+    return 'http://10.0.2.2:3000$path';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,7 +103,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                     width: double.infinity,
                     height: 250,
                     child: Image.network(
-                      store['pictureUrl'],
+                      constructImageUrl(store['pictureUrl']),
                       fit: BoxFit.cover,
                       errorBuilder: (BuildContext context, Object error,
                           StackTrace? stackTrace) {
@@ -200,7 +204,8 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                                           borderRadius: BorderRadius.vertical(
                                               top: Radius.circular(15.0)),
                                           child: Image.network(
-                                            product['imageUrl'],
+                                            constructImageUrl(
+                                                product['imageUrl']),
                                             fit: BoxFit.fill,
                                             width: double.infinity,
                                             errorBuilder:

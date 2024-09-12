@@ -13,6 +13,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   String? _selectedSize;
   String? _selectedColor;
 
+  String getImageUrl(String relativePath) {
+    final baseUrl = 'http://10.0.2.2:3000'; // Your backend base URL
+    return '$baseUrl$relativePath';
+  }
+
   Color _getColorFromName(String colorName) {
     switch (colorName.toLowerCase()) {
       case 'red':
@@ -69,8 +74,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
-                          widget.product['imageUrl'] ?? '',
-                          fit: BoxFit.contain,
+                          getImageUrl(widget.product['imageUrl'] ?? ''),
+                          fit: BoxFit.fill,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Icon(Icons.error, size: 100),

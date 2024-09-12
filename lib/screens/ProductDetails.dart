@@ -53,13 +53,33 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10),
-                    Image.network(
-                      widget.product['imageUrl'] ?? '',
-                      height: 200,
+                    Container(
+                      height: 250,
                       width: double.infinity,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Icon(Icons.error, size: 100);
-                      },
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          getImageUrl(widget.product['imageUrl'] ?? ''),
+                          fit: BoxFit.fill,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Center(
+                              child: Icon(Icons.error, size: 100),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     SizedBox(height: 10),
                     Padding(
@@ -67,7 +87,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       child: Text(
                         widget.product['name'] ?? 'Unknown Product',
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                            fontSize: 24, fontWeight: FontWeight.w500),
                       ),
                     ),
                     Divider(
@@ -83,7 +103,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                           children: <TextSpan>[
                             TextSpan(
@@ -107,7 +127,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -170,7 +190,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -240,7 +260,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       'Price: \$${widget.product['price'] ?? '0.00'}',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     Spacer(),
@@ -265,8 +285,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            StoreDetailsPage(storeId :widget.product['storeId']),
+                        builder: (context) => StoreDetailsPage(
+                            storeId: widget.product['storeId']),
                       ),
                     );
                   },
@@ -282,5 +302,10 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         ],
       ),
     );
+  }
+
+  String getImageUrl(String relativePath) {
+    final baseUrl = 'http://10.0.2.2:3000';
+    return '$baseUrl$relativePath';
   }
 }

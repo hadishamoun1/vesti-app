@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'StoreDetails.dart';
 
-
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
 var appBarColor = Colors.white;
@@ -106,6 +105,11 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     });
   }
 
+  String getImageUrl(String relativePath) {
+    final baseUrl = 'http://10.0.2.2:3000'; 
+    return '$baseUrl$relativePath';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,25 +167,22 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                               final store = _filteredStores[index];
                               final storeName =
                                   store['name'] ?? 'Unnamed Store';
-                              final pictureURL = store['pictureUrl'];
+                              final pictureURL =
+                                  getImageUrl(store['pictureUrl']);
 
                               return ListTile(
-                                leading: pictureURL != null &&
-                                        pictureURL.isNotEmpty
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.network(
-                                          pictureURL,
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) =>
-                                                  Icon(Icons.error),
-                                        ),
-                                      )
-                                    : Icon(Icons.store),
+                                leading: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: Image.network(
+                                    pictureURL,
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Icon(Icons.error),
+                                  ),
+                                ),
                                 title: Text(storeName),
                                 subtitle: Text(store['description'] ??
                                     'No description available'),
@@ -213,7 +214,8 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                               final store = _filteredStores[index];
                               final storeName =
                                   store['name'] ?? 'Unnamed Store';
-                              final pictureURL = store['pictureUrl'];
+                              final pictureURL =
+                                  getImageUrl(store['pictureUrl']);
                               final description = store['description'] ??
                                   'No description available';
 
@@ -235,25 +237,22 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       ClipRRect(
                                         borderRadius: BorderRadius.vertical(
                                             top: Radius.circular(10)),
                                         child: SizedBox(
-                                          width: double.infinity,
-                                          height: 120,
-                                          child: pictureURL != null &&
-                                                  pictureURL.isNotEmpty
-                                              ? Image.network(
-                                                  pictureURL,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (context, error,
-                                                          stackTrace) =>
-                                                      Icon(Icons.error),
-                                                )
-                                              : Icon(Icons.store, size: 100),
-                                        ),
+                                            width: double.infinity,
+                                            height: 120,
+                                            child: Image.network(
+                                              pictureURL,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (context, error,
+                                                      stackTrace) =>
+                                                  Icon(Icons.error),
+                                            )),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -261,7 +260,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                           storeName,
                                           style: TextStyle(
                                             fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),

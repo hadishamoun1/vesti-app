@@ -206,11 +206,9 @@ class _HometabState extends State<Hometab> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
             ),
-            SizedBox(
-              height: 400, 
-              child: ProductGrid(
-                products: productsByCategory,
-              ),
+            
+            ProductGrid(
+              products: productsByCategory,
             ),
           ],
         ),

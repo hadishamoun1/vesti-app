@@ -125,7 +125,7 @@ class _CartScreenState extends State<CartScreen> {
                                           cartItems[index].name,
                                           style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.bold),
+                                              fontWeight: FontWeight.w500),
                                         ),
                                         SizedBox(width: 10),
                                         // CircleAvatar showing the quantity beside the name
@@ -220,7 +220,7 @@ class _CartScreenState extends State<CartScreen> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     'Total Items: $totalItems',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -230,12 +230,12 @@ class _CartScreenState extends State<CartScreen> {
                     Text(
                       'Total: ',
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                     Text(
                       '\$${totalPrice.toStringAsFixed(2)}',
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),

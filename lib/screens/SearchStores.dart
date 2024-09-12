@@ -106,7 +106,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   }
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000'; 
+    final baseUrl = 'http://10.0.2.2:3000';
     return '$baseUrl$relativePath';
   }
 
@@ -114,11 +114,6 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      appBar: AppBar(
-        title: Text('Search Stores'),
-        backgroundColor: appBarColor,
-        centerTitle: true,
-      ),
       body: Column(
         children: [
           CustomSearchBar(

@@ -256,7 +256,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
             decoration: InputDecoration(
               labelText: 'Card Number',
               border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.credit_card),
+              prefixIcon: Icon(
+                Icons.credit_card,
+                color: Colors.blue,
+              ),
             ),
           ),
           SizedBox(height: 16),

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:app/widgets/category_chips.dart';
@@ -77,12 +79,17 @@ class _HometabState extends State<Hometab> {
       }
       _isLocationServiceInitialized = true;
 
-      bg.BackgroundGeolocation.onLocation((bg.Location location) {
-        // Handle location updates here
-        print('Location: ${location.coords}');
-        // You can also send location data to your server or use it as needed
-      });
+      // bg.BackgroundGeolocation.getonLocation((bg.Location location) {
+      //   // Handle location updates here
+      //   print('Location: ${location.coords}');
+      //   // You can also send location data to your server or use it as needed
+      // });
 
+      Timer.periodic(Duration(seconds: 1), (timer) async {
+        final location = await bg.BackgroundGeolocation.getCurrentPosition();
+
+        print(location.coords);
+      });
     } catch (e) {
       print('Error initializing BackgroundGeolocation: $e');
     }
@@ -90,7 +97,8 @@ class _HometabState extends State<Hometab> {
 
   Future<void> fetchStores() async {
     try {
-      final response = await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
@@ -118,35 +126,35 @@ class _HometabState extends State<Hometab> {
     }
   }
 
- Future<void> fetchProductsByCategory(String category) async {
-  try {
-    final response = await http.get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
+  Future<void> fetchProductsByCategory(String category) async {
+    try {
+      final response = await http
+          .get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
 
-    print('API Response: ${response.body}');  
+      print('API Response: ${response.body}');
 
-    if (response.statusCode == 200) {
-      final List<dynamic> decodedResponse = json.decode(response.body);
+      if (response.statusCode == 200) {
+        final List<dynamic> decodedResponse = json.decode(response.body);
+        if (mounted) {
+          setState(() {
+            productsByCategory = decodedResponse;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            errorMessage = 'Failed to load products. Please try again later.';
+          });
+        }
+      }
+    } catch (error) {
       if (mounted) {
         setState(() {
-          productsByCategory = decodedResponse;
+          errorMessage = 'An error occurred: $error';
         });
       }
-    } else {
-      if (mounted) {
-        setState(() {
-          errorMessage = 'Failed to load products. Please try again later.';
-        });
-      }
-    }
-  } catch (error) {
-    if (mounted) {
-      setState(() {
-        errorMessage = 'An error occurred: $error';
-      });
     }
   }
-}
-
 
   @override
   void dispose() {

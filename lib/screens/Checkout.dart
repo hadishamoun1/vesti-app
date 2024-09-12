@@ -71,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         'Delivery Address',
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
                       ),
@@ -114,7 +114,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         'Payment Method',
                         style: TextStyle(
                           fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
                           color: Colors.black,
                         ),
                       ),
@@ -197,7 +197,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                   child: Text(
                     'Total Items: ${widget.totalItems}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -207,12 +207,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     Text(
                       'Total: ',
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                     Text(
                       '\$${widget.totalPrice.toStringAsFixed(2)}',
                       style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),

@@ -1,10 +1,16 @@
+import 'package:app/models/firebase_api.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'screens/Home.dart';
 import 'screens/Loading.dart';
 import 'screens/Login.dart';
 import 'screens/Signup.dart';
 
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(MyApp());
 }
 

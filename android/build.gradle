@@ -1,31 +1,37 @@
+// android/build.gradle
 buildscript {
     ext.kotlin_version = '1.8.0'
     ext {
-        compileSdkVersion   = 34           // or higher / as desired
-        targetSdkVersion    = 34                // or higher / as desired
-        minSdkVersion       = 21                // Required minimum
-        appCompatVersion    = "1.4.2"           // or higher / as desired
-        playServicesLocationVersion = "21.0.1"  // or higher / as desired
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        minSdkVersion = 21
+        appCompatVersion = "1.4.2"
+        playServicesLocationVersion = "21.0.1"
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.0.0" // Update as needed
+        classpath "com.android.tools.build:gradle:8.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        
+        classpath "com.google.gms:google-services:4.3.13"
     }
 }
+
+plugins {
+    // Add the Google services Gradle plugin here
+    id 'com.google.gms.google-services' version '4.3.13' apply false
+}
+
+
 
 allprojects {
     repositories {
         google()
         mavenCentral()
-         // [required] flutter_background_geolocation
         maven { url "${project(':flutter_background_geolocation').projectDir}/libs" }
         maven { url 'https://developer.huawei.com/repo/' }
-      // [required] background_fetch
         maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 }
@@ -33,13 +39,9 @@ allprojects {
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-
-

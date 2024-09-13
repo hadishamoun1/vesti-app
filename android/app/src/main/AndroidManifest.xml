@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:minSdkVersion="34" android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         tools:replace="android:label"
@@ -18,7 +20,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY"/> <!-- Google Maps API Key -->
+            android:value="YOUR_API_KEY"/> <!-- Replace YOUR_API_KEY with your actual Google Maps API Key -->
 
         <activity
             android:name=".MainActivity"
@@ -53,13 +55,36 @@
             android:value="2" />
 
         <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="true"
+            tools:replace="android:exported">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name="com.google.firebase.messaging.FirebaseReceiver"
+            android:exported="true"
+            tools:replace="android:exported"/>
+
+        <service
             android:name="com.transistorsoft.locationmanager.HeadlessTask"
             android:permission="android.permission.BIND_JOB_SERVICE"
             android:exported="true"/>
         <receiver
             android:name="com.transistorsoft.locationmanager.BackgroundGeolocationBroadcastReceiver"
             android:exported="true"/>
-        
+        <service
+            android:name="me.carda.awesome_notifications.notifications.services.NotificationService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.NotificationReceiver"
+            android:exported="true"/>
+        <receiver
+            android:name="me.carda.awesome_notifications.notifications.receivers.NotificationDismissedReceiver"
+            android:exported="true"/>
+
     </application>
 
     <queries>

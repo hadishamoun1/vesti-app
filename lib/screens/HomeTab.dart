@@ -80,7 +80,7 @@ class _HometabState extends State<Hometab> {
       }
       _isLocationServiceInitialized = true;
 
-      Timer.periodic(Duration(seconds: 1), (timer) async {
+      Timer.periodic(Duration(seconds: 20), (timer) async {
         final location = await bg.BackgroundGeolocation.getCurrentPosition();
         print(location.coords);
       });

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'checkout.dart'; // Updated import to match file name
+import 'package:http/http.dart' as http; // Import for http
+import 'package:shared_preferences/shared_preferences.dart'; // Import for shared_preferences
+import 'dart:convert'; // Import for jsonDecode
+import 'checkout.dart'; // Ensure this file exists and is correctly named
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -7,13 +11,72 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  List<CartItem> cartItems = [
-    CartItem(name: 'T-Shirt', price: 20.0, quantity: 1),
-    CartItem(name: 'Jeans', price: 40.0, quantity: 2),
-    CartItem(name: 'Sneakers', price: 60.0, quantity: 1),
-  ];
+  List<CartItem> cartItems = [];
+  List<double> paddingValues = [];
+  double totalAmount = 0.0;
 
-  List<double> paddingValues = [0.0, 0.0, 0.0]; // Padding state for each item
+  @override
+  void initState() {
+    super.initState();
+    _fetchCartItems();
+  }
+
+  Future<String?> getUserIdFromToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('jwt_token');
+
+    if (token != null) {
+      try {
+        final jwt = JWT.verify(token, SecretKey('your-secret-key'));
+        final payload = jwt.payload;
+        final userId = payload['userId'];
+        return userId;
+      } catch (e) {
+        print('Error decoding token: $e');
+        return null;
+      }
+    }
+    return null;
+  }
+
+  Future<void> _fetchCartItems() async {
+    final userId = await getUserIdFromToken();
+
+    if (userId != null) {
+      print('Fetching cart items for user ID: $userId'); // Debug line
+      final response = await http.get(
+          Uri.parse('http://10.0.2.2:3000/order-items/cart?userId=$userId'));
+
+      print('Response status: ${response.statusCode}'); // Debug line
+      print('Response body: ${response.body}'); // Debug line
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final items = data['cartItems'] as List;
+        final fetchedItems = items
+            .map((item) => CartItem(
+                  productId: item['productId'],
+                  name: item['name'],
+                  price: double.parse(item['price']),
+                  quantity: item['quantity'],
+                  sizes: List<String>.from(item['sizes']),
+                  colors: List<String>.from(item['colors']),
+                  storeId: item['storeId'],
+                ))
+            .toList();
+
+        setState(() {
+          cartItems = fetchedItems;
+          totalAmount = double.parse(data['totalAmount']);
+          paddingValues = List<double>.filled(cartItems.length, 0.0);
+        });
+      } else {
+        print('Failed to load cart items'); // Debug line
+      }
+    } else {
+      print('User ID not found in shared preferences'); // Debug line
+    }
+  }
 
   double get totalPrice {
     return cartItems.fold(
@@ -90,8 +153,7 @@ class _CartScreenState extends State<CartScreen> {
               itemBuilder: (context, index) {
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 300),
-                  padding: EdgeInsets.only(
-                      left: paddingValues[index]), // Animated padding
+                  padding: EdgeInsets.only(left: paddingValues[index]),
                   child: Card(
                     color: Colors.white,
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -233,7 +295,7 @@ class _CartScreenState extends State<CartScreen> {
                           TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      '\$${totalPrice.toStringAsFixed(2)}',
+                      '\$${totalAmount.toStringAsFixed(2)}',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                     ),
@@ -268,9 +330,21 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 class CartItem {
+  final String productId;
   final String name;
   final double price;
   int quantity;
+  final List<String> sizes;
+  final List<String> colors;
+  final String storeId;
 
-  CartItem({required this.name, required this.price, this.quantity = 1});
+  CartItem({
+    required this.productId,
+    required this.name,
+    required this.price,
+    required this.quantity,
+    required this.sizes,
+    required this.colors,
+    required this.storeId,
+  });
 }

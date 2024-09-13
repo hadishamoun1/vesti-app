@@ -21,16 +21,23 @@ class _CartScreenState extends State<CartScreen> {
     _fetchCartItems();
   }
 
-  Future<String?> getUserIdFromToken() async {
+  Future<int?> _getUserIdFromToken() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('jwt_token');
 
     if (token != null) {
       try {
-        final jwt = JWT.verify(token, SecretKey('your-secret-key'));
+        // Decode the JWT token
+        final jwt = JWT.verify(token, SecretKey('secret7063'));
+
+        // Access payload directly
         final payload = jwt.payload;
+
+        // Extract userId from the payload
         final userId = payload['userId'];
-        return userId;
+
+        // Return userId directly if it's an int
+        return userId is int ? userId : null;
       } catch (e) {
         print('Error decoding token: $e');
         return null;
@@ -40,41 +47,45 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   Future<void> _fetchCartItems() async {
-    final userId = await getUserIdFromToken();
+    final userId = await _getUserIdFromToken();
 
     if (userId != null) {
-      print('Fetching cart items for user ID: $userId'); // Debug line
+      print('Fetching cart items for user ID: $userId');
       final response = await http.get(
           Uri.parse('http://10.0.2.2:3000/order-items/cart?userId=$userId'));
 
-      print('Response status: ${response.statusCode}'); // Debug line
-      print('Response body: ${response.body}'); // Debug line
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final items = data['cartItems'] as List;
         final fetchedItems = items
             .map((item) => CartItem(
-                  productId: item['productId'],
+                  productId: item['productId']
+                      .toString(), 
                   name: item['name'],
-                  price: double.parse(item['price']),
-                  quantity: item['quantity'],
+                  price: double.parse(
+                      item['price']), 
+                  quantity: item['quantity'], 
                   sizes: List<String>.from(item['sizes']),
                   colors: List<String>.from(item['colors']),
-                  storeId: item['storeId'],
+                  storeId:
+                      item['storeId'].toString(), 
                 ))
             .toList();
 
         setState(() {
           cartItems = fetchedItems;
-          totalAmount = double.parse(data['totalAmount']);
+          totalAmount = double.parse(
+              data['totalAmount']);
           paddingValues = List<double>.filled(cartItems.length, 0.0);
         });
       } else {
-        print('Failed to load cart items'); // Debug line
+        print('Failed to load cart items');
       }
     } else {
-      print('User ID not found in shared preferences'); // Debug line
+      print('User ID not found in shared preferences');
     }
   }
 

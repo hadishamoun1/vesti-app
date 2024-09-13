@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ProductDetailsPage extends StatefulWidget {
   final dynamic product;
@@ -34,6 +36,44 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         return Colors.purple;
       default:
         return Colors.grey;
+    }
+  }
+
+  Future<void> _addToCart() async {
+    if (_selectedSize == null || _selectedColor == null) {
+      // Show an error message if size or color is not selected
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please select both size and color'),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/orders/add-to-cart'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'userId': 1, // Replace with the actual userId
+        'storeId': widget.product['storeId'],
+        'productId': widget.product['id'],
+        'quantity': 1,
+        'sizes': [_selectedSize],
+        'colors': [_selectedColor],
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Product added to cart'),
+        backgroundColor: Colors.blue,
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to add product to cart'),
+        backgroundColor: Colors.red,
+      ));
     }
   }
 
@@ -172,8 +212,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           ),
                                         ),
                                       ))
-                                  .toList() ??
-                              [Text('No sizes available')],
+                                  .toList() ?? [Text('No sizes available')],
                     ),
                     SizedBox(height: 20),
                     Padding(
@@ -218,8 +257,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           ),
                                         ),
                                       ))
-                                  .toList() ??
-                              [Text('No colors available')],
+                                  .toList() ?? [Text('No colors available')],
                     ),
                   ],
                 ),
@@ -259,9 +297,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     ),
                     Spacer(),
                     ElevatedButton(
-                      onPressed: () {
-                        // Handle button press
-                      },
+                      onPressed: _addToCart,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
                         foregroundColor: Colors.white,

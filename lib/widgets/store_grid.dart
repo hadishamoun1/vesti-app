@@ -16,7 +16,7 @@ class StoreGrid extends StatelessWidget {
   });
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000'; // Your backend base URL
+    final baseUrl = 'http://10.0.2.2:3000'; 
     return '$baseUrl$relativePath';
   }
 

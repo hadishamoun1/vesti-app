@@ -80,12 +80,71 @@ class _HometabState extends State<Hometab> {
       }
       _isLocationServiceInitialized = true;
 
-      Timer.periodic(Duration(seconds: 20), (timer) async {
-        final location = await bg.BackgroundGeolocation.getCurrentPosition();
-        print(location.coords);
+      Timer.periodic(Duration(minutes: 10), (timer) async {
+        try {
+          final location = await bg.BackgroundGeolocation.getCurrentPosition();
+          print('Current Location: ${location.coords}');
+
+          final response = await http.get(
+            Uri.parse(
+              'http://10.0.2.2:3000/stores/nearby?lat=${location.coords.latitude}&lon=${location.coords.longitude}&radius=5000&limit=10',
+            ),
+          );
+
+          if (response.statusCode == 200) {
+            final List<dynamic> stores = json.decode(response.body);
+            if (stores.isEmpty) {
+              print('No nearby stores found. Retrying...');
+              // Optionally add a delay before retrying
+            } else {
+              _sendNotificationsForNearbyStores(stores);
+              print('Nearby stores: $stores');
+            }
+          } else {
+            print(
+                'Failed to fetch nearby stores. Status code: ${response.statusCode}');
+            // Optionally add a delay before retrying
+          }
+        } catch (e) {
+          print('Error fetching nearby stores: $e');
+          // Optionally add a delay before retrying
+        }
       });
     } catch (e) {
       print('Error initializing BackgroundGeolocation: $e');
+    }
+  }
+
+  void _sendNotificationsForNearbyStores(List<dynamic> stores) {
+    for (var store in stores) {
+      final title = store['name'];
+      final body =
+          '${store['name']} is making discounts!'; // Customize your message
+
+      _sendNotification(title, body);
+    }
+  }
+
+  void _sendNotification(String title, String body) async {
+    // Replace this URL with your backend endpoint
+    final url = 'http://10.0.2.2:3000/notifications/send-notification';
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+        'body': body,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Notification sent successfully');
+    } else {
+      print('Failed to send notification');
+      print('Response body: ${response.body}');
     }
   }
 

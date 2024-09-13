@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'StoreDetails.dart';
 
@@ -31,6 +33,33 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         return Colors.purple;
       default:
         return Colors.grey;
+    }
+  }
+
+  void _addToCart() async {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/orders/add-to-cart'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'userId': 1, // Replace with the actual userId
+        'storeId': widget.product['storeId'],
+        'productId': widget.product['id'],
+        'quantity': 1,
+        'sizes': [_selectedSize], // Ensure this is an array, e.g., ['XL']
+        'colors': [_selectedColor] // Ensure this is an array, e.g., ['Green']
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Product added to cart!'),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Failed to add product to cart.'),
+      ));
     }
   }
 
@@ -147,7 +176,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                             setState(() {
                                               _selectedSize = size;
                                             });
-
                                             print('Selected size: $size');
                                           },
                                           child: Container(
@@ -205,7 +233,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           setState(() {
                                             _selectedColor = colorName;
                                           });
-                                          // Handle color selection
                                           print('Selected color: $colorName');
                                         },
                                         child: Container(
@@ -266,7 +293,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                     Spacer(),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle button press
+                        _addToCart(); // Correct function call
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
@@ -305,7 +332,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000';
-    return '$baseUrl$relativePath';
+    return 'http://10.0.2.2:3000$relativePath';
   }
 }

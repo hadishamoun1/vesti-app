@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Import for http
-import 'package:shared_preferences/shared_preferences.dart'; // Import for shared_preferences
-import 'dart:convert'; // Import for jsonDecode
-import 'checkout.dart'; // Ensure this file exists and is correctly named
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import './Checkout.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class CartScreen extends StatefulWidget {
@@ -14,6 +14,7 @@ class _CartScreenState extends State<CartScreen> {
   List<CartItem> cartItems = [];
   List<double> paddingValues = [];
   double totalAmount = 0.0;
+  Map<String, String> productImages = {}; // Store fetched images
 
   @override
   void initState() {
@@ -50,43 +51,73 @@ class _CartScreenState extends State<CartScreen> {
     final userId = await _getUserIdFromToken();
 
     if (userId != null) {
-      print('Fetching cart items for user ID: $userId');
       final response = await http.get(
           Uri.parse('http://10.0.2.2:3000/order-items/cart?userId=$userId'));
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        print('DATA FETCHED: $data');
         final items = data['cartItems'] as List;
+        print('iTEMS FETCHED: $items');
         final fetchedItems = items
             .map((item) => CartItem(
-                  productId: item['productId']
-                      .toString(), 
+                  productId: item['productId'].toString(),
                   name: item['name'],
-                  price: double.parse(
-                      item['price']), 
-                  quantity: item['quantity'], 
-                  sizes: List<String>.from(item['sizes']),
-                  colors: List<String>.from(item['colors']),
-                  storeId:
-                      item['storeId'].toString(), 
+                  price: double.parse(item['price']),
+                  quantity: item['quantity'],
+                  sizes: item['Sizes'] != null
+                      ? List<String>.from(item['Sizes'])
+                      : [], // Handle null sizes
+                  colors: item['Colors'] != null
+                      ? List<String>.from(item['Colors'])
+                      : [], // Handle null colors
+                  storeId: item['storeId'].toString(),
+                  orderId: item['orderId'].toString(),
                 ))
             .toList();
 
         setState(() {
           cartItems = fetchedItems;
-          totalAmount = double.parse(
-              data['totalAmount']);
-          paddingValues = List<double>.filled(cartItems.length, 0.0);
+          totalAmount = double.parse(data['totalAmount']);
+          paddingValues =
+              List<double>.generate(cartItems.length, (index) => 0.0);
         });
+
+        // Fetch images for the products
+        for (var item in fetchedItems) {
+          await _fetchProductImage(item.productId);
+        }
       } else {
         print('Failed to load cart items');
       }
     } else {
       print('User ID not found in shared preferences');
     }
+  }
+
+  Future<void> _fetchProductImage(String productId) async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://10.0.2.2:3000/products/$productId'));
+
+      if (response.statusCode == 200) {
+        final productData = jsonDecode(response.body);
+        final imageUrl = productData['imageUrl'];
+
+        setState(() {
+          productImages[productId] = imageUrl;
+        });
+      } else {
+        print('Failed to load image for product: $productId');
+      }
+    } catch (e) {
+      print('Error fetching image: $e');
+    }
+  }
+
+  double _calculateTotalAmount() {
+    return cartItems.fold(
+        0.0, (total, item) => total + (item.price * item.quantity));
   }
 
   double get totalPrice {
@@ -101,10 +132,10 @@ class _CartScreenState extends State<CartScreen> {
   void _incrementQuantity(int index) {
     setState(() {
       cartItems[index].quantity++;
-      paddingValues[index] = 10.0; // Move the card forward
+      paddingValues[index] = 10.0;
+      totalAmount = _calculateTotalAmount();
     });
 
-    // Reset the padding after a short delay for smooth animation
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         paddingValues[index] = 0.0;
@@ -116,11 +147,11 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       if (cartItems[index].quantity > 1) {
         cartItems[index].quantity--;
-        paddingValues[index] = 10.0; // Move the card forward
+        paddingValues[index] = 10.0;
+        totalAmount = _calculateTotalAmount();
       }
     });
 
-    // Reset the padding after a short delay for smooth animation
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         paddingValues[index] = 0.0;
@@ -128,23 +159,84 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
-  void _removeCartItem(int index) {
-    setState(() {
-      cartItems.removeAt(index);
-      paddingValues.removeAt(index);
-    });
+  void _removeCartItem(int index) async {
+    final cartItem = cartItems[index];
+    final response = await http.delete(
+      Uri.parse(
+          'http://10.0.2.2:3000/order-items/product/${cartItem.productId}'),
+    );
+
+    if (response.statusCode == 200) {
+      setState(() {
+        // Remove item and padding value safely
+        cartItems.removeAt(index);
+        paddingValues.removeAt(index); // This should be fine now
+        totalAmount = _calculateTotalAmount();
+      });
+    } else {
+      print(
+          'Failed to delete cart item: ${response.statusCode} - ${response.body}');
+    }
   }
 
-  void _onCheckout() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PaymentScreen(
-          totalItems: totalItems,
-          totalPrice: totalPrice,
-        ),
-      ),
-    );
+  void _onCheckout() async {
+    final userId = await _getUserIdFromToken();
+    if (userId != null) {
+      final items = cartItems
+          .map((item) => {
+                'productId': item.productId,
+                'quantity': item.quantity,
+                'Sizes': item.sizes,
+                'Colors': item.colors
+              })
+          .toList();
+
+      // Print items to debug
+      print('Items to be sent: ${jsonEncode(items)}');
+
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:3000/orders/update-cart'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'userId': userId,
+          'storeId': cartItems.isNotEmpty ? cartItems[0].storeId : null,
+          'items': items,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        // Ensure totalAmount is parsed as double
+        double totalAmount;
+        try {
+          totalAmount = double.parse(data['totalAmount'].toString());
+        } catch (e) {
+          print('Error parsing totalAmount: $e');
+          totalAmount = 0.0;
+        }
+
+        setState(() {
+          this.totalAmount = totalAmount;
+        });
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PaymentScreen(
+              cartItems: cartItems,
+              totalItems: totalItems,
+              totalPrice: totalAmount,
+              orderId: cartItems[0].orderId,
+            ),
+          ),
+        );
+      } else {
+        print('Failed to update cart');
+      }
+    } else {
+      print('User ID not found in shared preferences');
+    }
   }
 
   @override
@@ -162,6 +254,7 @@ class _CartScreenState extends State<CartScreen> {
             child: ListView.builder(
               itemCount: cartItems.length,
               itemBuilder: (context, index) {
+                final productImage = productImages[cartItems[index].productId];
                 return AnimatedContainer(
                   duration: Duration(milliseconds: 300),
                   padding: EdgeInsets.only(left: paddingValues[index]),
@@ -183,7 +276,19 @@ class _CartScreenState extends State<CartScreen> {
                                   color: Colors.grey.shade200,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Icon(Icons.image, color: Colors.grey),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      10.0), // Set the desired border radius
+                                  child: Image.network(
+                                    getImageUrl(productImage ?? ''),
+                                    fit: BoxFit.fill,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(
+                                        child: Icon(Icons.error, size: 100),
+                                      );
+                                    },
+                                  ),
+                                ),
                               ),
                               SizedBox(width: 10),
                               // Item details and quantity centered vertically
@@ -340,6 +445,10 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
+String getImageUrl(String relativePath) {
+  return 'http://10.0.2.2:3000$relativePath';
+}
+
 class CartItem {
   final String productId;
   final String name;
@@ -348,14 +457,19 @@ class CartItem {
   final List<String> sizes;
   final List<String> colors;
   final String storeId;
+  final String orderId;
 
-  CartItem({
-    required this.productId,
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.sizes,
-    required this.colors,
-    required this.storeId,
-  });
+  CartItem(
+      {required this.productId,
+      required this.name,
+      required this.price,
+      required this.quantity,
+      required this.sizes,
+      required this.colors,
+      required this.storeId,
+      required this.orderId});
+  @override
+  String toString() {
+    return 'CartItem(productId: $productId, name: $name, price: $price, quantity: $quantity, sizes: $sizes, colors: $colors, storeId: $storeId, orderId: $orderId)';
+  }
 }

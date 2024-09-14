@@ -1,13 +1,24 @@
-// checkout.dart
+import 'dart:convert';
+import 'package:app/screens/SearchStores.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import '../widgets/OpenStreetMap.dart'; // Adjust the path if necessary
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/OpenStreetMap.dart';
+import 'Cart.dart';
 
 class PaymentScreen extends StatefulWidget {
   final int totalItems;
   final double totalPrice;
+  final List<CartItem> cartItems;
+  final String orderId; // Add the orderId to the screen
 
-  PaymentScreen({required this.totalItems, required this.totalPrice});
+  PaymentScreen({
+    required this.totalItems,
+    required this.totalPrice,
+    required this.cartItems,
+    required this.orderId,
+  });
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -18,12 +29,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
   String _streetName = 'Unknown'; // Field for the street name
   String _selectedPaymentMethod = '';
 
+  // Function to select the payment method
   void _selectPaymentMethod(String method) {
     setState(() {
       _selectedPaymentMethod = method;
     });
   }
 
+  // Function to open the map and select the location
   void _openMap() async {
     final result = await Navigator.push(
       context,
@@ -47,8 +60,56 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
+  // Function to handle the payment process
+  Future<void> _completePayment() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('jwt_token');
+
+      if (token == null) {
+        // Handle the case when token is null (user is not logged in)
+        print('Token is missing.');
+        return;
+      }
+
+      // Prepare the API request
+      final url =
+          Uri.parse('http://10.0.2.2:3000/orders/update/${widget.orderId}');
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'orderStatus': 'paid',
+          'paymentMethod': _selectedPaymentMethod,
+          'totalPrice': widget.totalPrice,
+          'cartItems': widget.cartItems
+              .map((item) => {
+                    'productId': item.productId,
+                    'quantity': item.quantity,
+                  })
+              .toList(),
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Handle success
+        print('Payment completed successfully!');
+      } else {
+        // Handle error
+        print(
+            'Failed to update the order status. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error during payment: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('Cart Items: ${widget.cartItems}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -218,9 +279,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 Center(
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle checkout action
-                    },
+                    onPressed: _completePayment,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -314,8 +373,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Text(
-        'You will pay in cash upon delivery.',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        'You have selected Cash on Delivery. Please ensure you have the exact amount ready upon delivery.',
+        style: TextStyle(
+            fontSize: 16, fontWeight: FontWeight.w500, color: secondaryColor),
       ),
     );
   }

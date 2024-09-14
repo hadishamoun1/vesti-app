@@ -14,7 +14,7 @@ class _CartScreenState extends State<CartScreen> {
   List<CartItem> cartItems = [];
   List<double> paddingValues = [];
   double totalAmount = 0.0;
-  Map<String, String> productImages = {}; // Store fetched images
+  Map<String, String> productImages = {}; 
 
   @override
   void initState() {
@@ -28,16 +28,12 @@ class _CartScreenState extends State<CartScreen> {
 
     if (token != null) {
       try {
-        // Decode the JWT token
         final jwt = JWT.verify(token, SecretKey('secret7063'));
 
-        // Access payload directly
         final payload = jwt.payload;
 
-        // Extract userId from the payload
         final userId = payload['userId'];
 
-        // Return userId directly if it's an int
         return userId is int ? userId : null;
       } catch (e) {
         print('Error decoding token: $e');
@@ -67,10 +63,10 @@ class _CartScreenState extends State<CartScreen> {
                   quantity: item['quantity'],
                   sizes: item['Sizes'] != null
                       ? List<String>.from(item['Sizes'])
-                      : [], // Handle null sizes
+                      : [], 
                   colors: item['Colors'] != null
                       ? List<String>.from(item['Colors'])
-                      : [], // Handle null colors
+                      : [], 
                   storeId: item['storeId'].toString(),
                   orderId: item['orderId'].toString(),
                 ))
@@ -83,7 +79,6 @@ class _CartScreenState extends State<CartScreen> {
               List<double>.generate(cartItems.length, (index) => 0.0);
         });
 
-        // Fetch images for the products
         for (var item in fetchedItems) {
           await _fetchProductImage(item.productId);
         }
@@ -168,9 +163,9 @@ class _CartScreenState extends State<CartScreen> {
 
     if (response.statusCode == 200) {
       setState(() {
-        // Remove item and padding value safely
+       
         cartItems.removeAt(index);
-        paddingValues.removeAt(index); // This should be fine now
+        paddingValues.removeAt(index); 
         totalAmount = _calculateTotalAmount();
       });
     } else {
@@ -191,7 +186,6 @@ class _CartScreenState extends State<CartScreen> {
               })
           .toList();
 
-      // Print items to debug
       print('Items to be sent: ${jsonEncode(items)}');
 
       final response = await http.post(
@@ -207,7 +201,6 @@ class _CartScreenState extends State<CartScreen> {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
 
-        // Ensure totalAmount is parsed as double
         double totalAmount;
         try {
           totalAmount = double.parse(data['totalAmount'].toString());
@@ -268,7 +261,6 @@ class _CartScreenState extends State<CartScreen> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              // Image container
                               Container(
                                 width: 120,
                                 height: 110,
@@ -278,7 +270,7 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(
-                                      10.0), // Set the desired border radius
+                                      10.0), 
                                   child: Image.network(
                                     getImageUrl(productImage ?? ''),
                                     fit: BoxFit.fill,
@@ -291,7 +283,6 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                               SizedBox(width: 10),
-                              // Item details and quantity centered vertically
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -306,7 +297,6 @@ class _CartScreenState extends State<CartScreen> {
                                               fontWeight: FontWeight.w500),
                                         ),
                                         SizedBox(width: 10),
-                                        // CircleAvatar showing the quantity beside the name
                                         CircleAvatar(
                                           radius: 12,
                                           backgroundColor: Colors.blue,
@@ -321,7 +311,6 @@ class _CartScreenState extends State<CartScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 10),
-                                    // Row to align price with increment/decrement buttons
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,

@@ -40,7 +40,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-// Mediauery.of(context).size.height
   @override
   Widget build(BuildContext context) {
     return Scaffold(

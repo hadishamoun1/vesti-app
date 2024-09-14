@@ -22,7 +22,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _fetchSearchResults() async {
-    // Fetch search results here
   }
 
   @override

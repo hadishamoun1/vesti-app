@@ -74,7 +74,6 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 CircleAvatar(
                   radius: 50,
-                  // backgroundImage: AssetImage('assets/logo.png'),
                 ),
                 SizedBox(height: 40),
                 Text(

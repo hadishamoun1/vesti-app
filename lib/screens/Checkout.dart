@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:app/screens/SearchStores.dart';
+import 'package:app/screens/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +11,7 @@ class PaymentScreen extends StatefulWidget {
   final int totalItems;
   final double totalPrice;
   final List<CartItem> cartItems;
-  final String orderId; // Add the orderId to the screen
+  final String orderId; 
 
   PaymentScreen({
     required this.totalItems,
@@ -60,19 +60,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
   }
 
-  // Function to handle the payment process
   Future<void> _completePayment() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('jwt_token');
 
       if (token == null) {
-        // Handle the case when token is null (user is not logged in)
         print('Token is missing.');
         return;
       }
 
-      // Prepare the API request
       final url =
           Uri.parse('http://10.0.2.2:3000/orders/update/${widget.orderId}');
       final response = await http.put(
@@ -95,14 +92,39 @@ class _PaymentScreenState extends State<PaymentScreen> {
       );
 
       if (response.statusCode == 200) {
-        // Handle success
-        print('Payment completed successfully!');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Payment completed successfully!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+
+        await Future.delayed(Duration(seconds: 2));
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
       } else {
-        // Handle error
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update the order status.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
         print(
             'Failed to update the order status. Status code: ${response.statusCode}');
       }
     } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error during payment: $e'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
       print('Error during payment: $e');
     }
   }
@@ -375,7 +397,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Text(
         'You have selected Cash on Delivery. Please ensure you have the exact amount ready upon delivery.',
         style: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500, color: secondaryColor),
+            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.blue),
       ),
     );
   }

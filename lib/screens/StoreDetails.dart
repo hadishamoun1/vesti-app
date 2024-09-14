@@ -57,7 +57,6 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   }
 
   String constructImageUrl(String path) {
-    // Replace with the base URL of your backend
     return 'http://10.0.2.2:3000$path';
   }
 

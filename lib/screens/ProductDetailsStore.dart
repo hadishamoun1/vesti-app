@@ -18,7 +18,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   String? _selectedColor;
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000'; // Your backend base URL
+    final baseUrl = 'http://10.0.2.2:3000'; 
     return '$baseUrl$relativePath';
   }
 
@@ -47,16 +47,12 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
 
     if (token != null) {
       try {
-        // Decode the JWT token
         final jwt = JWT.verify(token, SecretKey('secret7063'));
 
-        // Access payload directly
         final payload = jwt.payload;
 
-        // Extract userId from the payload
         final userId = payload['userId'];
 
-        // Return userId directly if it's an int
         return userId is int ? userId : null;
       } catch (e) {
         print('Error decoding token: $e');
@@ -67,7 +63,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void _addToCart() async {
-    final userId = await _getUserIdFromToken(); // Fetch the userId from token
+    final userId = await _getUserIdFromToken(); 
 
     if (userId != null) {
       final response = await http.post(
@@ -76,23 +72,23 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode({
-          'userId': userId, // Ensure userId is sent as an integer
+          'userId': userId, 
           'storeId': widget.product['storeId'],
           'productId': widget.product['id'],
           'quantity': 1,
-          'sizes': [_selectedSize], // Ensure this is an array, e.g., ['XL']
-          'colors': [_selectedColor] // Ensure this is an array, e.g., ['Green']
+          'sizes': [_selectedSize], 
+          'colors': [_selectedColor] 
         }),
       );
 
-      // Print status code and response body for debugging
+      
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Product added to cart'),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.green,
         ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -102,7 +98,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -265,7 +260,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                           setState(() {
                                             _selectedColor = colorName;
                                           });
-                                          // Handle color selection
                                           print('Selected color: $colorName');
                                         },
                                         child: Container(

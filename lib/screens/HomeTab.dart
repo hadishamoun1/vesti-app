@@ -30,14 +30,14 @@ class _HometabState extends State<Hometab> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String selectedCategory = "Shoes"; // Initialize with desired category
+  String selectedCategory = "Shoes"; 
 
   @override
   void initState() {
     super.initState();
     fetchStores();
     fetchProductsByCategory(
-        selectedCategory.toLowerCase()); // Convert to lowercase
+        selectedCategory.toLowerCase()); 
     _initializeWebSocket();
     _initializeBackgroundGeolocation();
   }
@@ -95,7 +95,6 @@ class _HometabState extends State<Hometab> {
             final List<dynamic> stores = json.decode(response.body);
             if (stores.isEmpty) {
               print('No nearby stores found. Retrying...');
-              // Optionally add a delay before retrying
             } else {
               _sendNotificationsForNearbyStores(stores);
               print('Nearby stores: $stores');
@@ -103,11 +102,9 @@ class _HometabState extends State<Hometab> {
           } else {
             print(
                 'Failed to fetch nearby stores. Status code: ${response.statusCode}');
-            // Optionally add a delay before retrying
           }
         } catch (e) {
           print('Error fetching nearby stores: $e');
-          // Optionally add a delay before retrying
         }
       });
     } catch (e) {
@@ -119,14 +116,13 @@ class _HometabState extends State<Hometab> {
     for (var store in stores) {
       final title = store['name'];
       final body =
-          '${store['name']} is making discounts!'; // Customize your message
+          '${store['name']} is making discounts!';
 
       _sendNotification(title, body);
     }
   }
 
   void _sendNotification(String title, String body) async {
-    // Replace this URL with your backend endpoint
     final url = 'http://10.0.2.2:3000/notifications/send-notification';
 
     final response = await http.post(
@@ -241,7 +237,7 @@ class _HometabState extends State<Hometab> {
                 setState(() {
                   selectedCategory = category;
                   fetchProductsByCategory(
-                      selectedCategory.toLowerCase()); // Convert to lowercase
+                      selectedCategory.toLowerCase()); 
                 });
               },
             ),

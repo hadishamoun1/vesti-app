@@ -68,7 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          // Large Circle with Gradient and Glow
           Positioned(
             top: -MediaQuery.of(context).size.width * 2.5,
             left: -MediaQuery.of(context).size.width * 0.5,
@@ -81,8 +80,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: MediaQuery.of(context).size.width * 2,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    Color(0xFF3882cd), // Base color
-                    Color(0xFF80c8ff), // Lighter shade for gradient
+                    Color(0xFF3882cd), 
+                    Color(0xFF80c8ff), 
                   ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                   boxShadow: [
                     BoxShadow(
@@ -97,27 +96,25 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
-          // Profile Image inside the Large Circle with Border
           Positioned(
             top: MediaQuery.of(context).size.width * 0.3,
             left: MediaQuery.of(context).size.width * 0.37,
             child: CircleAvatar(
-              radius: 60, // Radius of the CircleAvatar
+              radius: 60, 
               backgroundColor: Colors.white,
               child: Icon(
                 Icons.account_circle,
-                size: 120, // Adjust size as needed
+                size: 120, 
                 color: secondaryColor,
               ),
             ),
           ),
-          // Main Content
           Padding(
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.width * 0.5 + 30),
             child: Column(
               crossAxisAlignment:
-                  CrossAxisAlignment.center, // Center items horizontally
+                  CrossAxisAlignment.center, 
               children: [
                 Container(
                   height: 130,
@@ -165,16 +162,16 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                         },
                       ),
-                      Divider(), // Divider after Notifications
+                      Divider(), 
                       ListTile(
                           leading: Icon(Icons.favorite, color: secondaryColor),
                           title: Text('Favorites'),
                           trailing: Icon(Icons.arrow_forward_ios,
                               size: 16, color: secondaryColor),
                           onTap:
-                              () {} // Add navigation or functionality if needed
+                              () {} 
                           ),
-                      Divider(), // Divider after Favorites
+                      Divider(), 
                       ListTile(
                         leading: Icon(Icons.list, color: secondaryColor),
                         title: Text('Orders'),
@@ -189,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                         },
                       ),
-                      Divider(), // Divider after Orders
+                      Divider(), 
                     ],
                   ),
                 ),

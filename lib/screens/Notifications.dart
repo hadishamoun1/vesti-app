@@ -25,12 +25,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Future<void> _fetchNotifications() async {
     final String apiUrl =
-        'http://10.0.2.2:3000/notifications'; // Replace with your notifications API endpoint
+        'http://10.0.2.2:3000/notifications'; 
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
 
-      print('Response status: ${response.statusCode}'); // Log the status code
+      print('Response status: ${response.statusCode}'); 
 
       if (response.statusCode == 200) {
         final List<dynamic> notificationsData = jsonDecode(response.body);
@@ -39,7 +39,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         for (var notification in notificationsData) {
           notifications.add(NotificationItem(
             imageUrl: notification['imageUrl'] ??
-                'https://via.placeholder.com/50', // Default image URL if not present
+                'https://via.placeholder.com/50', 
             name: notification['name'] ?? 'Unknown Store',
             message: notification['message'] ?? 'No message available.',
           ));
@@ -51,14 +51,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
         });
       } else {
         print(
-            'Failed to load notifications: ${response.body}'); // Log the response body for debugging
+            'Failed to load notifications: ${response.body}'); 
         setState(() {
           _hasError = true;
           _isLoading = false;
         });
       }
     } catch (error) {
-      print('Error fetching notifications: $error'); // Log the error
+      print('Error fetching notifications: $error');
       setState(() {
         _hasError = true;
         _isLoading = false;
@@ -94,7 +94,6 @@ class _NotificationsPageState extends State<NotificationsPage> {
   }
 }
 
-// NotificationItem class
 class NotificationItem {
   final String imageUrl;
   final String name;

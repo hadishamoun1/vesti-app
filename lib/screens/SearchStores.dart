@@ -21,6 +21,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   List _filteredStores = [];
   Position? _currentPosition;
   bool _showNearbyStores = true;
+  bool _isLoadingNearbyStores = false;
 
   @override
   void initState() {
@@ -49,6 +50,10 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   void _fetchStoresNearby() async {
     if (_currentPosition == null) return;
 
+    setState(() {
+      _isLoadingNearbyStores = true;
+    });
+
     try {
       final latitude = _currentPosition!.latitude;
       final longitude = _currentPosition!.longitude;
@@ -64,6 +69,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
             _allStores = json.decode(response.body);
             _filteredStores = _allStores;
             _showNearbyStores = true;
+            _isLoadingNearbyStores = false;
           });
         }
       } else {
@@ -71,6 +77,9 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
       }
     } catch (e) {
       print("Error fetching nearby stores: ${e.toString()}");
+      setState(() {
+        _isLoadingNearbyStores = false;
+      });
     }
   }
 
@@ -105,9 +114,11 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
     });
   }
 
-  String getImageUrl(String relativePath) {
+  String getImageUrl(String? relativePath) {
     final baseUrl = 'http://10.0.2.2:3000';
-    return '$baseUrl$relativePath';
+    return relativePath != null
+        ? '$baseUrl$relativePath'
+        : '$baseUrl/default_image.png';
   }
 
   @override
@@ -153,47 +164,12 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
           Expanded(
             child: _currentPosition == null
                 ? Center(child: CircularProgressIndicator())
-                : _showNearbyStores
-                    ? _filteredStores.isEmpty
-                        ? Center(child: Text('No stores found'))
-                        : ListView.builder(
-                            itemCount: _filteredStores.length,
-                            itemBuilder: (context, index) {
-                              final store = _filteredStores[index];
-                              final storeName =
-                                  store['name'] ?? 'Unnamed Store';
-                              final pictureURL =
-                                  getImageUrl(store['pictureUrl']);
-
-                              return ListTile(
-                                leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
-                                    pictureURL,
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Icon(Icons.error),
-                                  ),
-                                ),
-                                title: Text(storeName),
-                                subtitle: Text(store['description'] ??
-                                    'No description available'),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => StoreDetailsPage(
-                                        store: store,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          )
+                : _isLoadingNearbyStores
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: secondaryColor, // Blue color
+                        ),
+                      )
                     : _filteredStores.isEmpty
                         ? Center(child: Text('No stores found'))
                         : GridView.builder(
@@ -268,7 +244,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
                                             fontSize: 14,
                                             color: Colors.grey[700],
                                           ),
-                                          maxLines: 2,
+                                          maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),

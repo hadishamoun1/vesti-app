@@ -23,48 +23,47 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _fetchNotifications();
   }
 
-  Future<void> _fetchNotifications() async {
-    final String apiUrl =
-        'http://10.0.2.2:3000/notifications'; 
+Future<void> _fetchNotifications() async {
+  final String apiUrl =
+      'http://10.0.2.2:3000/notifications?userId=${widget.userId}'; 
 
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
+  try {
+    final response = await http.get(Uri.parse(apiUrl));
 
-      print('Response status: ${response.statusCode}'); 
+    print('Response status: ${response.statusCode}'); 
 
-      if (response.statusCode == 200) {
-        final List<dynamic> notificationsData = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> notificationsData = jsonDecode(response.body);
 
-        List<NotificationItem> notifications = [];
-        for (var notification in notificationsData) {
-          notifications.add(NotificationItem(
-            imageUrl: notification['imageUrl'] ??
-                'https://via.placeholder.com/50', 
-            name: notification['name'] ?? 'Unknown Store',
-            message: notification['message'] ?? 'No message available.',
-          ));
-        }
-
-        setState(() {
-          _notifications = notifications;
-          _isLoading = false;
-        });
-      } else {
-        print(
-            'Failed to load notifications: ${response.body}'); 
-        setState(() {
-          _hasError = true;
-          _isLoading = false;
-        });
+      List<NotificationItem> notifications = [];
+      for (var notification in notificationsData) {
+        notifications.add(NotificationItem(
+          imageUrl: notification['store']['imageUrl'] ??
+              'https://via.placeholder.com/50',
+          name: notification['store']['name'] ?? 'Unknown Store',
+          message: notification['message'] ?? 'No message available.',
+        ));
       }
-    } catch (error) {
-      print('Error fetching notifications: $error');
+
+      setState(() {
+        _notifications = notifications;
+        _isLoading = false;
+      });
+    } else {
+      print('Failed to load notifications: ${response.body}');
       setState(() {
         _hasError = true;
         _isLoading = false;
       });
     }
+  } catch (error) {
+    print('Error fetching notifications: $error');
+    setState(() {
+      _hasError = true;
+      _isLoading = false;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +83,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   itemBuilder: (context, index) {
                     final notification = _notifications[index];
                     return NotificationCard(
-                      imageUrl: notification.imageUrl,
+                      imageUrl: getImageUrl(notification.imageUrl),
                       name: notification.name,
                       message: notification.message,
                     );
                   },
                 ),
     );
+  }
+  String getImageUrl(String relativePath) {
+    return 'http://10.0.2.2:3000$relativePath';
   }
 }
 

@@ -32,7 +32,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         int userId = decodedToken['userId'];
 
         final response = await http.get(
-          Uri.parse('http://10.0.2.2:3000/orders/history/$userId'),
+          Uri.parse('http://10.0.2.2:3000/orders?userId=$userId'),
         );
 
         if (response.statusCode == 200) {
@@ -55,7 +55,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred';
+        _errorMessage = 'An error occurred: $e';
         _isLoading = false;
       });
     }
@@ -74,13 +74,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           ? Center(child: CircularProgressIndicator())
           : _errorMessage.isNotEmpty
               ? Center(child: Text(_errorMessage))
-              : ListView.builder(
-                  itemCount: _orders.length,
-                  itemBuilder: (context, index) {
-                    final order = _orders[index];
-                    return OrderCard(order: order);
-                  },
-                ),
+              : OrderGrid(orders: _orders),
     );
   }
 }

@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'ProductDetails.dart';
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -11,8 +13,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   File? _image;
-  List<String> _similarImages = [];
-  bool _isLoading = false; // Add a loading state
+  List<Map<String, dynamic>> _matchedProducts = [];
+  bool _isLoading = false;
   final picker = ImagePicker();
 
   Future<void> _pickImage() async {
@@ -29,10 +31,9 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_image == null) return;
 
     setState(() {
-      _isLoading = true; // Set loading to true when starting fetch
+      _isLoading = true;
     });
 
-    // Create a multipart request
     var request = http.MultipartRequest(
         'POST', Uri.parse('http://10.0.2.2:8000/upload/'));
     request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
@@ -42,26 +43,61 @@ class _SearchScreenState extends State<SearchScreen> {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var jsonResponse = json.decode(responseBody);
+        List<String> uploadedImageNames =
+            List<String>.from(jsonResponse['similar_images']);
 
-        setState(() {
-          _similarImages = List<String>.from(jsonResponse['similar_images']);
-        });
+        // Fetch products and match image names
+        await _fetchProductData(uploadedImageNames);
       } else {
-        // Handle the error
         print('Failed to upload image: ${response.statusCode}');
         setState(() {
-          _similarImages = []; // Clear the previous results
+          _matchedProducts = [];
         });
       }
     } catch (e) {
       print('Error uploading image: $e');
       setState(() {
-        _similarImages = []; // Clear the previous results
+        _matchedProducts = [];
       });
     } finally {
       setState(() {
-        _isLoading = false; // Set loading to false when fetch is done
+        _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _fetchProductData(List<String> uploadedImageNames) async {
+    try {
+      var response = await http.get(Uri.parse('http://10.0.2.2:3000/products'));
+      if (response.statusCode == 200) {
+        List<dynamic> products = json.decode(response.body);
+
+        List<Map<String, dynamic>> matchedProducts = [];
+        for (var product in products) {
+          String productImageUrl = product['imageUrl'];
+          String productImageName = productImageUrl.split('/').last;
+
+          // Match uploaded image name with product image name
+          for (var imageName in uploadedImageNames) {
+            String expectedImageUrl =
+                '/productImages/$imageName'; // Add the 'productImages/' prefix
+            print('uploads image: $expectedImageUrl');
+            print('Product image: $productImageUrl');
+            if (expectedImageUrl == productImageUrl) {
+              matchedProducts.add(product);
+              break;
+            }
+          }
+        }
+
+        setState(() {
+          _matchedProducts = matchedProducts;
+        });
+      } else {
+        print('Failed to fetch products: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching products: $e');
     }
   }
 
@@ -76,7 +112,7 @@ class _SearchScreenState extends State<SearchScreen> {
             onTap: _pickImage,
             child: Container(
               width: double.infinity,
-              height: 200,
+              height: 250,
               decoration: BoxDecoration(
                 color: const Color.fromARGB(255, 225, 242, 252),
                 borderRadius: BorderRadius.circular(12.0),
@@ -101,8 +137,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       borderRadius: BorderRadius.circular(12.0),
                       child: _isLoading
                           ? Center(
-                              child:
-                                  CircularProgressIndicator(), 
+                              child: CircularProgressIndicator(),
                             )
                           : Image.file(
                               _image!,
@@ -113,7 +148,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           SizedBox(height: 16.0),
           Expanded(
-            child: _similarImages.isEmpty
+            child: _matchedProducts.isEmpty
                 ? Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -140,21 +175,76 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildSearchResults() {
-    return ListView.builder(
-      itemCount: _similarImages.length,
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 10.0,
+        mainAxisSpacing: 10.0,
+      ),
+      itemCount: _matchedProducts.length,
       itemBuilder: (context, index) {
-        String imageUrl =
-            'http://10.0.2.2:3000/productImages/${_similarImages[index]}';
-        return Card(
-          child: ListTile(
-            leading: Container(
-              width: 50,
-              height: 50,
-              child: Image.network(imageUrl,
-                  width: 50, height: 50, fit: BoxFit.cover),
+        var product = _matchedProducts[index];
+        return GestureDetector(
+          onTap: () {
+            // Navigate to the ProductDetailsPage when the card is tapped
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailsPage(product: product),
+              ),
+            );
+          },
+          child: Card(
+            elevation: 3.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
             ),
-            title: Text('Similar Image ${index + 1}'),
-            subtitle: Text('Additional details for image'),
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      'http://10.0.2.2:3000${product['imageUrl']}',
+                      height: 170,
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    product['name'],
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(height: 4.0),
+                  Text(
+                    product['description'],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: Colors.grey[700],
+                    ),
+                  ),
+                  Spacer(),
+                  Text(
+                    'Price: \$${product['price']}',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },

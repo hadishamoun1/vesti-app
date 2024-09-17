@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/order_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OrderGrid extends StatelessWidget {
   final List<Order> orders;
@@ -13,7 +14,7 @@ class OrderGrid extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: 8.0,
         crossAxisSpacing: 8.0,
-        childAspectRatio: 0.58,
+        childAspectRatio: 0.55,
       ),
       padding: const EdgeInsets.all(8.0),
       itemCount: orders.length,
@@ -26,6 +27,7 @@ class OrderGrid extends StatelessWidget {
 
 class OrderCard extends StatelessWidget {
   final Order order;
+  final String? apiUrl = dotenv.env['API_URL'];
 
   OrderCard({required this.order});
 
@@ -39,51 +41,70 @@ class OrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product Image with Border Radius
             ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(8.0), // Adjust the radius as needed
+              borderRadius: BorderRadius.circular(8.0),
               child: Image.network(
                 getImageUrl(order.orderItems[0].product.imageUrl),
-                height: 130,
                 width: double.infinity,
-                fit: BoxFit
-                    .fill, // Use BoxFit.cover for better aspect ratio handling
+                height: 130,
+                fit: BoxFit.fill,
               ),
             ),
             SizedBox(height: 8),
 
-            // Order Number
             Text(
               'Order #${order.id}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Color(0xFF3882cd),
+              ),
             ),
             SizedBox(height: 8),
 
-            // Store Name
             Text(
               'Store: ${order.orderItems[0].product.store.name}',
-              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 14),
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 14,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
             SizedBox(height: 8),
 
             // Status
-            Text('Status: ${order.status}'),
+            Text(
+              'Status: ${order.status}',
+              overflow: TextOverflow.ellipsis,
+            ),
             SizedBox(height: 8),
 
             // Quantity
-            Text('Quantity: ${order.orderItems[0].quantity}'),
+            Text(
+              'Quantity: ${order.orderItems[0].quantity}',
+              overflow: TextOverflow.ellipsis,
+            ),
             SizedBox(height: 8),
 
             // Size
-            Text('Size: ${order.orderItems[0].sizes.join(", ")}'),
+            Text(
+              'Size: ${order.orderItems[0].sizes.join(", ")}',
+              overflow: TextOverflow.ellipsis,
+            ),
             SizedBox(height: 8),
 
             // Price
-            Text('Price: \$${order.orderItems[0].priceAtPurchase}'),
+            Text(
+              'Price: \$${order.orderItems[0].priceAtPurchase}',
+              overflow: TextOverflow.ellipsis,
+            ),
             SizedBox(height: 8),
 
-            Text('Total: \$${order.totalAmount}'),
+            // Total
+            Text(
+              'Total: \$${order.totalAmount}',
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
@@ -91,6 +112,6 @@ class OrderCard extends StatelessWidget {
   }
 
   String getImageUrl(String relativePath) {
-    return 'http://10.0.2.2:3000$relativePath';
+    return '$apiUrl$relativePath';
   }
 }

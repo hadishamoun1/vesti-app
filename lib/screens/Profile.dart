@@ -1,9 +1,9 @@
 import 'dart:convert'; // For converting API response
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:app/widgets/DashedDivider.dart';
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'Notifications.dart';
 import 'OrderHistory.dart';
@@ -19,6 +19,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String userName = '';
   String userEmail = '';
   int userId = 0;
+  final apiUrl = dotenv.env['API_URL'];
 
   @override
   void initState() {
@@ -37,7 +38,7 @@ class _ProfilePageState extends State<ProfilePage> {
       print(userId);
 
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:3000/users/$userId'),
+        Uri.parse('$apiUrl/users/$userId'),
         headers: {
           'Authorization': 'Bearer $token',
         },
@@ -80,8 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: MediaQuery.of(context).size.width * 2,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                    Color(0xFF3882cd), 
-                    Color(0xFF80c8ff), 
+                    Color(0xFF3882cd),
+                    Color(0xFF80c8ff),
                   ], begin: Alignment.topLeft, end: Alignment.bottomRight),
                   boxShadow: [
                     BoxShadow(
@@ -100,11 +101,11 @@ class _ProfilePageState extends State<ProfilePage> {
             top: MediaQuery.of(context).size.width * 0.3,
             left: MediaQuery.of(context).size.width * 0.37,
             child: CircleAvatar(
-              radius: 60, 
+              radius: 60,
               backgroundColor: Colors.white,
               child: Icon(
                 Icons.account_circle,
-                size: 120, 
+                size: 120,
                 color: secondaryColor,
               ),
             ),
@@ -113,8 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: EdgeInsets.only(
                 top: MediaQuery.of(context).size.width * 0.5 + 30),
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment.center, 
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   height: 130,
@@ -162,16 +162,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                         },
                       ),
-                      Divider(), 
+                      Divider(),
                       ListTile(
                           leading: Icon(Icons.favorite, color: secondaryColor),
                           title: Text('Favorites'),
                           trailing: Icon(Icons.arrow_forward_ios,
                               size: 16, color: secondaryColor),
-                          onTap:
-                              () {} 
-                          ),
-                      Divider(), 
+                          onTap: () {}),
+                      Divider(),
                       ListTile(
                         leading: Icon(Icons.list, color: secondaryColor),
                         title: Text('Orders'),
@@ -186,7 +184,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                         },
                       ),
-                      Divider(), 
+                      Divider(),
                     ],
                   ),
                 ),

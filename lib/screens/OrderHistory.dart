@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import '../models/order_model.dart';
 import '../widgets/order_cards.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   @override
@@ -31,8 +32,9 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
         int userId = decodedToken['userId'];
 
+        final apiUrl = dotenv.env['API_URL'];
         final response = await http.get(
-          Uri.parse('http://10.0.2.2:3000/orders?userId=$userId'),
+          Uri.parse('$apiUrl/orders?userId=$userId'),
         );
 
         if (response.statusCode == 200) {

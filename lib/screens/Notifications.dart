@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../widgets/NotificationCard.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NotificationsPage extends StatefulWidget {
   final int userId;
@@ -16,6 +17,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   List<NotificationItem> _notifications = [];
   bool _isLoading = true;
   bool _hasError = false;
+  final api_Url = dotenv.env['API_URL'];
 
   @override
   void initState() {
@@ -23,47 +25,46 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _fetchNotifications();
   }
 
-Future<void> _fetchNotifications() async {
-  final String apiUrl =
-      'http://10.0.2.2:3000/notifications?userId=${widget.userId}'; 
+  Future<void> _fetchNotifications() async {
+    final String apiUrl = '$api_Url/notifications?userId=${widget.userId}';
 
-  try {
-    final response = await http.get(Uri.parse(apiUrl));
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
 
-    print('Response status: ${response.statusCode}'); 
+      print('Response status: ${response.statusCode}');
 
-    if (response.statusCode == 200) {
-      final List<dynamic> notificationsData = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        final List<dynamic> notificationsData = jsonDecode(response.body);
 
-      List<NotificationItem> notifications = [];
-      for (var notification in notificationsData) {
-        notifications.add(NotificationItem(
-          imageUrl: notification['store']['imageUrl'] ??
-              'https://via.placeholder.com/50',
-          name: notification['store']['name'] ?? 'Unknown Store',
-          message: notification['message'] ?? 'No message available.',
-        ));
+        List<NotificationItem> notifications = [];
+        for (var notification in notificationsData) {
+          notifications.add(NotificationItem(
+            imageUrl: notification['store']['imageUrl'] ??
+                'https://via.placeholder.com/50',
+            name: notification['store']['name'] ?? 'Unknown Store',
+            message: notification['message'] ?? 'No message available.',
+          ));
+        }
+
+        setState(() {
+          _notifications = notifications;
+          _isLoading = false;
+        });
+      } else {
+        print('Failed to load notifications: ${response.body}');
+        setState(() {
+          _hasError = true;
+          _isLoading = false;
+        });
       }
-
-      setState(() {
-        _notifications = notifications;
-        _isLoading = false;
-      });
-    } else {
-      print('Failed to load notifications: ${response.body}');
+    } catch (error) {
+      print('Error fetching notifications: $error');
       setState(() {
         _hasError = true;
         _isLoading = false;
       });
     }
-  } catch (error) {
-    print('Error fetching notifications: $error');
-    setState(() {
-      _hasError = true;
-      _isLoading = false;
-    });
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -91,8 +92,9 @@ Future<void> _fetchNotifications() async {
                 ),
     );
   }
+
   String getImageUrl(String relativePath) {
-    return 'http://10.0.2.2:3000$relativePath';
+    return '$api_Url$relativePath';
   }
 }
 

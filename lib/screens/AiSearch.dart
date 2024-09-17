@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'ProductDetails.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -16,6 +16,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Map<String, dynamic>> _matchedProducts = [];
   bool _isLoading = false;
   final picker = ImagePicker();
+  final apiUrl = dotenv.env['PY_URL'];
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -34,8 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _isLoading = true;
     });
 
-    var request = http.MultipartRequest(
-        'POST', Uri.parse('http://10.0.2.2:8000/upload/'));
+    var request = http.MultipartRequest('POST', Uri.parse('$apiUrl/upload/'));
     request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
 
     try {

@@ -76,6 +76,7 @@ flutter:
   assets:
     - assets/images/imageMaps.png
     - assets/projImages/upload_pic.png
+    - .env
   fonts:
     - family: Poppins
       fonts:

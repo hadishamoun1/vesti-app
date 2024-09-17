@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'ProductDetailsStore.dart';
 
 class StoreDetailsPage extends StatefulWidget {
@@ -19,6 +19,7 @@ class StoreDetailsPage extends StatefulWidget {
 class _StoreDetailsPageState extends State<StoreDetailsPage> {
   late Future<Map<String, dynamic>> _storeDetailsFuture;
   late Future<List<dynamic>> _productsFuture;
+  final apiUrl = dotenv.env['API_URL'];
 
   @override
   void initState() {
@@ -35,8 +36,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   }
 
   Future<Map<String, dynamic>> fetchStoreDetails(int storeId) async {
-    final response =
-        await http.get(Uri.parse('http://10.0.2.2:3000/stores/$storeId'));
+    final response = await http.get(Uri.parse('$apiUrl/stores/$storeId'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -46,8 +46,8 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   }
 
   Future<List<dynamic>> fetchProducts(int storeId) async {
-    final response = await http
-        .get(Uri.parse('http://10.0.2.2:3000/products/store/$storeId'));
+    final response =
+        await http.get(Uri.parse('$apiUrl/products/store/$storeId'));
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
@@ -57,7 +57,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   }
 
   String constructImageUrl(String path) {
-    return 'http://10.0.2.2:3000$path';
+    return '$apiUrl$path';
   }
 
   @override

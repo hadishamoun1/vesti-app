@@ -9,6 +9,7 @@ import 'package:app/widgets/category_chips.dart';
 import 'package:app/widgets/custom_search_bar.dart';
 import 'package:app/widgets/product_grid.dart';
 import 'package:app/widgets/store_grid.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Hometab extends StatefulWidget {
   const Hometab({super.key});
@@ -30,21 +31,22 @@ class _HometabState extends State<Hometab> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String selectedCategory = "Shoes"; 
+  String selectedCategory = "Shoes";
+  final apiUrl = dotenv.env['API_URL'];
+  final wsUrl = dotenv.env['WS_URL'];
 
   @override
   void initState() {
     super.initState();
     fetchStores();
-    fetchProductsByCategory(
-        selectedCategory.toLowerCase()); 
+    fetchProductsByCategory(selectedCategory.toLowerCase());
     _initializeWebSocket();
     _initializeBackgroundGeolocation();
   }
 
   void _initializeWebSocket() {
     _channel = WebSocketChannel.connect(
-      Uri.parse('ws://10.0.2.2:3000?limit=2'),
+      Uri.parse('$wsUrl?limit=2'),
     );
     _channel.stream.listen(
       (message) {
@@ -87,7 +89,7 @@ class _HometabState extends State<Hometab> {
 
           final response = await http.get(
             Uri.parse(
-              'http://10.0.2.2:3000/stores/nearby?lat=${location.coords.latitude}&lon=${location.coords.longitude}&radius=5000&limit=10',
+              '$apiUrl/stores/nearby?lat=${location.coords.latitude}&lon=${location.coords.longitude}&radius=5000&limit=10',
             ),
           );
 
@@ -115,15 +117,14 @@ class _HometabState extends State<Hometab> {
   void _sendNotificationsForNearbyStores(List<dynamic> stores) {
     for (var store in stores) {
       final title = store['name'];
-      final body =
-          '${store['name']} is making discounts!';
+      final body = '${store['name']} is making discounts!';
 
       _sendNotification(title, body);
     }
   }
 
   void _sendNotification(String title, String body) async {
-    final url = 'http://10.0.2.2:3000/notifications/send-notification';
+    final url = '$apiUrl/notifications/send-notification';
 
     final response = await http.post(
       Uri.parse(url),
@@ -146,8 +147,7 @@ class _HometabState extends State<Hometab> {
 
   Future<void> fetchStores() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/stores?limit=2'));
+      final response = await http.get(Uri.parse('$apiUrl/stores?limit=2'));
 
       if (response.statusCode == 200) {
         final List<dynamic> decodedResponse = json.decode(response.body);
@@ -177,8 +177,8 @@ class _HometabState extends State<Hometab> {
 
   Future<void> fetchProductsByCategory(String category) async {
     try {
-      final response = await http
-          .get(Uri.parse('http://10.0.2.2:3000/products/category/$category'));
+      final response =
+          await http.get(Uri.parse('$apiUrl/products/category/$category'));
 
       print('API Response: ${response.body}');
 
@@ -231,13 +231,18 @@ class _HometabState extends State<Hometab> {
               },
             ),
             CategoryChips(
-              categories: ["Shoes", "Electronics", "Clothing", "Furniture"],
+              categories: [
+                "Hoodies",
+                "T-Shirts",
+                "Shirts",
+                "Over Shirts",
+              ],
               selectedCategory: selectedCategory,
               onCategorySelected: (category) {
                 setState(() {
                   selectedCategory = category;
-                  fetchProductsByCategory(
-                      selectedCategory.toLowerCase()); 
+                  print(selectedCategory);
+                  fetchProductsByCategory(selectedCategory.toLowerCase());
                 });
               },
             ),

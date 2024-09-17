@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/OpenStreetMap.dart';
 import 'Cart.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PaymentScreen extends StatefulWidget {
   final int totalItems;
@@ -69,9 +70,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         print('Token is missing.');
         return;
       }
-
+      final apiUrl = dotenv.env['API_URL'];
       final url =
-          Uri.parse('http://10.0.2.2:3000/orders/update/${widget.orderId}');
+          Uri.parse('$apiUrl/orders/update/${widget.orderId}');
       final response = await http.put(
         url,
         headers: {

@@ -5,6 +5,7 @@ import '../widgets/custom_search_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'StoreDetails.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 var primaryColor = Color(0xFFFFFFFF);
 var secondaryColor = Color(0xFF3882cd);
@@ -22,6 +23,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   Position? _currentPosition;
   bool _showNearbyStores = true;
   bool _isLoadingNearbyStores = false;
+  final apiUrl = dotenv.env['API_URL'];
 
   @override
   void initState() {
@@ -60,7 +62,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
 
       final response = await http.get(
         Uri.parse(
-            'http://10.0.2.2:3000/stores/nearby?lat=$latitude&lon=$longitude&radius=5000&limit=5'),
+            '$apiUrl/stores/nearby?lat=$latitude&lon=$longitude&radius=5000&limit=5'),
       );
 
       if (response.statusCode == 200) {
@@ -86,7 +88,7 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   void _fetchAllStores() async {
     try {
       final response = await http.get(
-        Uri.parse('http://10.0.2.2:3000/stores'),
+        Uri.parse('$apiUrl/stores'),
       );
 
       if (response.statusCode == 200) {
@@ -115,10 +117,10 @@ class _SearchStoresPageState extends State<SearchStoresPage> {
   }
 
   String getImageUrl(String? relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000';
+    
     return relativePath != null
-        ? '$baseUrl$relativePath'
-        : '$baseUrl/default_image.png';
+        ? '$apiUrl$relativePath'
+        : '$apiUrl/default_image.png';
   }
 
   @override

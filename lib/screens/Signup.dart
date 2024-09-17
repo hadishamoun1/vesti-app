@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
+  final apiUrl = dotenv.env['API_URL'];
 
   Future<void> _signup() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -31,7 +33,7 @@ class _SignupPageState extends State<SignupPage> {
 
       try {
         final response = await http.post(
-          Uri.parse('http://10.0.2.2:3000/users'),
+          Uri.parse('$apiUrl/users'),
           headers: {"Content-Type": "application/json"},
           body: jsonEncode({
             "name": name,
@@ -41,7 +43,7 @@ class _SignupPageState extends State<SignupPage> {
           }),
         );
 
-        if (response.statusCode == 201) { 
+        if (response.statusCode == 201) {
           Navigator.pushNamed(context, '/login');
         } else {
           setState(() {
@@ -198,7 +200,8 @@ class _SignupPageState extends State<SignupPage> {
                     : ElevatedButton(
                         onPressed: _signup,
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 80),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 80),
                           backgroundColor: Colors.blueAccent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),

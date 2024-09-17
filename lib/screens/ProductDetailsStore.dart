@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final dynamic product;
@@ -16,10 +17,11 @@ class ProductDetailsPage extends StatefulWidget {
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
   String? _selectedSize;
   String? _selectedColor;
+  final apiUrl = dotenv.env['API_URL'];
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000'; 
-    return '$baseUrl$relativePath';
+    
+    return '$apiUrl$relativePath';
   }
 
   Color _getColorFromName(String colorName) {
@@ -63,25 +65,24 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   }
 
   void _addToCart() async {
-    final userId = await _getUserIdFromToken(); 
+    final userId = await _getUserIdFromToken();
 
     if (userId != null) {
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/orders/add-to-cart'),
+        Uri.parse('$apiUrl/orders/add-to-cart'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode({
-          'userId': userId, 
+          'userId': userId,
           'storeId': widget.product['storeId'],
           'productId': widget.product['id'],
           'quantity': 1,
-          'sizes': [_selectedSize], 
-          'colors': [_selectedColor] 
+          'sizes': [_selectedSize],
+          'colors': [_selectedColor]
         }),
       );
 
-      
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
@@ -98,6 +99,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import './Checkout.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CartScreen extends StatefulWidget {
   @override
@@ -14,7 +15,7 @@ class _CartScreenState extends State<CartScreen> {
   List<CartItem> cartItems = [];
   List<double> paddingValues = [];
   double totalAmount = 0.0;
-  Map<String, String> productImages = {}; 
+  Map<String, String> productImages = {};
 
   @override
   void initState() {
@@ -47,8 +48,9 @@ class _CartScreenState extends State<CartScreen> {
     final userId = await _getUserIdFromToken();
 
     if (userId != null) {
-      final response = await http.get(
-          Uri.parse('http://10.0.2.2:3000/order-items/cart?userId=$userId'));
+      final apiUrl = dotenv.env['API_URL'];
+      final response =
+          await http.get(Uri.parse('$apiUrl/order-items/cart?userId=$userId'));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -63,10 +65,10 @@ class _CartScreenState extends State<CartScreen> {
                   quantity: item['quantity'],
                   sizes: item['Sizes'] != null
                       ? List<String>.from(item['Sizes'])
-                      : [], 
+                      : [],
                   colors: item['Colors'] != null
                       ? List<String>.from(item['Colors'])
-                      : [], 
+                      : [],
                   storeId: item['storeId'].toString(),
                   orderId: item['orderId'].toString(),
                 ))
@@ -92,8 +94,8 @@ class _CartScreenState extends State<CartScreen> {
 
   Future<void> _fetchProductImage(String productId) async {
     try {
-      final response =
-          await http.get(Uri.parse('http://10.0.2.2:3000/products/$productId'));
+      final apiUrl = dotenv.env['API_URL'];
+      final response = await http.get(Uri.parse('$apiUrl/products/$productId'));
 
       if (response.statusCode == 200) {
         final productData = jsonDecode(response.body);
@@ -156,16 +158,15 @@ class _CartScreenState extends State<CartScreen> {
 
   void _removeCartItem(int index) async {
     final cartItem = cartItems[index];
+    final apiUrl = dotenv.env['API_URL'];
     final response = await http.delete(
-      Uri.parse(
-          'http://10.0.2.2:3000/order-items/product/${cartItem.productId}'),
+      Uri.parse('$apiUrl/order-items/product/${cartItem.productId}'),
     );
 
     if (response.statusCode == 200) {
       setState(() {
-       
         cartItems.removeAt(index);
-        paddingValues.removeAt(index); 
+        paddingValues.removeAt(index);
         totalAmount = _calculateTotalAmount();
       });
     } else {
@@ -187,9 +188,9 @@ class _CartScreenState extends State<CartScreen> {
           .toList();
 
       print('Items to be sent: ${jsonEncode(items)}');
-
+      final apiUrl = dotenv.env['API_URL'];
       final response = await http.post(
-        Uri.parse('http://10.0.2.2:3000/orders/update-cart'),
+        Uri.parse('$apiUrl/orders/update-cart'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'userId': userId,
@@ -269,8 +270,7 @@ class _CartScreenState extends State<CartScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      10.0), 
+                                  borderRadius: BorderRadius.circular(10.0),
                                   child: Image.network(
                                     getImageUrl(productImage ?? ''),
                                     fit: BoxFit.fill,
@@ -435,7 +435,8 @@ class _CartScreenState extends State<CartScreen> {
 }
 
 String getImageUrl(String relativePath) {
-  return 'http://10.0.2.2:3000$relativePath';
+  final apiUrl = dotenv.env['API_URL'];
+  return '$apiUrl$relativePath';
 }
 
 class CartItem {

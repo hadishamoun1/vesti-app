@@ -6,12 +6,13 @@ import 'screens/Loading.dart';
 import 'screens/Login.dart';
 import 'screens/Signup.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseApi().initNotifications();
-
+  await dotenv.load();
   subscribeToNearbyStores();
   runApp(MyApp());
 }

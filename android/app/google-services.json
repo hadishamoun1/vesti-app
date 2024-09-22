@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491192737690",
+    "project_id": "vesti-34f84",
+    "storage_bucket": "vesti-34f84.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491192737690:android:1cbf27eedbf1e3e34ce423",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmnGnYTryxnNcDy9qjSqR0g-sppPvfe9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

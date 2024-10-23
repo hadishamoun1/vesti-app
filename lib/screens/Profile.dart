@@ -164,13 +164,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       Divider(),
                       ListTile(
-                          leading: Icon(Icons.favorite, color: secondaryColor),
-                          title: Text('Favorites'),
-                          trailing: Icon(Icons.arrow_forward_ios,
-                              size: 16, color: secondaryColor),
-                          onTap: () {}),
-                      Divider(),
-                      ListTile(
                         leading: Icon(Icons.list, color: secondaryColor),
                         title: Text('Orders'),
                         trailing: Icon(Icons.arrow_forward_ios,

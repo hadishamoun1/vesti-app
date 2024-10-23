@@ -16,7 +16,7 @@ class StoreGrid extends StatelessWidget {
   });
 
   String getImageUrl(String relativePath) {
-    final baseUrl = 'http://10.0.2.2:3000'; 
+    final baseUrl = 'http://10.0.2.2:3000';
     return '$baseUrl$relativePath';
   }
 
@@ -58,7 +58,7 @@ class StoreGrid extends StatelessWidget {
                               );
                             },
                             child: Card(
-                              color: const Color.fromARGB(255, 236, 243, 248),
+                              color: const Color.fromARGB(255, 243, 243, 243),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -70,7 +70,7 @@ class StoreGrid extends StatelessWidget {
                                         width: double.infinity,
                                         child: Image.network(
                                           imageUrl,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.contain,
                                           errorBuilder: (BuildContext context,
                                               Object error,
                                               StackTrace? stackTrace) {

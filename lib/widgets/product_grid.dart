@@ -35,7 +35,7 @@ class ProductGrid extends StatelessWidget {
               );
             },
             child: Card(
-              color: const Color.fromARGB(255, 236, 243, 248),
+              color: const Color.fromARGB(255, 243, 243, 243),
               elevation: 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,15 +44,18 @@ class ProductGrid extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(8.0)),
-                      child: Image.network(
-                        getImageUrl(
-                          product['imageUrl'] ?? '',
+                      child: Container(
+                        color: Colors.white,
+                        child: Image.network(
+                          getImageUrl(
+                            product['imageUrl'] ?? '',
+                          ),
+                          width: double.infinity,
+                          fit: BoxFit.contain,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(Icons.error, size: 100);
+                          },
                         ),
-                        width: double.infinity,
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error, size: 100);
-                        },
                       ),
                     ),
                   ),

@@ -31,7 +31,7 @@ class _HometabState extends State<Hometab> {
   String errorMessage = '';
   TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  String selectedCategory = "Shoes";
+  String selectedCategory = "Hoodies";
   final apiUrl = dotenv.env['API_URL'];
   final wsUrl = dotenv.env['WS_URL'];
 
@@ -235,7 +235,7 @@ class _HometabState extends State<Hometab> {
                 "Hoodies",
                 "T-Shirts",
                 "Shirts",
-                "Over Shirts",
+                "Long Shirts",
               ],
               selectedCategory: selectedCategory,
               onCategorySelected: (category) {

@@ -20,7 +20,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
   final apiUrl = dotenv.env['API_URL'];
 
   String getImageUrl(String relativePath) {
-    
     return '$apiUrl$relativePath';
   }
 
@@ -138,7 +137,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
                           getImageUrl(widget.product['imageUrl'] ?? ''),
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                           errorBuilder: (context, error, stackTrace) {
                             return Center(
                               child: Icon(Icons.error, size: 100),

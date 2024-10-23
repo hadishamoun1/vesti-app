@@ -73,8 +73,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 50,
+                Container(
+                  height: 100,
+                  width: 100,
+                  child:
+                      Image.asset('assets/images/logo.png', fit: BoxFit.fill),
                 ),
                 SizedBox(height: 40),
                 Text(
@@ -157,19 +160,27 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(color: Colors.red),
                   ),
                 SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
-                  },
-                  child: Text(
-                    'Don\'t have an account? Sign up',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.blueAccent,
-                      decoration: TextDecoration.underline,
-                    ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Don\'t have an account?'),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/signup');
+                        },
+                        child: Text(
+                          'Sign up',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.blueAccent,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                )
               ],
             ),
           ),

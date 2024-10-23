@@ -47,7 +47,7 @@ class OrderCard extends StatelessWidget {
                 getImageUrl(order.orderItems[0].product.imageUrl),
                 width: double.infinity,
                 height: 130,
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
               ),
             ),
             SizedBox(height: 8),

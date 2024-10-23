@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -21,6 +23,83 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
     _fetchCartItems();
+  }
+
+  Map<String, dynamic>? paymentIntentData;
+  Future<void> initPaymentSheet(amount) async {
+    try {
+      paymentIntentData = await createPaymentIntent("1000", "USD");
+      await stripe.Stripe.instance
+          .initPaymentSheet(
+            paymentSheetParameters: stripe.SetupPaymentSheetParameters(
+              allowsDelayedPaymentMethods: true,
+              paymentIntentClientSecret: paymentIntentData!['client_secret'],
+              style: ThemeMode.dark,
+              merchantDisplayName: 'Devhubspot',
+              customFlow: false,
+              googlePay: stripe.PaymentSheetGooglePay(
+                merchantCountryCode: "US",
+                testEnv: true,
+              ),
+            ),
+          )
+          .then((value) => {
+                print(value),
+              });
+      displayPaymentSheet();
+    } catch (e, s) {
+      if (kDebugMode) {
+        print(s);
+      }
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': (int.parse(amount) * 100).toString(),
+        'currency': currency,
+        'payment_method_types[]': 'card',
+      };
+      var response = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          body: body,
+          headers: {
+            'Authorization':
+                'Bearer sk_test_51Px61N025uFFnpPdxCNv7ogr1FGA9qI7Th72TozC30cfQc9pDSxwB0mPy1dxZwcEWbo1qZgJen9fZGOM8o6oLIvX00dRDUjjNm',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+      return jsonDecode(response.body);
+    } catch (err) {
+      if (kDebugMode) {
+        print(err.toString());
+      }
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await stripe.Stripe.instance.presentPaymentSheet().then((value) {
+        paymentIntentData = null;
+      }).onError((error, stackTrace) {
+        if (kDebugMode) {
+          print('$error, $StackTrace');
+        }
+      });
+    } on stripe.StripeException catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+                content: Text('Cancelled'),
+              ));
+    } catch (e) {
+      if (kDebugMode) {
+        print(e.toString());
+      }
+    }
   }
 
   Future<int?> _getUserIdFromToken() async {
@@ -214,6 +293,7 @@ class _CartScreenState extends State<CartScreen> {
           this.totalAmount = totalAmount;
         });
 
+        await initPaymentSheet(totalAmount);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -266,14 +346,14 @@ class _CartScreenState extends State<CartScreen> {
                                 width: 120,
                                 height: 110,
                                 decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
+                                  color: Colors.white,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10.0),
                                   child: Image.network(
                                     getImageUrl(productImage ?? ''),
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.contain,
                                     errorBuilder: (context, error, stackTrace) {
                                       return Center(
                                         child: Icon(Icons.error, size: 100),
@@ -350,7 +430,7 @@ class _CartScreenState extends State<CartScreen> {
                             top: 0,
                             right: 0,
                             child: IconButton(
-                              icon: Icon(Icons.close, color: Colors.red),
+                              icon: Icon(Icons.delete, color: Colors.red),
                               onPressed: () => _removeCartItem(index),
                             ),
                           ),

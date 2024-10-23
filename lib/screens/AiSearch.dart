@@ -16,7 +16,8 @@ class _SearchScreenState extends State<SearchScreen> {
   List<Map<String, dynamic>> _matchedProducts = [];
   bool _isLoading = false;
   final picker = ImagePicker();
-  final apiUrl = dotenv.env['PY_URL'];
+  final PY_Url = dotenv.env['PY_URL'];
+  final apiUrl = dotenv.env['API_URL'];
 
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -35,7 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _isLoading = true;
     });
 
-    var request = http.MultipartRequest('POST', Uri.parse('$apiUrl/upload/'));
+    var request = http.MultipartRequest('POST', Uri.parse('$PY_Url/upload/'));
     request.files.add(await http.MultipartFile.fromPath('file', _image!.path));
 
     try {
@@ -68,24 +69,21 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> _fetchProductData(List<String> uploadedImageNames) async {
     try {
-      var response = await http.get(Uri.parse('http://10.0.2.2:3000/products'));
+      var response = await http.get(Uri.parse('$apiUrl/products'));
       if (response.statusCode == 200) {
         List<dynamic> products = json.decode(response.body);
 
         List<Map<String, dynamic>> matchedProducts = [];
         for (var product in products) {
           String productImageUrl = product['imageUrl'];
-          String productImageName = productImageUrl.split('/').last;
 
           // Match uploaded image name with product image name
           for (var imageName in uploadedImageNames) {
-            String expectedImageUrl =
-                '/productImages/$imageName'; // Add the 'productImages/' prefix
+            String expectedImageUrl = '/productImages/$imageName';
             print('uploads image: $expectedImageUrl');
             print('Product image: $productImageUrl');
             if (expectedImageUrl == productImageUrl) {
               matchedProducts.add(product);
-              break;
             }
           }
         }
@@ -141,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             )
                           : Image.file(
                               _image!,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                             ),
                     ),
             ),
@@ -178,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.7,
+        childAspectRatio: 0.68,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),
@@ -212,7 +210,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       'http://10.0.2.2:3000${product['imageUrl']}',
                       height: 170,
                       width: double.infinity,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.contain,
                     ),
                   ),
                   SizedBox(height: 8.0),

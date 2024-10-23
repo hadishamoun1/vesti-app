@@ -63,7 +63,7 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: FutureBuilder<Map<String, dynamic>>(
           future: _storeDetailsFuture,
@@ -190,33 +190,39 @@ class _StoreDetailsPageState extends State<StoreDetailsPage> {
                                 },
                                 child: Card(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
+                                    borderRadius: BorderRadius.circular(15.0),
                                   ),
                                   elevation: 2,
-                                  color: Colors.white,
+                                  color:
+                                      const Color.fromARGB(255, 243, 243, 243),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(15.0)),
-                                          child: Image.network(
-                                            constructImageUrl(
-                                                product['imageUrl']),
-                                            fit: BoxFit.fill,
-                                            width: double.infinity,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return Center(
-                                                child: Icon(
-                                                  Icons.error,
-                                                  color: Colors.red,
-                                                  size: 50,
-                                                ),
-                                              );
-                                            },
+                                        child: Container(
+                                          height: double.infinity,
+                                          width: double.infinity,
+                                          color: Colors.white,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.vertical(
+                                                top: Radius.circular(15.0)),
+                                            child: Image.network(
+                                              constructImageUrl(
+                                                  product['imageUrl']),
+                                              fit: BoxFit.contain,
+                                              width: double.infinity,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Center(
+                                                  child: Icon(
+                                                    Icons.error,
+                                                    color: Colors.red,
+                                                    size: 50,
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           ),
                                         ),
                                       ),

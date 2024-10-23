@@ -12,7 +12,7 @@ class PaymentScreen extends StatefulWidget {
   final int totalItems;
   final double totalPrice;
   final List<CartItem> cartItems;
-  final String orderId; 
+  final String orderId;
 
   PaymentScreen({
     required this.totalItems,
@@ -71,8 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         return;
       }
       final apiUrl = dotenv.env['API_URL'];
-      final url =
-          Uri.parse('$apiUrl/orders/update/${widget.orderId}');
+      final url = Uri.parse('$apiUrl/orders/update/${widget.orderId}');
       final response = await http.put(
         url,
         headers: {
@@ -132,7 +131,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Cart Items: ${widget.cartItems}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -181,7 +179,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
                             'assets/images/imageMaps.png',
-                            fit: BoxFit.fill,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
@@ -328,78 +326,103 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget _buildCardPaymentFields() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Card Number',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(
-                Icons.credit_card,
-                color: Colors.blue,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 5),
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'Card Number',
+            border: OutlineInputBorder(),
+            prefixIcon: Icon(
+              Icons.credit_card,
+              color: Colors.blue,
             ),
           ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.datetime,
-                  decoration: InputDecoration(
-                    labelText: 'Expiration Date',
-                    border: OutlineInputBorder(),
-                    hintText: 'MM/YY',
-                  ),
+          keyboardType: TextInputType.number,
+          maxLength: 16,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Expiry Date',
+                  border: OutlineInputBorder(),
+                  hintText: 'MM/YY',
                 ),
+                keyboardType: TextInputType.datetime,
               ),
-              SizedBox(width: 16),
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'CVV',
-                    border: OutlineInputBorder(),
-                    hintText: 'XXX',
-                  ),
+            ),
+            SizedBox(width: 10),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'CVV',
+                  border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.number,
+                obscureText: true,
               ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   Widget _buildPayPalPaymentFields() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          labelText: 'PayPal Email',
-          border: OutlineInputBorder(),
-          prefixIcon: Icon(
-            Icons.email,
-            color: Colors.blue,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 15),
+        TextField(
+          decoration: InputDecoration(
+            labelText: 'PayPal Email',
+            border: OutlineInputBorder(),
+            prefixIcon: Icon(Icons.email, color: Colors.blueAccent),
+            hintText: 'Enter your PayPal email',
           ),
+          keyboardType: TextInputType.emailAddress,
         ),
-      ),
+      ],
     );
   }
 
   Widget _buildCashOnDeliveryMessage() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Text(
-        'You have selected Cash on Delivery. Please ensure you have the exact amount ready upon delivery.',
-        style: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.w500, color: Colors.blue),
-      ),
+    return Column(
+      children: [
+        SizedBox(height: 20),
+        Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.orange),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                Icons.local_shipping,
+                size: 40,
+                color: Colors.orange,
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  'You selected Cash on Delivery. Please have the exact amount ready upon delivery.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.left,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
